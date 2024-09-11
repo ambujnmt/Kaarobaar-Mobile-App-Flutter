@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ColorConstants {
-
   static const kIconsGrey = Color(0xff707070);
   static const kTabsGrey = Color(0xffcecccc);
   static const kIndicatorDots = Color(0xffd9d9d9);
@@ -13,6 +12,5 @@ class ColorConstants {
   static const kCircleRed = Color(0xff511818);
   static const kTestimonialsDarkRed = Color(0xff2d2323);
   static const kTestimonialsLightRed = Color(0xff6f1010);
-static const kQuestionRed = Color(0xff9A0000);
-
+  static const kQuestionRed = Color(0xff9A0000); // colors
 }
