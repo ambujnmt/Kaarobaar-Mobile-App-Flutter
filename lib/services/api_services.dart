@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:kaarobaar/controllers/login_controller.dart';
 
 class API {
-
   String baseUrl = "https://mean-experts.com/kaarobaar/api";
   LoginController loginController = Get.put(LoginController());
 
@@ -22,11 +21,11 @@ class API {
     var url = "$baseUrl/auth/userRegistration";
 
     Map<String, dynamic> body = {
-    "token" : loginController.accessToken,
-    "username" : name,
-    "email" : email,
-    "password" : password,
-    "confirm_password" : password,
+      "token": loginController.accessToken,
+      "username": name,
+      "email": email,
+      "password": password,
+      "confirm_password": password,
     };
 
     http.Response response = await http.post(Uri.parse(url), body: body);
@@ -51,5 +50,12 @@ class API {
     return jsonDecode(response.body);
   }
 
-
+  verifyOTP(String? email, String? otp) async {
+    var verifyotpUrl = '$baseUrl/auth/verifyOTP';
+    Map<String, dynamic> body = {'otp': otp, 'email': email};
+    http.Response response =
+        await http.post(Uri.parse(verifyotpUrl), body: body);
+    log('verify otp response======${response.body}');
+    return jsonDecode(response.body);
+  }
 }
