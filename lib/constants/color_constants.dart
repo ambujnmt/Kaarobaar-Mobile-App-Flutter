@@ -12,5 +12,5 @@ class ColorConstants {
   static const kCircleRed = Color(0xff511818);
   static const kTestimonialsDarkRed = Color(0xff2d2323);
   static const kTestimonialsLightRed = Color(0xff6f1010);
-  static const kQuestionRed = Color(0xff9A0000); // colors
+  static const kQuestionRed = Color(0xff9A0000); // colors added
 }
