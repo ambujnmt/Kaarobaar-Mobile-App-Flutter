@@ -29,7 +29,7 @@ class _MyAccountState extends State<MyAccount> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("loginController.userId :- ${loginController.userId}");
+    print("loginController.userId test :- ${loginController.userId}");
     getProfileData();
   }
 
