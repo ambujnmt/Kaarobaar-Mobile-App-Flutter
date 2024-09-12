@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:kaarobaar/views/authorization/login_screen.dart';
+import 'package:kaarobaar/views/side_menuDrawer.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -9,20 +11,28 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  
+  final box = GetStorage();
+
   @override
   void initState() {
     super.initState();
     moveForward();
   }
-  
+
   moveForward() {
-    
+    var accessToken = box.read('accessToken');
+
+    print('access token==== $accessToken');
+
     Future.delayed(
-      const Duration(seconds: 3),
-        () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen() ))
-    );
-    
+        const Duration(seconds: 3),
+        () => accessToken == null
+            ? Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()))
+            : Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SideMenuDrawer())));
   }
 
   @override
@@ -37,9 +47,8 @@ class _SplashScreenState extends State<SplashScreen> {
             Image.asset("assets/images/upperCurve.png"),
             const Spacer(),
             Container(
-              margin: EdgeInsets.all(size.width * 0.12),
-              child: Image.asset("assets/images/logo.png")
-            ),
+                margin: EdgeInsets.all(size.width * 0.12),
+                child: Image.asset("assets/images/logo.png")),
             const Spacer(),
             Image.asset("assets/images/lowerCurve.png"),
           ],
@@ -47,5 +56,4 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-
 }

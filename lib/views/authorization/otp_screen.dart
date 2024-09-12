@@ -7,6 +7,7 @@ import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/helper.dart';
 import 'package:kaarobaar/utils/text.dart';
 import 'package:kaarobaar/views/authorization/create_password.dart';
+import 'package:kaarobaar/views/authorization/login_screen.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'dart:developer';
@@ -36,6 +37,7 @@ class _OTPScreenState extends State<OTPScreen> {
       systemBarSpace = -30;
     }
     startTimer();
+    print('email form register screen: ${widget.email}');
   }
 
   void startTimer() {
@@ -61,14 +63,16 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   resendOTP() async {
-    // resendOTPTimes++;
-    //
-    // final response = await api.forgotPassword(widget.email);
-    //
-    // if(response["status"] == true) {
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("OTP sent successfully")));
-    //   startTimer();
-    // }
+    resendOTPTimes++;
+
+    final response = await api.resendOTP(widget.email);
+
+    if (response["status"] == 1) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("OTP sent successfully")));
+      startTimer();
+      print('resend api response==== ${response["message"]}');
+    }
   }
 
   confirmOTP() async {
@@ -83,13 +87,28 @@ class _OTPScreenState extends State<OTPScreen> {
         isApiCalling = false;
       });
 
-      if (response["statusCode"] == 200) {
+      if (response["status"] == 1) {
         helper.successDialog(context, response["message"]);
+        widget.from == "register"
+            ? Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+              )
+            : Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreatePassword(
+                    email: widget.email,
+                  ),
+                ),
+              );
       } else {
         helper.errorDialog(context, response["message"]);
       }
     } else {
-      helper.errorDialog(context, "Please enter 4 digit valid OTP");
+      helper.errorDialog(context, "Please enter 6 digit valid OTP");
     }
   }
 
@@ -162,7 +181,9 @@ class _OTPScreenState extends State<OTPScreen> {
                         onChanged: (String pin) {
                           log("otp :- $pin");
                           otp = pin;
-                          setState(() {});
+                          setState(() {
+                            print('otp---${otp}');
+                          });
                         },
                       ),
                       SizedBox(
@@ -246,12 +267,7 @@ class _OTPScreenState extends State<OTPScreen> {
                         ),
                         onTap: () {
                           FocusScope.of(context).unfocus();
-                          // confirmOTP();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const CreatePassword()));
+                          confirmOTP();
                         },
                       )
                     ],

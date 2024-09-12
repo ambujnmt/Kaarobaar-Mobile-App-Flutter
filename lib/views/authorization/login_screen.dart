@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } else if (Platform.isIOS) {
       systemBarSpace = -30;
     }
-    getAccessToken();
+    // getAccessToken();
   }
 
   getAccessToken() async {
@@ -53,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (response["status"] == 1) {
       loginController.accessToken = response["token"];
+
       box.write("accessToken", loginController.accessToken);
 
       log("access token in login screen :- ${loginController.accessToken}");
@@ -77,9 +78,15 @@ class _LoginScreenState extends State<LoginScreen> {
         if (response["status"] == 1) {
           print(' if status----200');
           helper.successDialog(context, response["message"]);
+
+          loginController.accessToken = response['result']['access_token'];
+          loginController.userId = response['result']['user_id'];
+
+          box.write('accessToken', response['result']['access_token']);
+          box.write('userId', response['result']['user_id']);
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const DashboardScreen()),
+            MaterialPageRoute(builder: (context) => const SideMenuDrawer()),
           );
         } else {
           helper.errorDialog(context, response["message"]);
@@ -206,10 +213,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ForgotPassword()));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ForgotPassword(),
+                              ),
+                            );
                           },
                         ),
                         SizedBox(
