@@ -103,14 +103,80 @@ class API {
   }
 
   getProfileData() async {
-    var verifyotpUrl = '$baseUrl/user/get_profile';
-    
+    var getProfileData = '$baseUrl/user/get_profile';
+
     Map<String, dynamic> body = {
       "token": loginController.accessToken,
       "user_id": loginController.userId
     };
-    http.Response response = await http.post(Uri.parse(verifyotpUrl), body: body);
-    log('verify otp response======${response.body}');
+    http.Response response =
+        await http.post(Uri.parse(getProfileData), body: body);
+    log('get profile Data  response======${response.body}');
     return jsonDecode(response.body);
   }
+
+  // change password api integration
+  changePassword(
+      String oldPassword, String newPassword, String confirmNewPassword) async {
+    var changePassword = '$baseUrl/user/changePassword';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+      "old_password": oldPassword,
+      "new_password": newPassword,
+      "confirm_new_password": confirmNewPassword,
+    };
+    http.Response response =
+        await http.post(Uri.parse(changePassword), body: body);
+    log('change password response======${response.body}');
+    return jsonDecode(response.body);
+  }
+
+  //  Slider images Dashboard api integration
+  sliderImagesDashboard() async {
+    var sliderList = '$baseUrl/app/sliderList';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+    http.Response response = await http.post(
+      Uri.parse(sliderList),
+      body: body,
+    );
+    log('slider images dashboard response======${response.body}');
+    return jsonDecode(response.body);
+  }
+
+  // popular communities api integration
+  popularCommunities() async {
+    var popularCommunities = '$baseUrl/app/communities_category';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+    http.Response response = await http.post(
+      Uri.parse(popularCommunities),
+      body: body,
+    );
+    log(' popular communities dashboard response======${response.body}');
+    return jsonDecode(response.body);
+  }
+
+  // testimonials dashboard api integration
+  testimonialsDashboard() async {
+    var testimonials = '$baseUrl/app/testimonials';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+    http.Response response = await http.post(
+      Uri.parse(testimonials),
+      body: body,
+    );
+    log(' popular communities dashboard response======${response.body}');
+    return jsonDecode(response.body);
+  }
+
+  // category list api integration
 }
