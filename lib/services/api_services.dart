@@ -9,7 +9,6 @@ class API {
   LoginController loginController = Get.put(LoginController());
 
   // get access token api
-
   getAccessToken() async {
     var url = '$baseUrl/auth/system_token';
 
@@ -20,7 +19,6 @@ class API {
   }
 
   // user registration api
-
   register(String name, String email, String password) async {
     var url = "$baseUrl/auth/userRegistration";
 
@@ -39,7 +37,6 @@ class API {
   }
 
   // user log in api function
-
   login(String email, String password) async {
     //   https://mean-experts.com/kaarobaar/api/auth/userLogin
     var url = "$baseUrl/auth/userLogin";
@@ -57,7 +54,6 @@ class API {
   }
 
   // verify otp api integration
-
   verifyOTP(String? email, String? otp) async {
     var verifyotpUrl = '$baseUrl/auth/verifyOTP';
     Map<String, dynamic> body = {'otp': otp, 'email': email};
@@ -175,6 +171,19 @@ class API {
       body: body,
     );
     log(' popular communities dashboard response======${response.body}');
+    return jsonDecode(response.body);
+  }
+
+  // about us
+  aboutUs() async {
+    var aboutUs = '$baseUrl/app/about_us';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+
+    http.Response response = await http.post(Uri.parse(aboutUs), body: body);
+    log("about us response :- ${response.body}");
     return jsonDecode(response.body);
   }
 
