@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/helper.dart';
-
+import 'package:get/get.dart';
 import '../../utils/text.dart';
 
 class OurServicesDetail extends StatefulWidget {
@@ -18,6 +19,9 @@ class _OurServicesDetailState extends State<OurServicesDetail> {
   dynamic size;
   bool isApiLoading = false;
   List<dynamic> servicesDetailData = [];
+
+  SideDrawerController sideDrawerController = Get.put(SideDrawerController());
+
   servicesDetail() async {
     print('services detail function call');
     setState(() {
@@ -26,7 +30,7 @@ class _OurServicesDetailState extends State<OurServicesDetail> {
 
     print('Function 1');
 
-    final response = await api.servicesDetail();
+    final response = await api.servicesDetail(sideDrawerController.ourServiceId);
     print('Function 2');
 
     setState(() {

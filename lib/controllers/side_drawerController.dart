@@ -6,4 +6,6 @@ class SideDrawerController extends GetxController {
   RxInt pageIndex = 0.obs;
   PageController pageController = PageController();
 
+  String ourServiceId = "";
+
 }

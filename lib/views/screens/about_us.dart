@@ -242,8 +242,8 @@ class _AboutUsState extends State<AboutUs> {
                                 onTap: () {
                                   // FocusScope.of(context).unfocus();
                                   sideDrawerController.pageIndex.value = 19;
-                                  sideDrawerController.pageController
-                                      .jumpToPage(19);
+                                  sideDrawerController.ourServiceId = servicesListData[index]["id"];
+                                  sideDrawerController.pageController.jumpToPage(19);
                                 },
                               ),
                             ],

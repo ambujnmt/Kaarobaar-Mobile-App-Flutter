@@ -190,7 +190,6 @@ class API {
   // category list api integration
 
   // services list api integration
-
   servicesList() async {
     var servicesList = '$baseUrl/app/services_list';
 
@@ -205,23 +204,34 @@ class API {
   }
 
   // services detail api integration
+  // servicesDetail() async {
+  //   var servicesDetailURL = '$baseUrl/app/services_details';
+  //
+  //   Map<String, dynamic> body = {
+  //     "token": loginController.accessToken,
+  //     "service_id ": "1",
+  //   };
+  //
+  //   http.Response response = await http.post(Uri.parse(servicesDetailURL), body: body);
+  //
+  //   log("api service service detail response :- ${response.body}");
+  //
+  //   return jsonDecode(response.body);
+  // }
 
-  servicesDetail() async {
-    print(' Line 1');
-    var servicesDetailURL = '$baseUrl/app/services_details';
-    print('Line 2...... $servicesDetailURL');
+  servicesDetail(String serviceId) async {
+    // https://mean-experts.com/kaarobaar/api
+    var url = '$baseUrl/app/services_details';
 
     Map<String, dynamic> body = {
       "token": loginController.accessToken,
-      "service_id ": "1",
+      "service_id": serviceId
     };
-    print('Line 3');
 
-    http.Response response =
-        await http.post(Uri.parse(servicesDetailURL), body: body);
-    print('Line 4..... $response');
-    print('response of services detail---------${response.statusCode}');
-    print(" services list response :- ${response.body}");
+    http.Response response = await http.post(Uri.parse(url), body: body);
+
+    log("api serviceDetails response :- ${response.body}");
     return jsonDecode(response.body);
+
   }
 }
