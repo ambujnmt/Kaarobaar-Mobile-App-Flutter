@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
+import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/text.dart';
 
 class Testimonials extends StatefulWidget {
@@ -10,9 +11,35 @@ class Testimonials extends StatefulWidget {
 }
 
 class _TestimonialsState extends State<Testimonials> {
-
   dynamic size;
   final customText = CustomText();
+  bool isApiCalling = false;
+  List<dynamic> testimonialsList = [];
+  final api = API();
+
+  // get testimonials of view all
+  getTestimonials() async {
+    setState(() {
+      isApiCalling = true;
+    });
+    final response = await api.testimonialsDashboard();
+    setState(() {
+      testimonialsList = response['result'];
+    });
+    setState(() {
+      isApiCalling = false;
+    });
+
+    print(' get testimonials view all ----$testimonialsList');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('testimonial screen list api call');
+    getTestimonials();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +67,10 @@ class _TestimonialsState extends State<Testimonials> {
                       colors: [
                         ColorConstants.kGradientDarkGreen,
                         ColorConstants.kGradientLightGreen
-                      ]
-                  )
-              ),
+                      ])),
               child: Center(
-                child: customText.kText("Testimonials", 20, FontWeight.w700, Colors.white, TextAlign.center),
+                child: customText.kText("Testimonials", 20, FontWeight.w700,
+                    Colors.white, TextAlign.center),
               ),
             ),
             SizedBox(
@@ -57,15 +83,14 @@ class _TestimonialsState extends State<Testimonials> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 5.0,
                   mainAxisSpacing: 5.0,
-                  childAspectRatio: 1/1.8,
+                  childAspectRatio: 1 / 1.8,
                 ),
-                itemCount: 5,
+                itemCount: testimonialsList.length,
                 itemBuilder: (context, index) {
                   return Container(
                     padding: EdgeInsets.all(size.width * 0.01),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(size.width * 0.03)
-                    ),
+                        borderRadius: BorderRadius.circular(size.width * 0.03)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -80,29 +105,44 @@ class _TestimonialsState extends State<Testimonials> {
                                   colors: [
                                     ColorConstants.kTestimonialsDarkRed,
                                     ColorConstants.kTestimonialsLightRed,
-                                  ]
-                              )
-                          ),
+                                  ])),
                           child: Container(
                             margin: EdgeInsets.all(size.width * 0.015),
                             padding: EdgeInsets.all(size.width * 0.01),
                             decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white, width: 3),
-                                borderRadius: BorderRadius.circular(size.width * 0.5),
-                                image: const DecorationImage(
-                                    image: NetworkImage("https://s3-alpha-sig.figma.com/img/6d87/6fab/4374e1c546bc9a8ed00585d8f1de4efe?Expires=1722211200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=bTVVRzfzlLfnc1c4yWIJmpih7PBddA-AVNBxWYkeHRoQjaiHkXHRzFs7l2cTbj1FrZofzQuF3x51MHfrScbxtdvEI81-tOYIayc1GodmAIpKZJm3eSIsshj3NbV7oIyAvFmEG5r35BUAWLW-RwlQSBBVSzoL0vXwHit9N9GyNPyUrZ0A0sB3NRQRJXRo~6~KDfjMEii--yrpZuyFsZ2LSayFHQtW~WQrr3zQWatDSMAvGra2jY~vQa7GlAU2FWGOR1J4zA~j1qD4wh8GSd5sREXBCAayP-wVxO3kwpdP719wITEqzEzBLwgRNhhsURoRZRKP6ILO6HOy4tbsrFB~NA__"),
-                                    fit: BoxFit.fill
-                                )
+                              border: Border.all(color: Colors.white, width: 3),
+                              borderRadius:
+                                  BorderRadius.circular(size.width * 0.5),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    "${testimonialsList[index]['img'].toString()}"),
+                                fit: BoxFit.fill,
+                              ),
                             ),
                             // child: Image.network("https://s3-alpha-sig.figma.com/img/6d87/6fab/4374e1c546bc9a8ed00585d8f1de4efe?Expires=1722211200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=bTVVRzfzlLfnc1c4yWIJmpih7PBddA-AVNBxWYkeHRoQjaiHkXHRzFs7l2cTbj1FrZofzQuF3x51MHfrScbxtdvEI81-tOYIayc1GodmAIpKZJm3eSIsshj3NbV7oIyAvFmEG5r35BUAWLW-RwlQSBBVSzoL0vXwHit9N9GyNPyUrZ0A0sB3NRQRJXRo~6~KDfjMEii--yrpZuyFsZ2LSayFHQtW~WQrr3zQWatDSMAvGra2jY~vQa7GlAU2FWGOR1J4zA~j1qD4wh8GSd5sREXBCAayP-wVxO3kwpdP719wITEqzEzBLwgRNhhsURoRZRKP6ILO6HOy4tbsrFB~NA__", fit: BoxFit.fill,),
                           ),
                         ),
-                        customText.kText("Jerry", 16, FontWeight.w900, Colors.black, TextAlign.center),
-                        customText.kText("Kaarobaar Founder", 16, FontWeight.w900, Colors.black, TextAlign.center),
-                        const Text(
-                          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.black, fontFamily: "Raleway"),
-                          overflow: TextOverflow.ellipsis, maxLines: 5,
+                        customText.kText(
+                            "${testimonialsList[index]['name'].toString()}",
+                            16,
+                            FontWeight.w900,
+                            Colors.black,
+                            TextAlign.center),
+                        customText.kText(
+                            "${testimonialsList[index]['position'].toString()}",
+                            16,
+                            FontWeight.w900,
+                            Colors.black,
+                            TextAlign.center),
+                        Text(
+                          "${testimonialsList[index]['description'].toString()}",
+                          style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                              fontFamily: "Raleway"),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 5,
                           textAlign: TextAlign.start,
                         )
                       ],
@@ -116,5 +156,4 @@ class _TestimonialsState extends State<Testimonials> {
       ),
     );
   }
-
 }

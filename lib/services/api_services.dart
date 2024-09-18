@@ -188,4 +188,40 @@ class API {
   }
 
   // category list api integration
+
+  // services list api integration
+
+  servicesList() async {
+    var servicesList = '$baseUrl/app/services_list';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+
+    http.Response response =
+        await http.post(Uri.parse(servicesList), body: body);
+    log(" services list response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // services detail api integration
+
+  servicesDetail() async {
+    print(' Line 1');
+    var servicesDetailURL = '$baseUrl/app/services_details';
+    print('Line 2...... $servicesDetailURL');
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "service_id ": "1",
+    };
+    print('Line 3');
+
+    http.Response response =
+        await http.post(Uri.parse(servicesDetailURL), body: body);
+    print('Line 4..... $response');
+    print('response of services detail---------${response.statusCode}');
+    print(" services list response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
 }

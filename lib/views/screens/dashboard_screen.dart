@@ -208,7 +208,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             width: size.width,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: popularCommunitiesList.length,
+              itemCount: popularCommunitiesList.length >= 4
+                  ? 4
+                  : popularCommunitiesList.length,
               itemBuilder: (context, index) {
                 return SizedBox(
                   height: size.width * 0.2,
@@ -295,7 +297,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             padding: EdgeInsets.only(top: size.width * 0.01),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: testimonialsList.length,
+              itemCount:
+                  testimonialsList.length >= 4 ? 4 : testimonialsList.length,
               itemBuilder: (context, index) {
                 return Container(
                   height: size.width * 0.35,
