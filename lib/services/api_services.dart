@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaarobaar/controllers/login_controller.dart';
@@ -229,9 +230,74 @@ class API {
     };
 
     http.Response response = await http.post(Uri.parse(url), body: body);
-
-    log("api serviceDetails response :- ${response.body}");
+    debugPrint("api serviceDetails response :- ${response.body}");
     return jsonDecode(response.body);
+  }
 
+  // blog list api integration
+  blogList() async {
+    var url = '$baseUrl/app/blogs_list';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("blog list api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // blog details api integration
+  blogListDetail(String blogId) async {
+    var url = '$baseUrl/app/blog_details';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "blog_id": blogId,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("blog detail api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // FAQ
+  faqList() async {
+    var url = '$baseUrl/app/faq_list';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("faq list api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // offers list
+  offersList() async {
+    var url = '$baseUrl/app/offers_list';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("offers list api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // offers detail
+  offersDetail(String offerId) async {
+    var url = '$baseUrl/app/offer_details';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "offer_id": offerId,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("offers detail api response :- ${response.body}");
+    return jsonDecode(response.body);
   }
 }

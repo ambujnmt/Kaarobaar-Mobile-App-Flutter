@@ -1,63 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:get/get.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/helper.dart';
-import 'package:get/get.dart';
-import '../../utils/text.dart';
+import 'package:kaarobaar/utils/text.dart';
 
-class OurServicesDetail extends StatefulWidget {
-  const OurServicesDetail({super.key});
+class OffersDetail extends StatefulWidget {
+  const OffersDetail({super.key});
 
   @override
-  State<OurServicesDetail> createState() => _OurServicesDetailState();
+  State<OffersDetail> createState() => _OffersDetailState();
 }
 
-class _OurServicesDetailState extends State<OurServicesDetail> {
+class _OffersDetailState extends State<OffersDetail> {
   final customText = CustomText(), api = API(), helper = Helper();
-  dynamic size;
   bool isApiLoading = false;
-  List<dynamic> servicesDetailData = [];
-
+  dynamic size;
+  List<dynamic> offersDetailList = [];
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
-  servicesDetail() async {
-    print('services detail function call');
+  offersListDetail() async {
     setState(() {
       isApiLoading = true;
     });
 
-    print('Function 1');
-
-    final response =
-        await api.servicesDetail(sideDrawerController.ourServiceId);
-    print('Function 2');
+    final response = await api.offersDetail(sideDrawerController.offersId);
 
     setState(() {
-      servicesDetailData = response['result'];
+      offersDetailList = response['result'];
     });
-    print('Function 3');
 
     setState(() {
       isApiLoading = false;
     });
-
-    print('Function 4');
-
-    // if (response["status"] == 1) {
-    //   servicesDetailData = response["result"];
-    //   print('services data-------${servicesDetailData[0]['title']}');
-    //   // log(" services list response :- $servicesListData");
-    // }
-    // setState(() {});
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    servicesDetail();
+    offersListDetail();
   }
 
   @override
@@ -65,7 +49,7 @@ class _OurServicesDetailState extends State<OurServicesDetail> {
     size = MediaQuery.of(context).size;
     return Scaffold(
       body: isApiLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
@@ -76,13 +60,13 @@ class _OurServicesDetailState extends State<OurServicesDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     customText.kText(
-                      "${servicesDetailData[0]["title"]}",
+                      "${offersDetailList[0]["title"]}",
                       20,
                       FontWeight.w700,
                       Colors.black,
                       TextAlign.center,
                     ),
-                    servicesDetailData[0]['image'] == ""
+                    offersDetailList[0]['image'] == ""
                         ? Container()
                         : Container(
                             height: size.height * 0.2,
@@ -100,17 +84,17 @@ class _OurServicesDetailState extends State<OurServicesDetail> {
                               //     fit: BoxFit.cover),
                             ),
                             child: Image.network(
-                              servicesDetailData[0]['image'].toString(),
+                              offersDetailList[0]['image'].toString(),
                               fit: BoxFit.fill,
                             ),
                           ),
                     HtmlWidget(
-                      servicesDetailData[0]["short_content"],
+                      offersDetailList[0]["short_content"],
                       textStyle: customText.kTextStyle(
                           16, FontWeight.w500, Colors.black),
                     ),
                     HtmlWidget(
-                      servicesDetailData[0]["description"],
+                      offersDetailList[0]["description"],
                       textStyle: customText.kTextStyle(
                           16, FontWeight.w500, Colors.black),
                     ),

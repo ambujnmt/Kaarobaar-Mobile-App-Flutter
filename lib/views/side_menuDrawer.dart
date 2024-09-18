@@ -8,6 +8,7 @@ import 'package:kaarobaar/views/screens/add_business.dart';
 import 'package:kaarobaar/views/screens/add_event.dart';
 import 'package:kaarobaar/views/screens/advertise_withUs.dart';
 import 'package:kaarobaar/views/screens/advertisement_details.dart';
+import 'package:kaarobaar/views/screens/blog_detail_screen.dart';
 import 'package:kaarobaar/views/screens/blogs_screen.dart';
 import 'package:kaarobaar/views/screens/category.dart';
 import 'package:kaarobaar/views/screens/change_password.dart';
@@ -16,6 +17,7 @@ import 'package:kaarobaar/views/screens/dashboard_screen.dart';
 import 'package:kaarobaar/views/screens/events_screen.dart';
 import 'package:kaarobaar/views/screens/faq_screen.dart';
 import 'package:kaarobaar/views/screens/my_account.dart';
+import 'package:kaarobaar/views/screens/offers_detail.dart';
 import 'package:kaarobaar/views/screens/our_services_detail.dart';
 import 'package:kaarobaar/views/screens/popular_commuitites.dart';
 import 'package:kaarobaar/views/screens/privacy_policy.dart';
@@ -460,7 +462,9 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       SearchScreen(),
                       AddEvent(),
                       AdvertisementDetails(),
-                      OurServicesDetail(),
+                      OurServicesDetail(), // page 19
+                      BlogDetailScreen(),
+                      OffersDetail(),
                     ],
                   )),
             )
