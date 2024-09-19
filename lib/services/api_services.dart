@@ -300,4 +300,30 @@ class API {
     debugPrint("offers detail api response :- ${response.body}");
     return jsonDecode(response.body);
   }
+
+  // privacy policy
+  privacyPolicy() async {
+    var url = '$baseUrl/app/privacy_policy';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" privacy policy api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // terms and conditions
+  termsCondition() async {
+    var url = '$baseUrl/app/terms_conditions';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" terms and conditons api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
 }
