@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
+import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/helper.dart';
 import 'package:kaarobaar/utils/text.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:drop_down_search_field/drop_down_search_field.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddBusiness extends StatefulWidget {
   const AddBusiness({super.key});
@@ -26,10 +30,37 @@ class _AddBusinessState extends State<AddBusiness> {
   TextEditingController businessDescriptionController = TextEditingController();
   TextEditingController businessTypeController = TextEditingController();
   TextEditingController businessAddressController = TextEditingController();
-  TextEditingController vatNoController = TextEditingController();
+
   TextEditingController businessKeywordController = TextEditingController();
 
   addBusiness() async {
+    for (int i = 0; i < getCategoryItems.length; i++) {
+      if (getCategoryItems[i]['category_name'] ==
+          categoryDropdownController.text) {
+        selectedCategoryId = getCategoryItems[i]['id'].toString();
+      }
+    }
+
+    for (int i = 0; i < getStateItems.length; i++) {
+      if (getStateItems[i]['name'] == stateDropdownController.text) {
+        setState(() {
+          selectedStateId = getStateItems[i]['id'].toString();
+        });
+      }
+    }
+
+    for (int i = 0; i < getCityItems.length; i++) {
+      if (getCityItems[i]['name'] == selectedCity) {
+        setState(() {
+          selectedCityId = getCityItems[i]['id'].toString();
+        });
+      }
+    }
+
+    print('selected state id---- $selectedStateId');
+    print('selected city id---- $selectedCityId');
+    print('selected category id---- $selectedCategoryId');
+
     if (businessNameController.text.isNotEmpty &&
         (!businessNameController.text.startsWith(" "))) {
       if (categoryDropdownController.text.isNotEmpty &&
@@ -53,12 +84,6 @@ class _AddBusinessState extends State<AddBusiness> {
                           if (businessAddressController.text.isNotEmpty &&
                               (!businessAddressController.text
                                   .startsWith(" "))) {
-                            if (vatNoController.text.isNotEmpty &&
-                                (!vatNoController.text.startsWith(" "))) {
-                            } else {
-                              helper.errorDialog(
-                                  context, "Please enter vat number");
-                            }
                           } else {
                             helper.errorDialog(
                                 context, "Please enter business address");
@@ -117,8 +142,15 @@ class _AddBusinessState extends State<AddBusiness> {
   }
 
   String? selectedCategory;
+  String? selectedCategoryId;
   String? selectedState;
+  String? selectedStateId;
   String? selectedCity;
+  String? selectedCityId;
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController categoryDropdownController =
       TextEditingController();
@@ -132,57 +164,147 @@ class _AddBusinessState extends State<AddBusiness> {
   SuggestionsBoxController citySuggestionBoxController =
       SuggestionsBoxController();
 
-  static List<String> getCategorySuggestions(String query) {
+  Future getImageFromGallery() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+    });
+  }
+
+  Future getImageFromCamera() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _image = image;
+    });
+  }
+
+  List<String> getCategorySuggestions(String query) {
     List<String> categoryMatches = <String>[];
-    final List<String> categoryList = [
-      'IT',
-      'Banking',
-      'Medical',
-      'Education',
-      'Institute',
-    ];
+    final List<String> categoryList = getCategoryItems
+        .map((element) => element['category_name'].toString())
+        .toList();
     categoryMatches.addAll(categoryList);
+
+    for (int i = 0; i < getCategoryItems.length; i++) {
+      if (getCategoryItems[i]['category_name'] == selectedCategory) {
+        selectedCategoryId = getCategoryItems[i]['id'].toString();
+      }
+    }
 
     categoryMatches
         .retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
     return categoryMatches;
   }
 
-  static List<String> getStateSuggestions(String query) {
+  List<String> getStateSuggestions(String query) {
     List<String> stateMatches = <String>[];
-    final List<String> stateList = [
-      'Uttar Pradesh',
-      'Noida',
-      'Andra Pradesh',
-      'Delhi',
-      'Lucknow',
-    ];
+    final List<String> stateList =
+        getStateItems.map((element) => element['name'].toString()).toList();
     stateMatches.addAll(stateList);
+
+    for (int i = 0; i < getStateItems.length; i++) {
+      if (getStateItems[i]['name'] == selectedState) {
+        setState(() {
+          selectedStateId = getStateItems[i]['id'].toString();
+        });
+      }
+    }
 
     stateMatches
         .retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
     return stateMatches;
   }
 
-  static List<String> getCitySuggestions(String query) {
+  List<String> getCitySuggestions(String query) {
     List<String> cityMatches = <String>[];
-    final List<String> cityList = [
-      'City1',
-      'City2',
-      'City3',
-      'City4',
-      'City5',
-    ];
+    final List<String> cityList =
+        getCityItems.map((element) => element['name'].toString()).toList();
     cityMatches.addAll(cityList);
+
+    for (int i = 0; i < getCityItems.length; i++) {
+      if (getCityItems[i]['name'] == selectedCity) {
+        setState(() {
+          selectedCityId = getCityItems[i]['id'].toString();
+        });
+      }
+    }
 
     cityMatches
         .retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
     return cityMatches;
   }
 
+  final api = API();
+  List<dynamic> getCategoryItems = [];
+  List<dynamic> getStateItems = [];
+  List<dynamic> getCityItems = [];
+
+  // category list api integration
+
+  getCategoryList() async {
+    setState(() {
+      isApiCalling = true;
+    });
+    final response = await api.categoryList();
+    setState(() {
+      getCategoryItems = response['result'];
+    });
+    setState(() {
+      isApiCalling = false;
+    });
+
+    print('get category response list ----$getCategoryItems');
+  }
+
+  // state list api integration
+
+  getStateList() async {
+    setState(() {
+      isApiCalling = true;
+    });
+    final response = await api.stateList();
+    setState(() {
+      getStateItems = response['result'];
+    });
+    setState(() {
+      isApiCalling = false;
+    });
+
+    print('get state response list ----$getStateItems');
+  }
+
+  // city list api integration
+  getCityList() async {
+    setState(() {
+      isApiCalling = true;
+    });
+    final response = await api.cityList("4077");
+    setState(() {
+      getCityItems = response['result'];
+    });
+    setState(() {
+      isApiCalling = false;
+    });
+
+    print('get city response list ----$getCityItems');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCategoryList();
+    getStateList();
+    getCityList();
+  }
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+    final double h = MediaQuery.of(context).size.height;
+    final double w = MediaQuery.of(context).size.width;
     return Scaffold(
         body: Container(
             height: size.height * 0.77,
@@ -246,11 +368,15 @@ class _AddBusinessState extends State<AddBusiness> {
                     },
                     onSuggestionSelected: (String suggestion) {
                       categoryDropdownController.text = suggestion;
+                      print(
+                          'category controller------${categoryDropdownController.text}---id ${selectedCategoryId}');
                     },
                     suggestionsBoxController: categorySuggestionBoxController,
                     validator: (value) =>
                         value!.isEmpty ? 'Please select a category' : null,
-                    onSaved: (value) => selectedCategory = value,
+                    onSaved: (value) {
+                      selectedCategory = value;
+                    },
                     displayAllSuggestionWhenTap: true,
                   ),
                   SizedBox(
@@ -461,17 +587,111 @@ class _AddBusinessState extends State<AddBusiness> {
                   SizedBox(
                     height: size.width * 0.05,
                   ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.done,
-                    controller: vatNoController,
-                    decoration: InputDecoration(
-                      hintText: "VAT Number",
-                      hintStyle: customText.kTextStyle(
-                          16, FontWeight.w400, ColorConstants.kIconsGrey),
-                      // prefixIcon: const Icon(Icons.onetwothree, color: ColorConstants.kIconsGrey, size: 35,),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
+                    child: customText.kText("Upload Featured Image", 16,
+                        FontWeight.w400, Colors.black, TextAlign.start),
+                  ),
+
+                  GestureDetector(
+                    onTap: () {
+                      // show modal bottom sheet
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                                padding: EdgeInsets.only(top: 20),
+                                height: 120,
+                                color: Colors.white,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        getImageFromGallery();
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 20),
+                                              child: const Icon(
+                                                Icons.photo,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            customText.kText(
+                                                "Gallery",
+                                                16,
+                                                FontWeight.w400,
+                                                Colors.black,
+                                                TextAlign.start),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        getImageFromCamera();
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 20),
+                                              child: const Icon(
+                                                Icons.camera,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            customText.kText(
+                                                "Camera",
+                                                16,
+                                                FontWeight.w400,
+                                                Colors.black,
+                                                TextAlign.start),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ));
+                          });
+                    },
+                    child: Container(
+                      height: h * .200,
+                      width: w * .400,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: FileImage(File(_image?.path ?? '')))),
+                      child: Center(
+                        child: _image == null
+                            ? const Icon(
+                                size: 34,
+                                Icons.add,
+                                color: Colors.black,
+                              )
+                            : Container(),
+                      ),
                     ),
                   ),
+
                   SizedBox(
                     height: size.width * 0.15,
                   ),

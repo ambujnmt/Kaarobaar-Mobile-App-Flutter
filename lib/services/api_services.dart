@@ -326,4 +326,74 @@ class API {
     debugPrint(" terms and conditons api response :- ${response.body}");
     return jsonDecode(response.body);
   }
+
+  // category list api for add business
+  categoryList() async {
+    var url = '$baseUrl/app/category_list';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" category api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // state list
+
+  stateList() async {
+    var url = '$baseUrl/app/state_list';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" state api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // city list
+
+  cityList(String stateId) async {
+    var url = '$baseUrl/app/city_list';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "state_id": stateId,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" city api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // add business
+  addBusiness({
+    String? categoryID,
+  }) async {
+    var url = '$baseUrl/app/add_business';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+      "category_id": "8",
+      "business_title": "Test business-1",
+      "mobile": "2376478263742",
+      "email": "test@gmail.com",
+      "website": "www.test.com",
+      "state_id": "3652",
+      "city_id": "54498",
+      "zipcode": "UK376378",
+      "address": "Noida sector 45",
+      "business_description": "business_description",
+      "keywords": "food shop, online delevery, testy snakes",
+      "featured_image": "select image"
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" city api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
 }
