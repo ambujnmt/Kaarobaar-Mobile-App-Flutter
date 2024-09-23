@@ -17,6 +17,7 @@ import 'package:kaarobaar/views/screens/dashboard_screen.dart';
 import 'package:kaarobaar/views/screens/events_screen.dart';
 import 'package:kaarobaar/views/screens/faq_screen.dart';
 import 'package:kaarobaar/views/screens/my_account.dart';
+import 'package:kaarobaar/views/screens/my_business.dart';
 import 'package:kaarobaar/views/screens/offers_detail.dart';
 import 'package:kaarobaar/views/screens/our_services_detail.dart';
 import 'package:kaarobaar/views/screens/popular_commuitites.dart';
@@ -130,6 +131,18 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     onTap: () {
                       sideDrawerController.pageIndex.value = 2;
                       sideDrawerController.pageController.jumpToPage(2);
+                      scaffoldKey.currentState!.closeEndDrawer();
+                    },
+                  ),
+                  GestureDetector(
+                    child: SizedBox(
+                      height: size.height * 0.05,
+                      child: customText.kText("My Business", 22,
+                          FontWeight.w700, Colors.black, TextAlign.start),
+                    ),
+                    onTap: () {
+                      sideDrawerController.pageIndex.value = 22;
+                      sideDrawerController.pageController.jumpToPage(22);
                       scaffoldKey.currentState!.closeEndDrawer();
                     },
                   ),
@@ -462,9 +475,10 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       SearchScreen(),
                       AddEvent(),
                       AdvertisementDetails(),
-                      OurServicesDetail(), // page 19
+                      OurServicesDetail(), // page number 19
                       BlogDetailScreen(),
                       OffersDetail(),
+                      MyBusiness(), // page number 22
                     ],
                   )),
             )

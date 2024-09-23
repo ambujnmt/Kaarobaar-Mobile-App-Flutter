@@ -370,30 +370,57 @@ class API {
   }
 
   // add business
-  addBusiness({
-    String? categoryID,
-  }) async {
-    var url = '$baseUrl/app/add_business';
+  addBusiness(
+      {String? businessName,
+      String? categoryId,
+      String? businessKeyword,
+      String? email,
+      String? contactNumber,
+      String? postalCode,
+      String? websiteURL,
+      String? businessDescription,
+      String? stateId,
+      String? cityId,
+      String? businessAddress,
+      String? image}) async {
+    var url = '$baseUrl/user/add_business';
 
     Map<String, dynamic> body = {
       "token": loginController.accessToken,
       "user_id": loginController.userId,
-      "category_id": "8",
-      "business_title": "Test business-1",
-      "mobile": "2376478263742",
-      "email": "test@gmail.com",
-      "website": "www.test.com",
-      "state_id": "3652",
-      "city_id": "54498",
-      "zipcode": "UK376378",
-      "address": "Noida sector 45",
-      "business_description": "business_description",
-      "keywords": "food shop, online delevery, testy snakes",
-      "featured_image": "select image"
+      "category_id": categoryId,
+      "business_title": businessName,
+      "mobile": contactNumber,
+      "email": email,
+      "website": websiteURL,
+      "state_id": stateId,
+      "city_id": cityId,
+      "zipcode": postalCode,
+      "address": businessAddress,
+      "business_description": businessDescription,
+      "keywords": businessKeyword,
+      "featured_image": image
+    };
+
+    print('add request---- ${body}');
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" add business api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+// business list by user
+
+  businessListByUser() async {
+    var url = '$baseUrl/app/user/business_list_by_user';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
     };
 
     http.Response response = await http.post(Uri.parse(url), body: body);
-    debugPrint(" city api response :- ${response.body}");
+    debugPrint(" business list by user api response :- ${response.body}");
     return jsonDecode(response.body);
   }
 }

@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
+import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/helper.dart';
 import 'package:kaarobaar/utils/text.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:drop_down_search_field/drop_down_search_field.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class AddBusiness extends StatefulWidget {
   const AddBusiness({super.key});
@@ -28,10 +31,12 @@ class _AddBusinessState extends State<AddBusiness> {
   TextEditingController postalCodeController = TextEditingController();
   TextEditingController websiteURL = TextEditingController();
   TextEditingController businessDescriptionController = TextEditingController();
-  TextEditingController businessTypeController = TextEditingController();
+
   TextEditingController businessAddressController = TextEditingController();
 
   TextEditingController businessKeywordController = TextEditingController();
+
+  SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
   addBusiness() async {
     for (int i = 0; i < getCategoryItems.length; i++) {
@@ -50,7 +55,7 @@ class _AddBusinessState extends State<AddBusiness> {
     }
 
     for (int i = 0; i < getCityItems.length; i++) {
-      if (getCityItems[i]['name'] == selectedCity) {
+      if (getCityItems[i]['name'] == cityDropdownController.text) {
         setState(() {
           selectedCityId = getCityItems[i]['id'].toString();
         });
@@ -60,6 +65,30 @@ class _AddBusinessState extends State<AddBusiness> {
     print('selected state id---- $selectedStateId');
     print('selected city id---- $selectedCityId');
     print('selected category id---- $selectedCategoryId');
+
+    // image upload url
+    final uri =
+        Uri.parse("https://mean-experts.com/kaarobaar/api/user/add_business");
+
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', uri);
+
+    // Add the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'featured_image', // The name of the field on the server
+      _image?.path.toString() ?? " ",
+    ));
+
+    // Send the request
+    var imageResponse = await request.send();
+
+    if (imageResponse.statusCode == 200) {
+      print('Image uploaded successfully');
+      final responseData = await imageResponse.stream.bytesToString();
+      print('image response ==== ${responseData}');
+    } else {
+      print('Image upload failed: ${imageResponse.statusCode}');
+    }
 
     if (businessNameController.text.isNotEmpty &&
         (!businessNameController.text.startsWith(" "))) {
@@ -75,27 +104,53 @@ class _AddBusinessState extends State<AddBusiness> {
                     !websiteURL.text.startsWith(" ")) {
                   if (businessDescriptionController.text.isNotEmpty &&
                       (!businessDescriptionController.text.startsWith(" "))) {
-                    if (businessTypeController.text.isNotEmpty &&
-                        (!businessTypeController.text.startsWith(" "))) {
-                      if (stateDropdownController.text.isNotEmpty &&
-                          !stateDropdownController.text.startsWith(" ")) {
-                        if (cityDropdownController.text.isNotEmpty &&
-                            !cityDropdownController.text.startsWith(" ")) {
-                          if (businessAddressController.text.isNotEmpty &&
-                              (!businessAddressController.text
-                                  .startsWith(" "))) {
+                    if (stateDropdownController.text.isNotEmpty &&
+                        !stateDropdownController.text.startsWith(" ")) {
+                      if (cityDropdownController.text.isNotEmpty &&
+                          !cityDropdownController.text.startsWith(" ")) {
+                        if (businessAddressController.text.isNotEmpty &&
+                            (!businessAddressController.text.startsWith(" "))) {
+                          setState(() {
+                            isApiCalling = true;
+                          });
+
+                          final response = await api.addBusiness(
+                            businessName: businessNameController.text,
+                            categoryId: selectedCategoryId,
+                            businessKeyword: businessKeywordController.text,
+                            email: emailController.text,
+                            contactNumber: phoneController.text,
+                            postalCode: postalCodeController.text,
+                            websiteURL: websiteURL.text,
+                            businessDescription:
+                                businessDescriptionController.text,
+                            stateId: selectedStateId,
+                            cityId: selectedCityId,
+                            businessAddress: businessAddressController.text,
+                            image: _image?.path.toString(),
+                          );
+
+                          setState(() {
+                            isApiCalling = false;
+                          });
+
+                          if (response["status"] == 1) {
+                            helper.successDialog(context, response["message"]);
+                            print('Business Added successfully');
+                            sideDrawerController.pageIndex.value = 0;
+                            sideDrawerController.pageController.jumpToPage(0);
                           } else {
-                            helper.errorDialog(
-                                context, "Please enter business address");
+                            helper.errorDialog(context, response["message"]);
                           }
                         } else {
-                          helper.errorDialog(context, 'Please select city');
+                          helper.errorDialog(
+                              context, "Please enter business address");
                         }
                       } else {
-                        helper.errorDialog(context, 'Please select state');
+                        helper.errorDialog(context, 'Please select city');
                       }
                     } else {
-                      helper.errorDialog(context, "Please enter business type");
+                      helper.errorDialog(context, 'Please select state');
                     }
                   } else {
                     helper.errorDialog(
@@ -170,6 +225,7 @@ class _AddBusinessState extends State<AddBusiness> {
     setState(() {
       _image = image;
     });
+    print('image path from gallery--- ${_image?.path}');
   }
 
   Future getImageFromCamera() async {
@@ -466,21 +522,7 @@ class _AddBusinessState extends State<AddBusiness> {
                       // prefixIcon: const Icon(Icons.store, color: ColorConstants.kIconsGrey, size: 35,),
                     ),
                   ),
-                  SizedBox(
-                    height: size.width * 0.05,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    textCapitalization: TextCapitalization.words,
-                    controller: businessTypeController,
-                    decoration: InputDecoration(
-                      hintText: "Business Type",
-                      hintStyle: customText.kTextStyle(
-                          16, FontWeight.w400, ColorConstants.kIconsGrey),
-                      // prefixIcon: const Icon(Icons.category, color: ColorConstants.kIconsGrey, size: 35,),
-                    ),
-                  ),
+
                   SizedBox(
                     height: size.width * 0.05,
                   ),
