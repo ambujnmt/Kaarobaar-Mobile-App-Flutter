@@ -370,48 +370,77 @@ class API {
   }
 
   // add business
-  addBusiness(String? businessName, String? categoryId, String? businessKeyword, String? email,
-    String? contactNumber, String? postalCode, String? websiteURL, String? businessDescription,
-    String? stateId, String? cityId, String? businessAddress, String? image) async {
-
+  addBusiness(
+      String? businessName,
+      String? categoryId,
+      String? businessKeyword,
+      String? email,
+      String? contactNumber,
+      String? postalCode,
+      String? websiteURL,
+      String? businessDescription,
+      String? stateId,
+      String? cityId,
+      String? businessAddress,
+      String? image) async {
     var url = '$baseUrl/user/add_business';
 
-      var request = http.MultipartRequest("POST", Uri.parse(url), );
-      request.files.add(await http.MultipartFile.fromPath("featured_image", image!));
+    var request = http.MultipartRequest(
+      "POST",
+      Uri.parse(url),
+    );
+    request.files
+        .add(await http.MultipartFile.fromPath("featured_image", image!));
 
-      request.fields["user_id"]= loginController.userId;
-      request.fields["category_id"]= categoryId!;
-      request.fields["business_title"]= businessName!;
-      request.fields["mobile"]= contactNumber!;
-      request.fields["email"]= email!;
-      request.fields["website"]= websiteURL!;
-      request.fields["state_id"]= stateId!;
-      request.fields["city_id"]= cityId!;
-      request.fields["zipcode"]= postalCode!;
-      request.fields["address"]= businessAddress!;
-      request.fields["business_description"]= businessDescription!;
-      request.fields["token"]= loginController.accessToken;
+    request.fields["user_id"] = loginController.userId;
+    request.fields["category_id"] = categoryId!;
+    request.fields["business_title"] = businessName!;
+    request.fields["mobile"] = contactNumber!;
+    request.fields["email"] = email!;
+    request.fields["website"] = websiteURL!;
+    request.fields["state_id"] = stateId!;
+    request.fields["city_id"] = cityId!;
+    request.fields["zipcode"] = postalCode!;
+    request.fields["address"] = businessAddress!;
+    request.fields["business_description"] = businessDescription!;
+    request.fields["token"] = loginController.accessToken;
 
-      var streamedResponse =await request.send();
+    var streamedResponse = await request.send();
 
-      var response = await http.Response.fromStream(streamedResponse);
-      final responseData = json.decode(response.body);
+    var response = await http.Response.fromStream(streamedResponse);
+    final responseData = json.decode(response.body);
 
-      log("add business response in api :- $responseData");
+    log("add business response in api :- $responseData");
 
-      return responseData;
+    return responseData;
   }
 
   businessListByUser() async {
-    var url = '$baseUrl/app/user/business_list_by_user';
+    var url = '$baseUrl/user/business_list_by_user';
 
     Map<String, dynamic> body = {
       "token": loginController.accessToken,
       "user_id": loginController.userId,
     };
-
+    print('user id----- ${loginController.userId}');
     http.Response response = await http.post(Uri.parse(url), body: body);
     debugPrint(" business list by user api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // Delete business
+  deleteBusiness(String businessId) async {
+    var url = '$baseUrl/user/delete_business';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+      "business_id": businessId,
+    };
+    print('user id----- ${loginController.userId}');
+    print('business id----- ${businessId}');
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" delete business api response :- ${response.body}");
     return jsonDecode(response.body);
   }
 }
