@@ -370,46 +370,37 @@ class API {
   }
 
   // add business
-  addBusiness(
-      {String? businessName,
-      String? categoryId,
-      String? businessKeyword,
-      String? email,
-      String? contactNumber,
-      String? postalCode,
-      String? websiteURL,
-      String? businessDescription,
-      String? stateId,
-      String? cityId,
-      String? businessAddress,
-      String? image}) async {
+  addBusiness(String? businessName, String? categoryId, String? businessKeyword, String? email,
+    String? contactNumber, String? postalCode, String? websiteURL, String? businessDescription,
+    String? stateId, String? cityId, String? businessAddress, String? image) async {
+
     var url = '$baseUrl/user/add_business';
 
-    Map<String, dynamic> body = {
-      "token": loginController.accessToken,
-      "user_id": loginController.userId,
-      "category_id": categoryId,
-      "business_title": businessName,
-      "mobile": contactNumber,
-      "email": email,
-      "website": websiteURL,
-      "state_id": stateId,
-      "city_id": cityId,
-      "zipcode": postalCode,
-      "address": businessAddress,
-      "business_description": businessDescription,
-      "keywords": businessKeyword,
-      "featured_image": image
-    };
+      var request = http.MultipartRequest("POST", Uri.parse(url), );
+      request.files.add(await http.MultipartFile.fromPath("featured_image", image!));
 
-    print('add request---- ${body}');
+      request.fields["user_id"]= loginController.userId;
+      request.fields["category_id"]= categoryId!;
+      request.fields["business_title"]= businessName!;
+      request.fields["mobile"]= contactNumber!;
+      request.fields["email"]= email!;
+      request.fields["website"]= websiteURL!;
+      request.fields["state_id"]= stateId!;
+      request.fields["city_id"]= cityId!;
+      request.fields["zipcode"]= postalCode!;
+      request.fields["address"]= businessAddress!;
+      request.fields["business_description"]= businessDescription!;
+      request.fields["token"]= loginController.accessToken;
 
-    http.Response response = await http.post(Uri.parse(url), body: body);
-    debugPrint(" add business api response :- ${response.body}");
-    return jsonDecode(response.body);
+      var streamedResponse =await request.send();
+
+      var response = await http.Response.fromStream(streamedResponse);
+      final responseData = json.decode(response.body);
+
+      log("add business response in api :- $responseData");
+
+      return responseData;
   }
-
-// business list by user
 
   businessListByUser() async {
     var url = '$baseUrl/app/user/business_list_by_user';

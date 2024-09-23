@@ -66,30 +66,6 @@ class _AddBusinessState extends State<AddBusiness> {
     print('selected city id---- $selectedCityId');
     print('selected category id---- $selectedCategoryId');
 
-    // image upload url
-    final uri =
-        Uri.parse("https://mean-experts.com/kaarobaar/api/user/add_business");
-
-    // Create a multipart request
-    var request = http.MultipartRequest('POST', uri);
-
-    // Add the image file to the request
-    request.files.add(await http.MultipartFile.fromPath(
-      'featured_image', // The name of the field on the server
-      _image?.path.toString() ?? " ",
-    ));
-
-    // Send the request
-    var imageResponse = await request.send();
-
-    if (imageResponse.statusCode == 200) {
-      print('Image uploaded successfully');
-      final responseData = await imageResponse.stream.bytesToString();
-      print('image response ==== ${responseData}');
-    } else {
-      print('Image upload failed: ${imageResponse.statusCode}');
-    }
-
     if (businessNameController.text.isNotEmpty &&
         (!businessNameController.text.startsWith(" "))) {
       if (categoryDropdownController.text.isNotEmpty &&
@@ -114,20 +90,9 @@ class _AddBusinessState extends State<AddBusiness> {
                             isApiCalling = true;
                           });
 
-                          final response = await api.addBusiness(
-                            businessName: businessNameController.text,
-                            categoryId: selectedCategoryId,
-                            businessKeyword: businessKeywordController.text,
-                            email: emailController.text,
-                            contactNumber: phoneController.text,
-                            postalCode: postalCodeController.text,
-                            websiteURL: websiteURL.text,
-                            businessDescription:
-                                businessDescriptionController.text,
-                            stateId: selectedStateId,
-                            cityId: selectedCityId,
-                            businessAddress: businessAddressController.text,
-                            image: _image?.path.toString(),
+                          final response = await api.addBusiness(businessNameController.text, selectedCategoryId, businessKeywordController.text,
+                            emailController.text, phoneController.text, postalCodeController.text, websiteURL.text,
+                            businessDescriptionController.text, selectedStateId, selectedCityId, businessAddressController.text, _image?.path.toString(),
                           );
 
                           setState(() {
