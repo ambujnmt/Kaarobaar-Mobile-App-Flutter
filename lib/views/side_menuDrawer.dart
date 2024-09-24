@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/utils/text.dart';
+import 'package:kaarobaar/views/authorization/login_screen.dart';
 import 'package:kaarobaar/views/screens/about_us.dart';
 import 'package:kaarobaar/views/screens/add_business.dart';
 import 'package:kaarobaar/views/screens/add_event.dart';
@@ -27,6 +28,8 @@ import 'package:kaarobaar/views/screens/special_offers.dart';
 import 'package:kaarobaar/views/screens/terms_coditions.dart';
 import 'package:kaarobaar/views/screens/testimonials_screen.dart';
 
+import '../controllers/login_controller.dart';
+
 class SideMenuDrawer extends StatefulWidget {
   const SideMenuDrawer({super.key});
 
@@ -40,6 +43,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
+  LoginController loginController = Get.put(LoginController());
 
   // @override
   // void initState() {
@@ -109,8 +113,10 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
           Positioned(
             top: size.height * 0.22,
             child: Container(
-              height: size.height,
-              width: size.width,
+              // height: size.height,
+              // width: size.width,
+              height: MediaQuery.of(context).size.height * .79,
+              width: 500,
               padding: EdgeInsets.fromLTRB(size.width * 0.05, size.width * 0.15,
                   size.width * 0.05, size.width * 0.02),
               decoration: BoxDecoration(
@@ -119,178 +125,199 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     topLeft: Radius.circular(size.width * 0.05),
                     topRight: Radius.circular(size.width * 0.05),
                   )),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Add a Business", 22,
-                          FontWeight.w700, Colors.black, TextAlign.start),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Add a Business", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 2;
+                        sideDrawerController.pageController.jumpToPage(2);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 2;
-                      sideDrawerController.pageController.jumpToPage(2);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("My Business", 22,
-                          FontWeight.w700, Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("My Business", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 22;
+                        sideDrawerController.pageController.jumpToPage(22);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 22;
-                      sideDrawerController.pageController.jumpToPage(22);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Advertise With Us", 22,
-                          FontWeight.w700, Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Advertise With Us", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 3;
+                        sideDrawerController.pageController.jumpToPage(3);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 3;
-                      sideDrawerController.pageController.jumpToPage(3);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Categories", 22, FontWeight.w700,
-                          Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Categories", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 4;
+                        sideDrawerController.pageController.jumpToPage(4);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 4;
-                      sideDrawerController.pageController.jumpToPage(4);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Add Events", 22, FontWeight.w700,
-                          Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Add Events", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 17;
+                        sideDrawerController.pageController.jumpToPage(17);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 17;
-                      sideDrawerController.pageController.jumpToPage(17);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Events", 22, FontWeight.w700,
-                          Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Events", 22, FontWeight.w700,
+                            Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 5;
+                        sideDrawerController.pageController.jumpToPage(5);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 5;
-                      sideDrawerController.pageController.jumpToPage(5);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("About Us", 22, FontWeight.w700,
-                          Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("About Us", 22, FontWeight.w700,
+                            Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 6;
+                        sideDrawerController.pageController.jumpToPage(6);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 6;
-                      sideDrawerController.pageController.jumpToPage(6);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Special Offers", 22,
-                          FontWeight.w700, Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Special Offers", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 7;
+                        sideDrawerController.pageController.jumpToPage(7);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 7;
-                      sideDrawerController.pageController.jumpToPage(7);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Blogs", 22, FontWeight.w700,
-                          Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Blogs", 22, FontWeight.w700,
+                            Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 8;
+                        sideDrawerController.pageController.jumpToPage(8);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 8;
-                      sideDrawerController.pageController.jumpToPage(8);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("FAQ", 22, FontWeight.w700,
-                          Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("FAQ", 22, FontWeight.w700,
+                            Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 9;
+                        sideDrawerController.pageController.jumpToPage(9);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 9;
-                      sideDrawerController.pageController.jumpToPage(9);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Testimonials", 22,
-                          FontWeight.w700, Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Testimonials", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 10;
+                        sideDrawerController.pageController.jumpToPage(10);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 10;
-                      sideDrawerController.pageController.jumpToPage(10);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Terms & Conditions", 22,
-                          FontWeight.w700, Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Terms & Conditions", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 11;
+                        sideDrawerController.pageController.jumpToPage(11);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 11;
-                      sideDrawerController.pageController.jumpToPage(11);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Privacy Policy", 22,
-                          FontWeight.w700, Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Privacy Policy", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 12;
+                        sideDrawerController.pageController.jumpToPage(12);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 12;
-                      sideDrawerController.pageController.jumpToPage(12);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                  GestureDetector(
-                    child: SizedBox(
-                      height: size.height * 0.05,
-                      child: customText.kText("Contact Admin ", 22,
-                          FontWeight.w700, Colors.black, TextAlign.start),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Contact Admin ", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 13;
+                        sideDrawerController.pageController.jumpToPage(13);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 13;
-                      sideDrawerController.pageController.jumpToPage(13);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
-                  ),
-                ],
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Logout", 22, FontWeight.w700,
+                            Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        loginController.accessToken.toString() == "";
+                        print(
+                            'Logout token ---------- ${loginController.accessToken.toString()}');
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()),
+                          (Route<dynamic> route) =>
+                              false, // This removes all the previous routes
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -479,6 +506,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       BlogDetailScreen(),
                       OffersDetail(),
                       MyBusiness(), // page number 22
+                      LoginScreen(),
                     ],
                   )),
             )

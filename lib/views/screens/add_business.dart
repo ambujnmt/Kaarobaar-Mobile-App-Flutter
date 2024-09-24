@@ -23,6 +23,7 @@ class _AddBusinessState extends State<AddBusiness> {
   dynamic size;
   bool isApiCalling = false;
   final customText = CustomText(), helper = Helper();
+  bool isApiLoading = false;
 
   TextEditingController businessNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -37,6 +38,10 @@ class _AddBusinessState extends State<AddBusiness> {
   TextEditingController businessKeywordController = TextEditingController();
 
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
+
+  List<dynamic> getBusinessDetailData = [];
+
+  String imageURL = " ";
 
   addBusiness() async {
     for (int i = 0; i < getCategoryItems.length; i++) {
@@ -89,11 +94,42 @@ class _AddBusinessState extends State<AddBusiness> {
                           setState(() {
                             isApiCalling = true;
                           });
+                          final response;
 
-                          final response = await api.addBusiness(businessNameController.text, selectedCategoryId, businessKeywordController.text,
-                            emailController.text, phoneController.text, postalCodeController.text, websiteURL.text,
-                            businessDescriptionController.text, selectedStateId, selectedCityId, businessAddressController.text, _image?.path.toString(),
-                          );
+                          if (sideDrawerController.myBusinessId.isEmpty) {
+                            print('inside the add function');
+                            response = await api.addBusiness(
+                              businessNameController.text,
+                              selectedCategoryId,
+                              businessKeywordController.text,
+                              emailController.text,
+                              phoneController.text,
+                              postalCodeController.text,
+                              websiteURL.text,
+                              businessDescriptionController.text,
+                              selectedStateId,
+                              selectedCityId,
+                              businessAddressController.text,
+                              _image?.path.toString(),
+                            );
+                          } else {
+                            print('inside the edit function');
+                            response = await api.updateBusinessDetails(
+                              businessNameController.text,
+                              selectedCategoryId,
+                              businessKeywordController.text,
+                              emailController.text,
+                              phoneController.text,
+                              postalCodeController.text,
+                              websiteURL.text,
+                              businessDescriptionController.text,
+                              selectedStateId,
+                              selectedCityId,
+                              businessAddressController.text,
+                              _image?.path.toString(),
+                              sideDrawerController.myBusinessId,
+                            );
+                          }
 
                           setState(() {
                             isApiCalling = false;
@@ -143,22 +179,46 @@ class _AddBusinessState extends State<AddBusiness> {
     } else {
       helper.errorDialog(context, "Please enter valid business name");
     }
+  }
 
-    // setState(() {
-    //   isApiCalling = true;
-    // });
-    //
-    // final response = await api.addBusiness();
-    //
-    // setState(() {
-    //   isApiCalling = false;
-    // });
+  getBusinessDetail() async {
+    setState(() {
+      isApiLoading = true;
+    });
 
-    // if(response["statusCode"] == 200){
-    //   helper.successDialog(context, response["message"]);
-    // } else {
-    //   helper.errorDialog(context, response["message"]);
-    // }
+    final response =
+        await api.myBusinessDetail(sideDrawerController.myBusinessId);
+
+    setState(() {
+      getBusinessDetailData = response['result'];
+    });
+
+    setState(() {
+      isApiLoading = false;
+    });
+    if (response['status'] == 1) {
+      print('status 1');
+      businessNameController.text =
+          getBusinessDetailData[0]['business_title'] ?? " ";
+      categoryDropdownController.text =
+          getBusinessDetailData[0]['category_name'] ?? " ";
+      businessKeywordController.text =
+          getBusinessDetailData[0]['keywords'] ?? " ";
+      emailController.text = getBusinessDetailData[0]['email'] ?? " ";
+      phoneController.text = getBusinessDetailData[0]['mobile'] ?? " ";
+      postalCodeController.text = getBusinessDetailData[0]['zipcode'] ?? " ";
+      websiteURL.text = getBusinessDetailData[0]['website'] ?? " ";
+      businessDescriptionController.text =
+          getBusinessDetailData[0]['business_description'] ?? " ";
+      stateDropdownController.text =
+          getBusinessDetailData[0]['state_name'] ?? " ";
+      cityDropdownController.text =
+          getBusinessDetailData[0]['city_name'] ?? " ";
+      businessAddressController.text =
+          getBusinessDetailData[0]['address'] ?? " ";
+      imageURL = getBusinessDetailData[0]['featured_image'] ?? " ";
+      print('image url---- $imageURL');
+    }
   }
 
   String? selectedCategory;
@@ -319,6 +379,15 @@ class _AddBusinessState extends State<AddBusiness> {
     getCategoryList();
     getStateList();
     getCityList();
+    if (sideDrawerController.myBusinessId.isNotEmpty) {
+      getBusinessDetail();
+    }
+    print('my business id is---- ${sideDrawerController.myBusinessId}');
+
+    // if (sideDrawerController.myBusinessId.isNotEmpty) {
+    //   businessDescriptionController.text =
+    //       getBusinessDetailData[0]['business_description'];
+    // }
   }
 
   @override
@@ -678,25 +747,53 @@ class _AddBusinessState extends State<AddBusiness> {
                                 ));
                           });
                     },
-                    child: Container(
-                      height: h * .200,
-                      width: w * .400,
-                      decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: FileImage(File(_image?.path ?? '')))),
-                      child: Center(
-                        child: _image == null
-                            ? const Icon(
-                                size: 34,
-                                Icons.add,
-                                color: Colors.black,
-                              )
-                            : Container(),
-                      ),
-                    ),
+                    child: imageURL == " "
+                        ? Container(
+                            height: h * .200,
+                            width: w * .400,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(8),
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: FileImage(
+                                  File(_image?.path ?? ''),
+                                ),
+                              ),
+                            ),
+                            child: Center(
+                              child: _image == null
+                                  ? const Icon(
+                                      size: 34,
+                                      Icons.add,
+                                      color: Colors.black,
+                                    )
+                                  : Container(),
+                            ),
+                          )
+                        : Container(
+                            height: h * .200,
+                            width: w * .400,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(8),
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: NetworkImage(
+                                  imageURL,
+                                ),
+                              ),
+                            ),
+                            child: Center(
+                              child: imageURL == " "
+                                  ? const Icon(
+                                      size: 34,
+                                      Icons.add,
+                                      color: Colors.black,
+                                    )
+                                  : Container(),
+                            ),
+                          ),
                   ),
 
                   SizedBox(
@@ -723,8 +820,19 @@ class _AddBusinessState extends State<AddBusiness> {
                             ? const CircularProgressIndicator(
                                 color: Colors.white,
                               )
-                            : customText.kText("Register", 30, FontWeight.w700,
-                                Colors.white, TextAlign.center),
+                            : sideDrawerController.myBusinessId.isEmpty
+                                ? customText.kText(
+                                    "Register",
+                                    30,
+                                    FontWeight.w700,
+                                    Colors.white,
+                                    TextAlign.center)
+                                : customText.kText(
+                                    "Update",
+                                    30,
+                                    FontWeight.w700,
+                                    Colors.white,
+                                    TextAlign.center),
                       ),
                     ),
                     onTap: () {

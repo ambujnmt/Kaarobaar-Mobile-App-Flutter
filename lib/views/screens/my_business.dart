@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
+import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/text.dart';
+import 'package:get/get.dart';
 
 class MyBusiness extends StatefulWidget {
   const MyBusiness({super.key});
@@ -16,6 +18,50 @@ class _MyBusinessState extends State<MyBusiness> {
   List<dynamic> myBusinessListData = [];
   bool isApiCalling = false;
   final api = API();
+  SideDrawerController sideDrawerController = Get.put(SideDrawerController());
+
+  // Function to show an alert dialog
+  void _showAlertDialog(BuildContext context, Function() deleteItem) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: const Text(''),
+          content: Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: const Text(
+              ' Are you sure want to delete this item ?',
+              style: TextStyle(fontFamily: 'Raleway'),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                    fontFamily: 'Raleway', color: Color.fromRGBO(164, 0, 0, 1)),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // Perform any action here, then close the dialog
+                deleteItem();
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                    fontFamily: 'Raleway', color: Color.fromRGBO(9, 103, 9, 1)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   // get my business  list
   getMyBusiness() async {
@@ -44,7 +90,7 @@ class _MyBusinessState extends State<MyBusiness> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     final double h = MediaQuery.of(context).size.height;
-    final double w = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: isApiCalling
           ? const Center(
@@ -87,7 +133,7 @@ class _MyBusinessState extends State<MyBusiness> {
                               crossAxisSpacing: 5.0,
                               mainAxisSpacing: 5.0,
                               // childAspectRatio: 1 / 1.8,
-                              childAspectRatio: 1 / 1.7,
+                              childAspectRatio: 1 / 1.8,
                             ),
                             itemCount: myBusinessListData.length,
                             itemBuilder: (context, index) {
@@ -161,7 +207,7 @@ class _MyBusinessState extends State<MyBusiness> {
                                     ),
 
                                     Container(
-                                      margin: const EdgeInsets.only(top: 5),
+                                      margin: const EdgeInsets.only(top: 25),
                                       height: h * .050,
                                       width: double.infinity,
                                       child: Row(
@@ -170,39 +216,66 @@ class _MyBusinessState extends State<MyBusiness> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            height: 30,
-                                            width: 60,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        size.width * 0.05),
-                                                gradient: const LinearGradient(
-                                                    begin: Alignment.centerLeft,
-                                                    end: Alignment.centerRight,
-                                                    colors: [
-                                                      ColorConstants
-                                                          .kGradientDarkGreen,
-                                                      ColorConstants
-                                                          .kGradientLightGreen
-                                                    ])),
-                                            child: const Center(
-                                              child: Icon(
-                                                Icons.edit,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
                                           GestureDetector(
-                                            onTap: () async {
-                                              // delete user by id
-                                              await api.deleteBusiness(
+                                            onTap: () {
+                                              sideDrawerController
+                                                  .pageIndex.value = 2;
+                                              sideDrawerController
+                                                      .myBusinessId =
                                                   myBusinessListData[index]
-                                                      ['id']);
+                                                      ["id"];
+                                              sideDrawerController
+                                                  .pageController
+                                                  .jumpToPage(2);
                                             },
                                             child: Container(
                                               height: 30,
-                                              width: 60,
+                                              width: width * .2,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          size.width * 0.05),
+                                                  gradient:
+                                                      const LinearGradient(
+                                                          begin: Alignment
+                                                              .centerLeft,
+                                                          end:
+                                                              Alignment
+                                                                  .centerRight,
+                                                          colors: [
+                                                        ColorConstants
+                                                            .kGradientDarkGreen,
+                                                        ColorConstants
+                                                            .kGradientLightGreen
+                                                      ])),
+                                              child: const Center(
+                                                child: Icon(
+                                                  Icons.edit,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          GestureDetector(
+                                            onTap: () {
+                                              _showAlertDialog(
+                                                context,
+                                                () async {
+                                                  await api.deleteBusiness(
+                                                      myBusinessListData[index]
+                                                          ['id']);
+                                                  getMyBusiness();
+                                                },
+                                              ); // Show the alert dialog
+                                              // delete user by id
+                                              // await api.deleteBusiness(
+                                              //     myBusinessListData[index]
+                                              //         ['id']);
+                                            },
+                                            child: Container(
+                                              height: 30,
+                                              width: width * .2,
                                               decoration: BoxDecoration(
                                                   border: Border.all(
                                                       color: Colors.white),

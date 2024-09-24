@@ -395,6 +395,7 @@ class API {
     request.fields["user_id"] = loginController.userId;
     request.fields["category_id"] = categoryId!;
     request.fields["business_title"] = businessName!;
+    request.fields["keywords"] = businessKeyword!;
     request.fields["mobile"] = contactNumber!;
     request.fields["email"] = email!;
     request.fields["website"] = websiteURL!;
@@ -441,6 +442,94 @@ class API {
     print('business id----- ${businessId}');
     http.Response response = await http.post(Uri.parse(url), body: body);
     debugPrint(" delete business api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // get business details for update
+  myBusinessDetail(String businessId) async {
+    var url = '$baseUrl/app/business_details';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "business_id": businessId,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("Get Business Details :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // update business details
+
+  updateBusinessDetails(
+      String? businessName,
+      String? categoryId,
+      String? businessKeyword,
+      String? email,
+      String? contactNumber,
+      String? postalCode,
+      String? websiteURL,
+      String? businessDescription,
+      String? stateId,
+      String? cityId,
+      String? businessAddress,
+      String? image,
+      String? businessId) async {
+    var url = '$baseUrl/user/update_business';
+
+    var request = http.MultipartRequest(
+      "POST",
+      Uri.parse(url),
+    );
+    request.files
+        .add(await http.MultipartFile.fromPath("featured_image", image!));
+    request.fields["token"] = loginController.accessToken;
+    request.fields["user_id"] = loginController.userId;
+    request.fields["business_id "] = businessId.toString();
+    request.fields["category_id"] = categoryId!;
+    request.fields["keywords"] = businessKeyword!;
+    request.fields["business_title"] = businessName!;
+    request.fields["mobile"] = contactNumber!;
+    request.fields["email"] = email!;
+    request.fields["website"] = websiteURL!;
+    request.fields["state_id"] = stateId!;
+    request.fields["city_id"] = cityId!;
+    request.fields["zipcode"] = postalCode!;
+    request.fields["address"] = businessAddress!;
+    request.fields["business_description"] = businessDescription!;
+
+    var streamedResponse = await request.send();
+
+    var response = await http.Response.fromStream(streamedResponse);
+    final responseData = json.decode(response.body);
+
+    log("edit business response in api :- $responseData");
+
+    return responseData;
+  }
+
+  // contact admin api integration
+  // get business details for update
+  contactToAdmin(
+    String name,
+    String email,
+    String contactNumber,
+    String message,
+    String address,
+  ) async {
+    var url = '$baseUrl/user/contact_to_admin';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "name": name,
+      "mobile": contactNumber,
+      "email": email,
+      "message": message,
+      "address": address,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("contact admin api response :- ${response.body}");
     return jsonDecode(response.body);
   }
 }
