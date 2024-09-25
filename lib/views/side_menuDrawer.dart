@@ -23,6 +23,7 @@ import 'package:kaarobaar/views/screens/offers_detail.dart';
 import 'package:kaarobaar/views/screens/our_services_detail.dart';
 import 'package:kaarobaar/views/screens/popular_commuitites.dart';
 import 'package:kaarobaar/views/screens/privacy_policy.dart';
+import 'package:kaarobaar/views/screens/public_jobs.dart';
 import 'package:kaarobaar/views/screens/search_screen.dart';
 import 'package:kaarobaar/views/screens/special_offers.dart';
 import 'package:kaarobaar/views/screens/terms_coditions.dart';
@@ -151,6 +152,18 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       onTap: () {
                         sideDrawerController.pageIndex.value = 22;
                         sideDrawerController.pageController.jumpToPage(22);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
+                    ),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Jobs", 22, FontWeight.w700,
+                            Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 24;
+                        sideDrawerController.pageController.jumpToPage(24);
                         scaffoldKey.currentState!.closeEndDrawer();
                       },
                     ),
@@ -510,6 +523,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       OffersDetail(),
                       MyBusiness(), // page number 22
                       LoginScreen(),
+                      PublicJobs(), // page number 24
                     ],
                   )),
             )

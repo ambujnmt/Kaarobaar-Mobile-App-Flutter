@@ -485,7 +485,7 @@ class API {
         .add(await http.MultipartFile.fromPath("featured_image", image!));
     request.fields["token"] = loginController.accessToken;
     request.fields["user_id"] = loginController.userId;
-    request.fields["business_id "] = businessId.toString();
+
     request.fields["category_id"] = categoryId!;
     request.fields["keywords"] = businessKeyword!;
     request.fields["business_title"] = businessName!;
@@ -497,6 +497,7 @@ class API {
     request.fields["zipcode"] = postalCode!;
     request.fields["address"] = businessAddress!;
     request.fields["business_description"] = businessDescription!;
+    request.fields["business_id "] = businessId.toString();
 
     var streamedResponse = await request.send();
 
@@ -554,6 +555,20 @@ class API {
 
     http.Response response = await http.post(Uri.parse(url), body: body);
     debugPrint("advertise with us api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // public jobs listing api integration
+
+  publicJobsListing() async {
+    var url = '$baseUrl/job/all_job_list';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" public job list api response:- ${response.body}");
     return jsonDecode(response.body);
   }
 }

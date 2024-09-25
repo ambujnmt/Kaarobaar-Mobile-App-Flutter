@@ -20,7 +20,6 @@ class AddBusiness extends StatefulWidget {
 }
 
 class _AddBusinessState extends State<AddBusiness> {
-
   dynamic size;
   bool isApiCalling = false;
   final customText = CustomText(), helper = Helper();
@@ -109,7 +108,8 @@ class _AddBusinessState extends State<AddBusiness> {
                               _image?.path.toString(),
                             );
                           } else {
-                            print('inside the edit function');
+                            print(
+                                'inside the edit function --- ${sideDrawerController.myBusinessId}');
                             response = await api.updateBusinessDetails(
                               businessNameController.text,
                               selectedCategoryId,
@@ -403,10 +403,13 @@ class _AddBusinessState extends State<AddBusiness> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                     child: customText.kText(
-                      sideDrawerController.myBusinessId == ""
-                        ? "Add Business"
-                        : "Update Business", 30, FontWeight.w700,
-                        Colors.black, TextAlign.start),
+                        sideDrawerController.myBusinessId == ""
+                            ? "Add Business"
+                            : "Update Business",
+                        30,
+                        FontWeight.w700,
+                        Colors.black,
+                        TextAlign.start),
                   ),
                   TextField(
                     keyboardType: TextInputType.text,
@@ -670,8 +673,7 @@ class _AddBusinessState extends State<AddBusiness> {
 
                   GestureDetector(
                     onTap: () {
-
-                      if(imageURL != "") {
+                      if (imageURL != "") {
                         setState(() {
                           imageURL = "";
                         });
@@ -800,28 +802,25 @@ class _AddBusinessState extends State<AddBusiness> {
                     //         ),
                     //       ),
                     child: Container(
-                      height: h * .200,
-                      width: w * .400,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(8),
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: imageURL != ""
-                            ? NetworkImage(imageURL)
-                            : Image.file(File(_image?.path ?? "")).image
-                        )
-                      ),
-                      child: imageURL != ""
-                       ? const Center(
-                          child:  Icon(
-                              size: 34,
-                              Icons.add,
-                              color: Colors.black,
-                            )
-                         )
-                       : const SizedBox()
-                    ),
+                        height: h * .200,
+                        width: w * .400,
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(8),
+                            image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: imageURL != ""
+                                    ? NetworkImage(imageURL)
+                                    : Image.file(File(_image?.path ?? ""))
+                                        .image)),
+                        child: imageURL != ""
+                            ? const Center(
+                                child: Icon(
+                                size: 34,
+                                Icons.add,
+                                color: Colors.black,
+                              ))
+                            : const SizedBox()),
                   ),
 
                   SizedBox(
