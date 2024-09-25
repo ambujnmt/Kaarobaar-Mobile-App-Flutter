@@ -20,10 +20,13 @@ class AddBusiness extends StatefulWidget {
 }
 
 class _AddBusinessState extends State<AddBusiness> {
+
   dynamic size;
   bool isApiCalling = false;
   final customText = CustomText(), helper = Helper();
   bool isApiLoading = false;
+  List<dynamic> getBusinessDetailData = [];
+  String imageURL = "";
 
   TextEditingController businessNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -32,16 +35,9 @@ class _AddBusinessState extends State<AddBusiness> {
   TextEditingController postalCodeController = TextEditingController();
   TextEditingController websiteURL = TextEditingController();
   TextEditingController businessDescriptionController = TextEditingController();
-
   TextEditingController businessAddressController = TextEditingController();
-
   TextEditingController businessKeywordController = TextEditingController();
-
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
-
-  List<dynamic> getBusinessDetailData = [];
-
-  String imageURL = " ";
 
   addBusiness() async {
     for (int i = 0; i < getCategoryItems.length; i++) {
@@ -216,7 +212,7 @@ class _AddBusinessState extends State<AddBusiness> {
           getBusinessDetailData[0]['city_name'] ?? " ";
       businessAddressController.text =
           getBusinessDetailData[0]['address'] ?? " ";
-      imageURL = getBusinessDetailData[0]['featured_image'] ?? " ";
+      imageURL = getBusinessDetailData[0]['featured_image'] ?? "";
       print('image url---- $imageURL');
     }
   }
@@ -406,7 +402,10 @@ class _AddBusinessState extends State<AddBusiness> {
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-                    child: customText.kText("Add Business", 30, FontWeight.w700,
+                    child: customText.kText(
+                      sideDrawerController.myBusinessId == ""
+                        ? "Add Business"
+                        : "Update Business", 30, FontWeight.w700,
                         Colors.black, TextAlign.start),
                   ),
                   TextField(
@@ -671,6 +670,12 @@ class _AddBusinessState extends State<AddBusiness> {
 
                   GestureDetector(
                     onTap: () {
+
+                      if(imageURL != "") {
+                        setState(() {
+                          imageURL = "";
+                        });
+                      }
                       // show modal bottom sheet
                       showModalBottomSheet(
                           context: context,
@@ -747,53 +752,76 @@ class _AddBusinessState extends State<AddBusiness> {
                                 ));
                           });
                     },
-                    child: imageURL == " "
-                        ? Container(
-                            height: h * .200,
-                            width: w * .400,
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(8),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: FileImage(
-                                  File(_image?.path ?? ''),
-                                ),
-                              ),
-                            ),
-                            child: Center(
-                              child: _image == null
-                                  ? const Icon(
-                                      size: 34,
-                                      Icons.add,
-                                      color: Colors.black,
-                                    )
-                                  : Container(),
-                            ),
-                          )
-                        : Container(
-                            height: h * .200,
-                            width: w * .400,
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(8),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: NetworkImage(
-                                  imageURL,
-                                ),
-                              ),
-                            ),
-                            child: Center(
-                              child: imageURL == " "
-                                  ? const Icon(
-                                      size: 34,
-                                      Icons.add,
-                                      color: Colors.black,
-                                    )
-                                  : Container(),
-                            ),
-                          ),
+                    // child: imageURL == " "
+                    //     ? Container(
+                    //         height: h * .200,
+                    //         width: w * .400,
+                    //         decoration: BoxDecoration(
+                    //           color: Colors.grey,
+                    //           borderRadius: BorderRadius.circular(8),
+                    //           image: DecorationImage(
+                    //             fit: BoxFit.fill,
+                    //             image: FileImage(
+                    //               File(_image?.path ?? ''),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         child: Center(
+                    //           child: _image == null
+                    //               ? const Icon(
+                    //                   size: 34,
+                    //                   Icons.add,
+                    //                   color: Colors.black,
+                    //                 )
+                    //               : Container(),
+                    //         ),
+                    //       )
+                    //     : Container(
+                    //         height: h * .200,
+                    //         width: w * .400,
+                    //         decoration: BoxDecoration(
+                    //           color: Colors.grey,
+                    //           borderRadius: BorderRadius.circular(8),
+                    //           image: DecorationImage(
+                    //             fit: BoxFit.fill,
+                    //             image: NetworkImage(
+                    //               imageURL,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         child: Center(
+                    //           child: imageURL == " "
+                    //               ? const Icon(
+                    //                   size: 34,
+                    //                   Icons.add,
+                    //                   color: Colors.black,
+                    //                 )
+                    //               : Container(),
+                    //         ),
+                    //       ),
+                    child: Container(
+                      height: h * .200,
+                      width: w * .400,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: imageURL != ""
+                            ? NetworkImage(imageURL)
+                            : Image.file(File(_image?.path ?? "")).image
+                        )
+                      ),
+                      child: imageURL != ""
+                       ? const Center(
+                          child:  Icon(
+                              size: 34,
+                              Icons.add,
+                              color: Colors.black,
+                            )
+                         )
+                       : const SizedBox()
+                    ),
                   ),
 
                   SizedBox(
