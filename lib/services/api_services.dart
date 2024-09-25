@@ -532,4 +532,28 @@ class API {
     debugPrint("contact admin api response :- ${response.body}");
     return jsonDecode(response.body);
   }
+
+  // Do advertise with us
+  advertiseWithUs(
+    String name,
+    String email,
+    String contactNumber,
+    String message,
+    String address,
+  ) async {
+    var url = '$baseUrl/user/advertise_with_us';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "name": name,
+      "mobile": contactNumber,
+      "email": email,
+      "message": message,
+      "address": address,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("advertise with us api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
 }

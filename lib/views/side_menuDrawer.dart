@@ -27,6 +27,7 @@ import 'package:kaarobaar/views/screens/search_screen.dart';
 import 'package:kaarobaar/views/screens/special_offers.dart';
 import 'package:kaarobaar/views/screens/terms_coditions.dart';
 import 'package:kaarobaar/views/screens/testimonials_screen.dart';
+import 'package:kaarobaar/views/screens/updated_advertise.dart';
 
 import '../controllers/login_controller.dart';
 
@@ -304,9 +305,10 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                             Colors.black, TextAlign.start),
                       ),
                       onTap: () {
-                        loginController.accessToken.toString() == "";
-                        print(
-                            'Logout token ---------- ${loginController.accessToken.toString()}');
+                        // loginController.accessToken.toString() == "";
+                        loginController.clearToken();
+                        // print(
+                        //     'Logout token ---------- ${loginController.accessToken.toString()}');
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
@@ -486,7 +488,8 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       DashboardScreen(),
                       MyAccount(),
                       AddBusiness(),
-                      AdvertiseWithUs(),
+                      // AdvertiseWithUs(),
+                      UpdatedAdvertise(),
                       Categories(),
                       Events(),
                       AboutUs(),

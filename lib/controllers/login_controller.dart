@@ -21,4 +21,10 @@ class LoginController extends GetxController {
       userId = box.read("userId");
     }
   }
+
+  clearToken() {
+    accessToken = "";
+    box.remove("accessToken");
+    print('Clear access token-------- $accessToken');
+  }
 }
