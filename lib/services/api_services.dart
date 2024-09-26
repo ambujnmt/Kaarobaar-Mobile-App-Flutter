@@ -571,4 +571,51 @@ class API {
     debugPrint(" public job list api response:- ${response.body}");
     return jsonDecode(response.body);
   }
+
+  // public job details
+  publicJobDetail(String jobId) async {
+    var url = '$baseUrl/job/job_details';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "job_id": jobId,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("job detail api response:- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // my jobs
+
+  myJobsListing() async {
+    var url = '$baseUrl/job/job_list_by_user';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("my job list api response:- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // delete my jobs
+
+  deleteMyJobs(String jobId) async {
+    var url = '$baseUrl/job/delete_job';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+      "job_id": jobId,
+    };
+    print('user id----- ${loginController.userId}');
+    print('job id----- ${jobId}');
+    http.Response response = await http.post(Uri.parse(url), body: body);
+
+    debugPrint(" delete job api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
 }

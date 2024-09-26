@@ -6,6 +6,7 @@ import 'package:kaarobaar/utils/text.dart';
 import 'package:kaarobaar/views/authorization/login_screen.dart';
 import 'package:kaarobaar/views/screens/about_us.dart';
 import 'package:kaarobaar/views/screens/add_business.dart';
+import 'package:kaarobaar/views/screens/add_edit_my_job.dart';
 import 'package:kaarobaar/views/screens/add_event.dart';
 import 'package:kaarobaar/views/screens/advertise_withUs.dart';
 import 'package:kaarobaar/views/screens/advertisement_details.dart';
@@ -19,10 +20,12 @@ import 'package:kaarobaar/views/screens/events_screen.dart';
 import 'package:kaarobaar/views/screens/faq_screen.dart';
 import 'package:kaarobaar/views/screens/my_account.dart';
 import 'package:kaarobaar/views/screens/my_business.dart';
+import 'package:kaarobaar/views/screens/my_jobs.dart';
 import 'package:kaarobaar/views/screens/offers_detail.dart';
 import 'package:kaarobaar/views/screens/our_services_detail.dart';
 import 'package:kaarobaar/views/screens/popular_commuitites.dart';
 import 'package:kaarobaar/views/screens/privacy_policy.dart';
+import 'package:kaarobaar/views/screens/public_job_details.dart';
 import 'package:kaarobaar/views/screens/public_jobs.dart';
 import 'package:kaarobaar/views/screens/search_screen.dart';
 import 'package:kaarobaar/views/screens/special_offers.dart';
@@ -152,6 +155,18 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       onTap: () {
                         sideDrawerController.pageIndex.value = 22;
                         sideDrawerController.pageController.jumpToPage(22);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
+                    ),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("My Jobs", 22, FontWeight.w700,
+                            Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 26;
+                        sideDrawerController.pageController.jumpToPage(26);
                         scaffoldKey.currentState!.closeEndDrawer();
                       },
                     ),
@@ -524,6 +539,9 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       MyBusiness(), // page number 22
                       LoginScreen(),
                       PublicJobs(), // page number 24
+                      PublicJobDetails(),
+                      MyJobs(), // page number 26
+                      AddEditMyJob(),
                     ],
                   )),
             )

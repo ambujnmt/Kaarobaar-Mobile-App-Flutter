@@ -133,7 +133,7 @@ class _MyBusinessState extends State<MyBusiness> {
                               crossAxisSpacing: 5.0,
                               mainAxisSpacing: 5.0,
                               // childAspectRatio: 1 / 1.8,
-                              childAspectRatio: 1 / 1.8,
+                              childAspectRatio: 1 / 2.1,
                             ),
                             itemCount: myBusinessListData.length,
                             itemBuilder: (context, index) {
@@ -267,11 +267,7 @@ class _MyBusinessState extends State<MyBusiness> {
                                                           ['id']);
                                                   getMyBusiness();
                                                 },
-                                              ); // Show the alert dialog
-                                              // delete user by id
-                                              // await api.deleteBusiness(
-                                              //     myBusinessListData[index]
-                                              //         ['id']);
+                                              );
                                             },
                                             child: Container(
                                               height: 30,
@@ -290,10 +286,8 @@ class _MyBusinessState extends State<MyBusiness> {
                                                               Alignment
                                                                   .centerRight,
                                                           colors: [
-                                                        ColorConstants
-                                                            .kGradientDarkGreen,
-                                                        ColorConstants
-                                                            .kGradientLightGreen
+                                                        Color(0xffa40000),
+                                                        Color(0xff262626)
                                                       ])),
                                               child: const Center(
                                                 child: Icon(
@@ -305,7 +299,43 @@ class _MyBusinessState extends State<MyBusiness> {
                                           ),
                                         ],
                                       ),
-                                    )
+                                    ),
+
+                                    GestureDetector(
+                                      onTap: () {
+                                        sideDrawerController.pageIndex.value =
+                                            27;
+                                        sideDrawerController.pageController
+                                            .jumpToPage(27);
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.white),
+                                            borderRadius: BorderRadius.circular(
+                                                size.width * 0.05),
+                                            gradient: const LinearGradient(
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                colors: [
+                                                  ColorConstants
+                                                      .kGradientDarkGreen,
+                                                  ColorConstants
+                                                      .kGradientLightGreen
+                                                ])),
+                                        child: Center(
+                                          child: customText.kText(
+                                              "Post Job",
+                                              15,
+                                              FontWeight.w600,
+                                              Colors.white,
+                                              TextAlign.center),
+                                        ),
+                                      ),
+                                    ),
+
                                     // Linear gradient color button
                                     // Row(
                                     //   mainAxisAlignment:
