@@ -10,4 +10,7 @@ class SideDrawerController extends GetxController {
   String offersId = "";
   String myBusinessId = "";
   String jobDetailId = "";
+  String businessListingId = "";
+  String myJobDetailId = "";
+  String businessId = "";
 }

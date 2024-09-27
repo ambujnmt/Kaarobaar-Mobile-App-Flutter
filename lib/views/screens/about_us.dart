@@ -27,7 +27,7 @@ class _AboutUsState extends State<AboutUs> {
   void initState() {
     super.initState();
     aboutUs();
-    servicesList();
+    // servicesList();
   }
 
   aboutUs() async {
@@ -75,9 +75,6 @@ class _AboutUsState extends State<AboutUs> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     return Scaffold(
-      // body: Center(
-      //   child: Text("About Us"),
-      // ),
       body: Container(
         height: size.height,
         width: size.width,
@@ -137,120 +134,122 @@ class _AboutUsState extends State<AboutUs> {
                       ],
                     ),
               const SizedBox(height: 20),
-              Container(
-                height: size.height * 0.05,
-                width: size.width * 0.8,
-                margin: EdgeInsets.symmetric(vertical: size.width * 0.03),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(size.width * 0.05),
-                    gradient: const LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [
-                          ColorConstants.kGradientDarkGreen,
-                          ColorConstants.kGradientLightGreen
-                        ])),
-                child: Center(
-                  child: customText.kText("Our Services", 20, FontWeight.w700,
-                      Colors.white, TextAlign.center),
-                ),
-              ),
-              isApiLoading
-                  ? const CircularProgressIndicator(
-                      color: ColorConstants.kTestimonialsDarkRed,
-                    )
-                  : Container(
-                      // color: Colors.red,
-                      // height: size.height * .5,
+              // Container(
+              //   height: size.height * 0.05,
+              //   width: size.width * 0.8,
+              //   margin: EdgeInsets.symmetric(vertical: size.width * 0.03),
+              //   decoration: BoxDecoration(
+              //       border: Border.all(color: Colors.white),
+              //       borderRadius: BorderRadius.circular(size.width * 0.05),
+              //       gradient: const LinearGradient(
+              //           begin: Alignment.centerLeft,
+              //           end: Alignment.centerRight,
+              //           colors: [
+              //             ColorConstants.kGradientDarkGreen,
+              //             ColorConstants.kGradientLightGreen
+              //           ])),
+              //   child: Center(
+              //     child: customText.kText("Our Services", 20, FontWeight.w700,
+              //         Colors.white, TextAlign.center),
+              //   ),
+              // ),
+              // isApiLoading
+              //     ? const CircularProgressIndicator(
+              //         color: ColorConstants.kTestimonialsDarkRed,
+              //       )
+              //     : Container(
+              //         // color: Colors.red,
+              //         // height: size.height * .5,
 
-                      width: double.infinity,
-                      child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: servicesListData.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                "${servicesListData[index]["title"]}",
-                                20,
-                                FontWeight.w700,
-                                Colors.black,
-                                TextAlign.center,
-                              ),
-                              servicesListData[index]['image'] == ""
-                                  ? Container()
-                                  : Container(
-                                      height: size.height * 0.2,
-                                      width: size.width,
-                                      margin: EdgeInsets.symmetric(
-                                          vertical: size.width * 0.03),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius: BorderRadius.circular(
-                                            size.width * 0.05),
-                                        // image: DecorationImage(
-                                        //     image: NetworkImage(
-                                        //         servicesListData[index]
-                                        //             ["image"]),
-                                        //     fit: BoxFit.cover),
-                                      ),
-                                      child: Image.network(
-                                        servicesListData[index]['image']
-                                            .toString(),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                              HtmlWidget(
-                                servicesListData[index]["short_content"],
-                                textStyle: customText.kTextStyle(
-                                    16, FontWeight.w500, Colors.black),
-                              ),
-                              const SizedBox(height: 20),
-                              GestureDetector(
-                                child: Container(
-                                  height: size.width * 0.13,
-                                  width: size.width,
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: size.width * 0.03,
-                                      horizontal: size.width * 0.25),
-                                  decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(
-                                          size.width * 0.03),
-                                      gradient: const RadialGradient(
-                                        center: Alignment(0.19, -0.9),
-                                        colors: [
-                                          Color(0xffa40000),
-                                          Color(0xff262626)
-                                        ],
-                                        radius: 4.0,
-                                      )),
-                                  child: Center(
-                                    child: customText.kText(
-                                        "See Details",
-                                        22,
-                                        FontWeight.w700,
-                                        Colors.white,
-                                        TextAlign.center),
-                                  ),
-                                ),
-                                onTap: () {
-                                  // FocusScope.of(context).unfocus();
-                                  sideDrawerController.pageIndex.value = 19;
-                                  sideDrawerController.ourServiceId = servicesListData[index]["id"];
-                                  sideDrawerController.pageController.jumpToPage(19);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+              //         width: double.infinity,
+              //         child: ListView.builder(
+              //           physics: NeverScrollableScrollPhysics(),
+              //           shrinkWrap: true,
+              //           itemCount: servicesListData.length,
+              //           itemBuilder: (BuildContext context, int index) =>
+              //               Container(
+              //             child: Column(
+              //               mainAxisAlignment: MainAxisAlignment.start,
+              //               crossAxisAlignment: CrossAxisAlignment.start,
+              //               children: [
+              //                 customText.kText(
+              //                   "${servicesListData[index]["title"]}",
+              //                   20,
+              //                   FontWeight.w700,
+              //                   Colors.black,
+              //                   TextAlign.center,
+              //                 ),
+              //                 servicesListData[index]['image'] == ""
+              //                     ? Container()
+              //                     : Container(
+              //                         height: size.height * 0.2,
+              //                         width: size.width,
+              //                         margin: EdgeInsets.symmetric(
+              //                             vertical: size.width * 0.03),
+              //                         decoration: BoxDecoration(
+              //                           color: Colors.grey,
+              //                           borderRadius: BorderRadius.circular(
+              //                               size.width * 0.05),
+              //                           // image: DecorationImage(
+              //                           //     image: NetworkImage(
+              //                           //         servicesListData[index]
+              //                           //             ["image"]),
+              //                           //     fit: BoxFit.cover),
+              //                         ),
+              //                         child: Image.network(
+              //                           servicesListData[index]['image']
+              //                               .toString(),
+              //                           fit: BoxFit.fill,
+              //                         ),
+              //                       ),
+              //                 HtmlWidget(
+              //                   servicesListData[index]["short_content"],
+              //                   textStyle: customText.kTextStyle(
+              //                       16, FontWeight.w500, Colors.black),
+              //                 ),
+              //                 const SizedBox(height: 20),
+              //                 GestureDetector(
+              //                   child: Container(
+              //                     height: size.width * 0.13,
+              //                     width: size.width,
+              //                     margin: EdgeInsets.symmetric(
+              //                         vertical: size.width * 0.03,
+              //                         horizontal: size.width * 0.25),
+              //                     decoration: BoxDecoration(
+              //                         color: Colors.black,
+              //                         borderRadius: BorderRadius.circular(
+              //                             size.width * 0.03),
+              //                         gradient: const RadialGradient(
+              //                           center: Alignment(0.19, -0.9),
+              //                           colors: [
+              //                             Color(0xffa40000),
+              //                             Color(0xff262626)
+              //                           ],
+              //                           radius: 4.0,
+              //                         )),
+              //                     child: Center(
+              //                       child: customText.kText(
+              //                           "See Details",
+              //                           22,
+              //                           FontWeight.w700,
+              //                           Colors.white,
+              //                           TextAlign.center),
+              //                     ),
+              //                   ),
+              //                   onTap: () {
+              //                     // FocusScope.of(context).unfocus();
+              //                     sideDrawerController.pageIndex.value = 19;
+              //                     sideDrawerController.ourServiceId =
+              //                         servicesListData[index]["id"];
+              //                     sideDrawerController.pageController
+              //                         .jumpToPage(19);
+              //                   },
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         ),
+              //       ),
             ],
           ),
         ),
@@ -258,121 +257,3 @@ class _AboutUsState extends State<AboutUs> {
     );
   }
 }
-
-
-// const Text(
-//   "Lorem ipsum dolor sit amet consectetur adipisicing elit. "
-//   "Atque cupiditate cum provident at! Dolorum fuga, deserunt "
-//   "est atque excepturi voluptas architecto exercitationem cumque "
-//   "delectus iste facilis quaerat in minima totam. Lorem ipsum dolor "
-//   "sit amet consectetur adipisicing elit. Nulla eligendi laudantium "
-//   "obcaecati numquam quisquam vitae ratione nihil. Quasi laborum tempora "
-//   "laboriosam libero aliquam distinctio, sapiente nemo, ex expedita nam "
-//   "error! Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-//   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black,
-//       fontFamily: "Raleway"), textAlign: TextAlign.start, overflow: TextOverflow.ellipsis,
-//   maxLines: 8,
-// ),
-// GestureDetector(
-//   child: Container(
-//     height: size.width * 0.13,
-//     width: size.width,
-//     margin: EdgeInsets.symmetric(vertical: size.width * 0.03, horizontal: size.width * 0.25),
-//     decoration: BoxDecoration(
-//         color: Colors.black,
-//         borderRadius: BorderRadius.circular(size.width * 0.03),
-//         gradient: const RadialGradient(
-//           center: Alignment(0.19, -0.9),
-//           colors: [
-//             Color(0xffa40000),
-//             Color(0xff262626)
-//           ],
-//           radius: 4.0,
-//         )
-//     ),
-//     child: Center(
-//       child: customText.kText("See Details", 22, FontWeight.w700, Colors.white, TextAlign.center),
-//     ),
-//   ),
-//   onTap: () {
-//     FocusScope.of(context).unfocus();
-//   },
-// ),
-// SizedBox(
-//   height: size.height * 0.7,
-//   width: size.width * 0.95,
-//   // color: Colors.grey.shade300,
-//   child: Column(
-//     children: [
-//       Container(
-//         height: size.height * 0.05,
-//         width: size.width * 0.8,
-//         margin: EdgeInsets.symmetric(vertical: size.width * 0.03),
-//         decoration: BoxDecoration(
-//             border: Border.all(color: Colors.white),
-//             borderRadius: BorderRadius.circular(size.width * 0.05),
-//             gradient: const LinearGradient(
-//                 begin: Alignment.centerLeft,
-//                 end: Alignment.centerRight,
-//                 colors: [
-//                   ColorConstants.kGradientDarkGreen,
-//                   ColorConstants.kGradientLightGreen
-//                 ]
-//             )
-//         ),
-//         child: Center(
-//           child: customText.kText("Our Services", 20, FontWeight.w700, Colors.white, TextAlign.center),
-//         ),
-//       ),
-//       customText.kText("Claim Your Business & Get Started Today!", 20, FontWeight.w700, Colors.black, TextAlign.center),
-//       Container(
-//         height: size.height * 0.2,
-//         width: size.width,
-//         margin: EdgeInsets.symmetric(vertical: size.width * 0.03),
-//         decoration: BoxDecoration(
-//             color: Colors.grey,
-//             borderRadius: BorderRadius.circular(size.width * 0.05)
-//         ),
-//         child: Image.asset("assets/images/cameraImg.png", fit: BoxFit.fill,),
-//       ),
-//       const Text(
-//         "Lorem ipsum dolor sit amet consectetur adipisicing elit. "
-//             "Atque cupiditate cum provident at! Dolorum fuga, deserunt "
-//             "est atque excepturi voluptas architecto exercitationem cumque "
-//             "delectus iste facilis quaerat in minima totam. Lorem ipsum dolor "
-//             "sit amet consectetur adipisicing elit. Nulla eligendi laudantium "
-//             "obcaecati numquam quisquam vitae ratione nihil. Quasi laborum tempora "
-//             "laboriosam libero aliquam distinctio, sapiente nemo, ex expedita nam "
-//             "error! Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-//         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black,
-//             fontFamily: "Raleway"), textAlign: TextAlign.start, overflow: TextOverflow.ellipsis,
-//         maxLines: 8,
-//       ),
-//       GestureDetector(
-//         child: Container(
-//           height: size.width * 0.13,
-//           width: size.width,
-//           margin: EdgeInsets.symmetric(vertical: size.width * 0.03, horizontal: size.width * 0.25),
-//           decoration: BoxDecoration(
-//               color: Colors.black,
-//               borderRadius: BorderRadius.circular(size.width * 0.03),
-//               gradient: const RadialGradient(
-//                 center: Alignment(0.19, -0.9),
-//                 colors: [
-//                   Color(0xffa40000),
-//                   Color(0xff262626)
-//                 ],
-//                 radius: 4.0,
-//               )
-//           ),
-//           child: Center(
-//             child: customText.kText("See Details", 22, FontWeight.w700, Colors.white, TextAlign.center),
-//           ),
-//         ),
-//         onTap: () {
-//           FocusScope.of(context).unfocus();
-//         },
-//       ),
-//     ],
-//   ),
-// ),

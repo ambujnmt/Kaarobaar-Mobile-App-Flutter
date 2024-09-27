@@ -1,7 +1,9 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
+import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/helper.dart';
 import 'package:kaarobaar/utils/text.dart';
 
@@ -16,6 +18,7 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
   final customText = CustomText(), helper = Helper();
   dynamic size;
   bool isApiCalling = false;
+  final api = API();
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
   TextEditingController jobTitleController = TextEditingController();
@@ -27,6 +30,141 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController salaryController = TextEditingController();
   TextEditingController vacancyControlller = TextEditingController();
+
+  Map<String, dynamic> myJobDetail = {};
+
+  addEditJob() async {
+    if (jobTitleController.text.isNotEmpty &&
+        (!jobTitleController.text.startsWith(" "))) {
+      if (jobTypeController.text.isNotEmpty &&
+          (!jobTypeController.text.startsWith(" "))) {
+        if (jobDescriptionController.text.isNotEmpty &&
+            (!jobDescriptionController.text.startsWith(" "))) {
+          if (jobLocationController.text.isNotEmpty &&
+              (!jobLocationController.text.startsWith(" "))) {
+            if (qualificationController.text.isNotEmpty &&
+                (!qualificationController.text.startsWith(" "))) {
+              if (EmailValidator.validate(emailController.text)) {
+                if (mobileController.text.length == 10) {
+                  if (salaryController.text.isNotEmpty &&
+                      (!salaryController.text.startsWith(" "))) {
+                    if (vacancyControlller.text.isNotEmpty &&
+                        (!vacancyControlller.text.startsWith(" "))) {
+                      setState(() {
+                        isApiCalling = true;
+                      });
+                      var response;
+                      if (sideDrawerController.myJobDetailId.isEmpty &&
+                          sideDrawerController.businessId.isEmpty) {
+                        print('inside the add job');
+                        response = await api.addJobs(
+                            sideDrawerController.businessListingId,
+                            jobTitleController.text,
+                            jobTypeController.text,
+                            jobDescriptionController.text,
+                            jobLocationController.text,
+                            qualificationController.text,
+                            emailController.text,
+                            mobileController.text,
+                            salaryController.text,
+                            vacancyControlller.text);
+                      } else {
+                        print('inside the edit job');
+                        response = await api.updateJobs(
+                            sideDrawerController.businessId,
+                            sideDrawerController.myJobDetailId,
+                            jobTitleController.text,
+                            jobTypeController.text,
+                            jobDescriptionController.text,
+                            jobLocationController.text,
+                            qualificationController.text,
+                            emailController.text,
+                            mobileController.text,
+                            salaryController.text,
+                            vacancyControlller.text);
+                      }
+
+                      setState(() {
+                        isApiCalling = false;
+                      });
+                      if (response["status"] == 1) {
+                        helper.successDialog(context, response["message"]);
+                        print('Job Added successfully');
+                        sideDrawerController.pageIndex.value = 26;
+                        sideDrawerController.pageController.jumpToPage(26);
+                      } else {
+                        helper.errorDialog(context, response["message"]);
+                      }
+                    } else {
+                      helper.errorDialog(
+                          context, "Please enter number of vacancy");
+                    }
+                  } else {
+                    helper.errorDialog(context, "Please enter salary");
+                  }
+                } else {
+                  helper.errorDialog(context, "Please enter mobile");
+                }
+              } else {
+                helper.errorDialog(context, "Please enter email");
+              }
+            } else {
+              helper.errorDialog(context, "Please enter qualication");
+            }
+          } else {
+            helper.errorDialog(context, "Please enter job location");
+          }
+        } else {
+          helper.errorDialog(context, "Please enter job description");
+        }
+      } else {
+        helper.errorDialog(context, "Please enter job type");
+      }
+    } else {
+      helper.errorDialog(context, "Please enter job title");
+    }
+  }
+
+  // job detail by id
+  myJobDetailById() async {
+    setState(() {
+      isApiCalling = true;
+    });
+
+    final response =
+        await api.publicJobDetail(sideDrawerController.myJobDetailId);
+
+    setState(() {
+      myJobDetail = response['result'];
+    });
+
+    setState(() {
+      isApiCalling = false;
+    });
+    if (response['status'] == 1) {
+      jobTitleController.text = myJobDetail['job_title'] ?? "";
+      jobTypeController.text = myJobDetail['job_type'] ?? "";
+      jobDescriptionController.text = myJobDetail['job_description'] ?? "";
+      jobLocationController.text = myJobDetail['job_location'] ?? "";
+      qualificationController.text = myJobDetail['job_qualification'] ?? "";
+      emailController.text = myJobDetail['job_email'] ?? "";
+      mobileController.text = myJobDetail['job_mobile'] ?? "";
+      salaryController.text = myJobDetail['job_salary'] ?? "";
+      vacancyControlller.text = myJobDetail['vacancy'] ?? "";
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (sideDrawerController.myJobDetailId.isNotEmpty &&
+        sideDrawerController.businessId.isNotEmpty) {
+      myJobDetailById();
+    }
+    print(
+        'business listing id---------${sideDrawerController.businessListingId}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +262,7 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
                 height: size.width * 0.05,
               ),
               TextField(
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.words,
                 controller: mobileController,
@@ -152,7 +290,7 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
                 height: size.width * 0.05,
               ),
               TextField(
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.words,
                 controller: vacancyControlller,
@@ -186,14 +324,14 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
                             color: Colors.white,
                           )
                         : sideDrawerController.myBusinessId.isEmpty
-                            ? customText.kText("Register", 30, FontWeight.w700,
+                            ? customText.kText("Submit", 30, FontWeight.w700,
                                 Colors.white, TextAlign.center)
                             : customText.kText("Update", 30, FontWeight.w700,
                                 Colors.white, TextAlign.center),
                   ),
                 ),
                 onTap: () {
-                  // addBusiness();
+                  addEditJob();
                 },
               )
             ],

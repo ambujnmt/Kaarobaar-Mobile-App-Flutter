@@ -31,6 +31,7 @@ import 'package:kaarobaar/views/screens/search_screen.dart';
 import 'package:kaarobaar/views/screens/special_offers.dart';
 import 'package:kaarobaar/views/screens/terms_coditions.dart';
 import 'package:kaarobaar/views/screens/testimonials_screen.dart';
+import 'package:kaarobaar/views/screens/top_services.dart';
 import 'package:kaarobaar/views/screens/updated_advertise.dart';
 
 import '../controllers/login_controller.dart';
@@ -542,6 +543,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       PublicJobDetails(),
                       MyJobs(), // page number 26
                       AddEditMyJob(),
+                      TopServices() // page number 28
                     ],
                   )),
             )

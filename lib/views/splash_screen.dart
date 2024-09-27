@@ -44,7 +44,10 @@ class _SplashScreenState extends State<SplashScreen> {
         width: size.width,
         child: Column(
           children: [
-            Image.asset("assets/images/upperCurve.png"),
+            Image.asset(
+              "assets/images/upperCurve.png",
+              color: Color(0xffEE0200),
+            ),
             const Spacer(),
             Container(
                 margin: EdgeInsets.all(size.width * 0.12),

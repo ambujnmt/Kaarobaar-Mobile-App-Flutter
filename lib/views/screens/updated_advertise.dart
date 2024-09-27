@@ -107,7 +107,6 @@ class _UpdatedAdvertiseState extends State<UpdatedAdvertise> {
               child: TextField(
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.words,
                 controller: nameController,
                 style: customText.kTextStyle(20, FontWeight.w500, Colors.black),
                 decoration: InputDecoration(
@@ -134,7 +133,6 @@ class _UpdatedAdvertiseState extends State<UpdatedAdvertise> {
               child: TextField(
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.words,
                 controller: emailController,
                 style: customText.kTextStyle(20, FontWeight.w500, Colors.black),
                 decoration: InputDecoration(
@@ -161,7 +159,6 @@ class _UpdatedAdvertiseState extends State<UpdatedAdvertise> {
               child: TextField(
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.words,
                 controller: phoneNoController,
                 style: customText.kTextStyle(20, FontWeight.w500, Colors.black),
                 decoration: InputDecoration(
@@ -187,7 +184,6 @@ class _UpdatedAdvertiseState extends State<UpdatedAdvertise> {
               child: TextField(
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.words,
                 controller: msgController,
                 maxLines: null,
                 style: customText.kTextStyle(20, FontWeight.w500, Colors.black),
@@ -213,8 +209,7 @@ class _UpdatedAdvertiseState extends State<UpdatedAdvertise> {
               ),
               child: TextField(
                 keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.words,
+                textInputAction: TextInputAction.done,
                 controller: addressController,
                 maxLines: null,
                 style: customText.kTextStyle(20, FontWeight.w500, Colors.black),

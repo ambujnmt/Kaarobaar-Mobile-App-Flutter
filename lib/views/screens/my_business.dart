@@ -305,6 +305,8 @@ class _MyBusinessState extends State<MyBusiness> {
                                       onTap: () {
                                         sideDrawerController.pageIndex.value =
                                             27;
+                                        sideDrawerController.businessListingId =
+                                            myBusinessListData[index]["id"];
                                         sideDrawerController.pageController
                                             .jumpToPage(27);
                                       },

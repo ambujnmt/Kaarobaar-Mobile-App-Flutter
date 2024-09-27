@@ -328,11 +328,13 @@ class _MyJobsState extends State<MyJobs> {
                               ),
                               onTap: () {
                                 // FocusScope.of(context).unfocus();
-                                // sideDrawerController.pageIndex.value = 25;
-                                // sideDrawerController.jobDetailId =
-                                //     myJobsListData[index]["id"];
-                                // sideDrawerController.pageController
-                                //     .jumpToPage(25);
+                                sideDrawerController.pageIndex.value = 27;
+                                sideDrawerController.myJobDetailId =
+                                    myJobsListData[index]["id"];
+                                sideDrawerController.businessId =
+                                    myJobsListData[index]["business_id"];
+                                sideDrawerController.pageController
+                                    .jumpToPage(27);
                               },
                             ),
                             GestureDetector(

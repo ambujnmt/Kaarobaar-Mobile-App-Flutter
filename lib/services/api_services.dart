@@ -618,4 +618,89 @@ class API {
     debugPrint(" delete job api response :- ${response.body}");
     return jsonDecode(response.body);
   }
+
+  addJobs(
+    String businessListId,
+    String jobTitle,
+    String jobType,
+    String jobDescription,
+    String jobLocation,
+    String qualication,
+    String email,
+    String mobileNumber,
+    String salary,
+    String vacancy,
+  ) async {
+    var url = '$baseUrl/job/add_job';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+      "business_id": businessListId,
+      "job_title": jobTitle,
+      "job_description": jobDescription,
+      "job_location": jobLocation,
+      "job_type": jobType,
+      "job_qualification": qualication,
+      "job_email": email,
+      "job_mobile": mobileNumber,
+      "job_salary": salary,
+      "vacancy": vacancy,
+    };
+    print('user id----- ${loginController.userId}');
+    print('job id----- ${businessListId}');
+    http.Response response = await http.post(Uri.parse(url), body: body);
+
+    debugPrint(" add business api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  updateJobs(
+    String businessIdForUpdate,
+    String jobIdForUpdate,
+    String jobTitle,
+    String jobType,
+    String jobDescription,
+    String jobLocation,
+    String qualication,
+    String email,
+    String mobileNumber,
+    String salary,
+    String vacancy,
+  ) async {
+    var url = '$baseUrl/job/update_job';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+      "business_id": businessIdForUpdate,
+      "job_id": jobIdForUpdate,
+      "job_title": jobTitle,
+      "job_description": jobDescription,
+      "job_location": jobLocation,
+      "job_type": jobType,
+      "job_qualification": qualication,
+      "job_email": email,
+      "job_mobile": mobileNumber,
+      "job_salary": salary,
+      "vacancy": vacancy,
+    };
+    print('user id----- ${loginController.userId}');
+    print('job id----- ${businessIdForUpdate}');
+    http.Response response = await http.post(Uri.parse(url), body: body);
+
+    debugPrint("update job api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  homeTopServices() async {
+    var url = '$baseUrl/app/top_services';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("home top services response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
 }
