@@ -4,6 +4,7 @@ import 'package:kaarobaar/constants/color_constants.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/utils/text.dart';
 import 'package:kaarobaar/views/authorization/login_screen.dart';
+import 'package:kaarobaar/views/authorization/register_screen.dart';
 import 'package:kaarobaar/views/screens/about_us.dart';
 import 'package:kaarobaar/views/screens/add_business.dart';
 import 'package:kaarobaar/views/screens/add_edit_my_job.dart';
@@ -24,6 +25,7 @@ import 'package:kaarobaar/views/screens/my_jobs.dart';
 import 'package:kaarobaar/views/screens/offers_detail.dart';
 import 'package:kaarobaar/views/screens/our_services_detail.dart';
 import 'package:kaarobaar/views/screens/popular_commuitites.dart';
+import 'package:kaarobaar/views/screens/popular_communities_detail.dart';
 import 'package:kaarobaar/views/screens/privacy_policy.dart';
 import 'package:kaarobaar/views/screens/public_job_details.dart';
 import 'package:kaarobaar/views/screens/public_jobs.dart';
@@ -51,11 +53,12 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
   LoginController loginController = Get.put(LoginController());
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   pageController.jumpToPage(0);
-  // }
+  @override
+  void initState() {
+    super.initState();
+    // pageController.jumpToPage(0);
+    print('side menu access token----${loginController.accessToken}');
+  }
 
   customDrawer() {
     return Container(
@@ -70,36 +73,88 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
               padding: EdgeInsets.fromLTRB(
                   size.width * 0.03, 0, size.width * 0.03, 0),
               decoration: const BoxDecoration(
-                  gradient: RadialGradient(
-                center: Alignment(0.25, -2.5),
-                colors: [Color(0xffa40000), Color(0xff262626)],
-                radius: 2.1,
-              )),
+                gradient: RadialGradient(
+                  center: Alignment(0.25, -2.5),
+                  colors: [Color(0xffa40000), Color(0xff262626)],
+                  radius: 2.1,
+                ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: size.height * 0.12,
-                    width: size.width * 0.8,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: size.width * 0.25,
-                          padding: EdgeInsets.all(size.width * 0.01),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
+                  loginController.accessToken.isEmpty
+                      ? Container(
+                          height: size.height * 0.08,
+                          width: size.width * 0.8,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // Register screen
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RegisterScreen()),
+                                  );
+                                },
+                                child: customText.kText(
+                                    "Register",
+                                    20,
+                                    FontWeight.w900,
+                                    Colors.white,
+                                    TextAlign.start),
+                              ),
+                              const SizedBox(height: 10),
+                              GestureDetector(
+                                onTap: () {
+                                  // Login Screen
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginScreen()),
+                                  );
+                                },
+                                child: customText.kText(
+                                    "Login",
+                                    20,
+                                    FontWeight.w900,
+                                    Colors.white,
+                                    TextAlign.start),
+                              ),
+                            ],
                           ),
-                          child: Image.asset("assets/images/sampleGirl.png"),
-                        ),
-                        SizedBox(width: size.width * 0.02),
-                        Expanded(
-                          child: customText.kText("Lucifer", 30,
-                              FontWeight.w900, Colors.white, TextAlign.start),
                         )
-                      ],
-                    ),
-                  ),
+                      : SizedBox(
+                          height: size.height * 0.12,
+                          width: size.width * 0.8,
+                          child: Row(
+                            children: [
+                              Container(
+                                height: size.width * 0.25,
+                                padding: EdgeInsets.all(size.width * 0.01),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child:
+                                    Image.asset("assets/images/sampleGirl.png"),
+                              ),
+                              SizedBox(width: size.width * 0.02),
+                              Expanded(
+                                child: customText.kText(
+                                    "Lucifer",
+                                    30,
+                                    FontWeight.w900,
+                                    Colors.white,
+                                    TextAlign.start),
+                              )
+                            ],
+                          ),
+                        ),
                   GestureDetector(
                     child: SizedBox(
                       height: size.height * 0.12,
@@ -123,8 +178,13 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
               // width: size.width,
               height: MediaQuery.of(context).size.height * .79,
               width: 500,
-              padding: EdgeInsets.fromLTRB(size.width * 0.05, size.width * 0.15,
-                  size.width * 0.05, size.width * 0.02),
+              padding: EdgeInsets.fromLTRB(
+                  size.width * 0.05,
+                  loginController.accessToken.isEmpty
+                      ? size.width * .050
+                      : size.width * 0.15,
+                  size.width * 0.05,
+                  size.width * 0.02),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -352,42 +412,45 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
               ),
             ),
           ),
-          Positioned(
-            top: size.height * 0.2,
-            left: size.width / 3.5,
-            child: GestureDetector(
-              child: Container(
-                height: size.height * 0.05,
-                width: size.width * 0.45,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(size.width * 0.05),
-                    gradient: const LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [
-                          ColorConstants.kGradientDarkGreen,
-                          ColorConstants.kGradientLightGreen
-                        ]),
-                    boxShadow: [
-                      BoxShadow(
-                          offset: const Offset(0, 3),
-                          color: Colors.grey.shade400,
-                          spreadRadius: 1,
-                          blurRadius: 2)
-                    ]),
-                child: Center(
-                  child: customText.kText("My Account", 25, FontWeight.w900,
-                      Colors.white, TextAlign.center),
-                ),
-              ),
-              onTap: () {
-                sideDrawerController.pageIndex.value = 1;
-                sideDrawerController.pageController.jumpToPage(1);
-                scaffoldKey.currentState!.closeEndDrawer();
-              },
-            ),
-          )
+          loginController.accessToken.isEmpty
+              ? Container()
+              : Positioned(
+                  top: size.height * 0.2,
+                  left: size.width / 3.5,
+                  child: GestureDetector(
+                    child: Container(
+                      height: size.height * 0.05,
+                      width: size.width * 0.45,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white),
+                          borderRadius:
+                              BorderRadius.circular(size.width * 0.05),
+                          gradient: const LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                ColorConstants.kGradientDarkGreen,
+                                ColorConstants.kGradientLightGreen
+                              ]),
+                          boxShadow: [
+                            BoxShadow(
+                                offset: const Offset(0, 3),
+                                color: Colors.grey.shade400,
+                                spreadRadius: 1,
+                                blurRadius: 2)
+                          ]),
+                      child: Center(
+                        child: customText.kText("My Account", 25,
+                            FontWeight.w900, Colors.white, TextAlign.center),
+                      ),
+                    ),
+                    onTap: () {
+                      sideDrawerController.pageIndex.value = 1;
+                      sideDrawerController.pageController.jumpToPage(1);
+                      scaffoldKey.currentState!.closeEndDrawer();
+                    },
+                  ),
+                )
         ],
       ),
     );
@@ -543,7 +606,8 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       PublicJobDetails(),
                       MyJobs(), // page number 26
                       AddEditMyJob(),
-                      TopServices() // page number 28
+                      TopServices(), // page number 28
+                      PopularCommunitiesDetails(),
                     ],
                   )),
             )

@@ -26,10 +26,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Future.delayed(
         const Duration(seconds: 3),
-        () => accessToken == null
-            ? Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()))
-            : Navigator.pushReplacement(
+        () =>
+            //  accessToken == null
+            //     ? Navigator.pushReplacement(context,
+            //         MaterialPageRoute(builder: (context) => const LoginScreen()))
+            //     :
+            Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => const SideMenuDrawer())));

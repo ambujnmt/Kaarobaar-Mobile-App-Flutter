@@ -46,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       isApiCalling = false;
     });
 
-    print(' slider list images ----$images');
+    print('slider list images ----$images');
   }
 
   // get popular communities  list
@@ -100,7 +100,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // TODO: implement initState
     super.initState();
     getSliderImages();
-    getTestimonials();
+    // getTestimonials();
     getPopularCommunities();
     getHomeTopServices();
   }
@@ -206,76 +206,97 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   FontWeight.w700, Colors.white, TextAlign.center),
             ),
           ),
-          GestureDetector(
-            child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 5, top: 2, bottom: 2),
-                  child: customText.kText("View All", 16, FontWeight.w700,
-                      ColorConstants.kIconsGrey, TextAlign.center),
-                )),
-            onTap: () {
-              sideDrawerController.pageIndex.value = 15;
-              sideDrawerController.pageController.jumpToPage(15);
-            },
-          ),
-          SizedBox(
-            height: size.height * 0.25,
-            width: size.width,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: popularCommunitiesList.length >= 4
-                  ? 4
-                  : popularCommunitiesList.length,
-              itemBuilder: (context, index) {
-                return SizedBox(
-                  height: size.width * 0.2,
-                  width: size.width * 0.5,
-                  child: Column(
-                    children: [
-                      Container(
-                        height: size.width * 0.4,
-                        width: size.width * 0.4,
-                        decoration: BoxDecoration(
+          popularCommunitiesList.isEmpty
+              ? Container()
+              : GestureDetector(
+                  child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(right: 5, top: 2, bottom: 2),
+                        child: customText.kText("View All", 16, FontWeight.w700,
+                            ColorConstants.kIconsGrey, TextAlign.center),
+                      )),
+                  onTap: () {
+                    sideDrawerController.pageIndex.value = 15;
+                    sideDrawerController.pageController.jumpToPage(15);
+                  },
+                ),
+          popularCommunitiesList.isEmpty
+              ? Container(
+                  height: size.height * 0.25,
+                  width: size.width,
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
                           color: Colors.grey,
-                          borderRadius: BorderRadius.circular(
-                            size.width * 0.05,
-                          ),
-                        ),
-                        child:
-                            popularCommunitiesList[index]['image'].toString() ==
-                                    ""
-                                ? Center(
-                                    child: customText.kText(
-                                        "No image",
-                                        20,
-                                        FontWeight.w700,
-                                        Colors.white,
-                                        TextAlign.center),
-                                  )
-                                : Image.network(
-                                    "${popularCommunitiesList[index]['image'].toString()}",
-                                    fit: BoxFit.fill,
-                                  ),
+                          borderRadius: BorderRadius.circular(8)),
+                      height: 50,
+                      width: size.width * .400,
+                      child: Center(
+                        child: customText.kText("No data found", 15,
+                            FontWeight.w700, Colors.black, TextAlign.center),
                       ),
-                      customText.kText(
-                          "${popularCommunitiesList[index]['category_name'].toString()}",
-                          16,
-                          FontWeight.w900,
-                          Colors.black,
-                          TextAlign.center),
-                      customText.kText(
-                          "${popularCommunitiesList[index]['content'].toString()}",
-                          16,
-                          FontWeight.w400,
-                          Colors.black,
-                          TextAlign.center)
-                    ],
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
+                )
+              : SizedBox(
+                  height: size.height * 0.25,
+                  width: size.width,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: popularCommunitiesList.length >= 4
+                        ? 4
+                        : popularCommunitiesList.length,
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        height: size.width * 0.2,
+                        width: size.width * 0.5,
+                        child: Column(
+                          children: [
+                            Container(
+                              height: size.width * 0.4,
+                              width: size.width * 0.4,
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(
+                                  size.width * 0.05,
+                                ),
+                              ),
+                              child: popularCommunitiesList[index]['image']
+                                          .toString() ==
+                                      ""
+                                  ? Center(
+                                      child: customText.kText(
+                                          "No image",
+                                          20,
+                                          FontWeight.w700,
+                                          Colors.white,
+                                          TextAlign.center),
+                                    )
+                                  : Image.network(
+                                      "${popularCommunitiesList[index]['image'].toString()}",
+                                      fit: BoxFit.fill,
+                                    ),
+                            ),
+                            customText.kText(
+                                "${popularCommunitiesList[index]['category_name'].toString()}",
+                                16,
+                                FontWeight.w900,
+                                Colors.black,
+                                TextAlign.center),
+                            customText.kText(
+                                "${popularCommunitiesList[index]['listing'].toString()} Listing",
+                                16,
+                                FontWeight.w400,
+                                Colors.black,
+                                TextAlign.center)
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
           Container(
             height: size.height * 0.05,
             width: size.width * 0.8,
@@ -294,19 +315,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Colors.white, TextAlign.center),
             ),
           ),
-          GestureDetector(
-            child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 5, top: 2, bottom: 2),
-                  child: customText.kText("View All", 16, FontWeight.w700,
-                      ColorConstants.kIconsGrey, TextAlign.center),
-                )),
-            onTap: () {
-              sideDrawerController.pageIndex.value = 28;
-              sideDrawerController.pageController.jumpToPage(28);
-            },
-          ),
+          homeTopServicesList.isEmpty
+              ? Container(
+                  height: size.height * 0.25,
+                  width: size.width,
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(8)),
+                      height: 50,
+                      width: size.width * .400,
+                      child: Center(
+                        child: customText.kText("No data found", 15,
+                            FontWeight.w700, Colors.black, TextAlign.center),
+                      ),
+                    ),
+                  ),
+                )
+              : GestureDetector(
+                  child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(right: 5, top: 2, bottom: 2),
+                        child: customText.kText("View All", 16, FontWeight.w700,
+                            ColorConstants.kIconsGrey, TextAlign.center),
+                      )),
+                  onTap: () {
+                    sideDrawerController.pageIndex.value = 28;
+                    sideDrawerController.pageController.jumpToPage(28);
+                  },
+                ),
           SizedBox(
             height: size.height * 0.25,
             width: size.width,

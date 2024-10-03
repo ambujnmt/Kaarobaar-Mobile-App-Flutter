@@ -19,9 +19,11 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-
   dynamic size;
-  final customText = CustomText(), helper = Helper(), api = API(), box = GetStorage();
+  final customText = CustomText(),
+      helper = Helper(),
+      api = API(),
+      box = GetStorage();
   double systemBarSpace = 0;
   bool hidePass = true, hideConfirmPass = true, isApiCalling = false;
 
@@ -32,53 +34,65 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   LoginController loginController = Get.put(LoginController());
 
+  // Create a variable to store the selected value
+  int _selectedValue = 1;
+  String selected = "";
+
   @override
   void initState() {
     super.initState();
-    if(Platform.isAndroid) {
+    if (Platform.isAndroid) {
       systemBarSpace = 1.5;
-    } else if(Platform.isIOS) {
+    } else if (Platform.isIOS) {
       systemBarSpace = -30;
     }
   }
 
   register() async {
-
-    if(nameController.text.length > 6) {
-      if(EmailValidator.validate(emailController.text)) {
-        if(passwordController.text.length >=6 && (!passwordController.text.contains(" "))){
-          if(passwordController.text == confirmPasswordController.text) {
-
+    if (nameController.text.length > 6) {
+      if (EmailValidator.validate(emailController.text)) {
+        if (passwordController.text.length >= 6 &&
+            (!passwordController.text.contains(" "))) {
+          if (passwordController.text == confirmPasswordController.text) {
             setState(() {
               isApiCalling = true;
             });
 
-            final response = await api.register(nameController.text, emailController.text, passwordController.text);
+            final response = await api.register(
+                nameController.text,
+                emailController.text,
+                passwordController.text,
+                _selectedValue.toString());
 
             setState(() {
               isApiCalling = false;
             });
 
-            if(response["status"] == 1){
+            if (response["status"] == 1) {
               helper.successDialog(context, response["message"]);
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OTPScreen(email: emailController.text, from: "register") ));
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OTPScreen(
+                          email: emailController.text, from: "register")));
             } else {
               helper.errorDialog(context, response["message"]);
             }
-
           } else {
-            helper.errorDialog(context, "Password and confirm password doesn't match");
+            helper.errorDialog(
+                context, "Password and confirm password doesn't match");
           }
         } else {
-          helper.errorDialog(context, "Password should be atleast 6 characters and valid");
+          helper.errorDialog(
+              context, "Password should be atleast 6 characters and valid");
         }
       } else {
         helper.errorDialog(context, "Please enter a valid email address");
       }
     } else {
-      helper.errorDialog(context, "Please enter a name of atleast 6 characters");
+      helper.errorDialog(
+          context, "Please enter a name of atleast 6 characters");
     }
-
   }
 
   @override
@@ -100,13 +114,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 alignment: Alignment.topCenter,
                 decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/images/bgImage.png")
-                    )
-                ),
+                        image: AssetImage("assets/images/bgImage.png"))),
                 child: Padding(
                   padding: Platform.isIOS
-                      ? EdgeInsets.fromLTRB(size.width * 0.1, size.width * 0.3, size.width * 0.1, 0)
-                      : EdgeInsets.fromLTRB(size.width * 0.1, size.width * 0.22, size.width * 0.1, 0),
+                      ? EdgeInsets.fromLTRB(size.width * 0.1, size.width * 0.3,
+                          size.width * 0.1, 0)
+                      : EdgeInsets.fromLTRB(size.width * 0.1, size.width * 0.22,
+                          size.width * 0.1, 0),
                   child: Image.asset("assets/images/logoText.png"),
                 ),
               ),
@@ -114,20 +128,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Container(
               height: size.height * 0.78,
               width: size.width,
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.05, vertical: size.height * 0.07),
+              padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.05, vertical: size.height * 0.07),
               decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(size.width * 0.1))
-              ),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(size.width * 0.1))),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
-                    customText.kText("Register", 30, FontWeight.w800, Colors.black, TextAlign.left),
-                    customText.kText("Please register to create your account", 18, FontWeight.w400, Colors.black, TextAlign.left),
-
-                    SizedBox(height: size.width * 0.1,),
+                    customText.kText("Register", 30, FontWeight.w800,
+                        Colors.black, TextAlign.left),
+                    customText.kText("Please register to create your account",
+                        18, FontWeight.w400, Colors.black, TextAlign.left),
+                    SizedBox(
+                      height: size.width * 0.1,
+                    ),
                     TextField(
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
@@ -135,24 +152,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       textCapitalization: TextCapitalization.words,
                       decoration: InputDecoration(
                           hintText: "Name",
-                          hintStyle: customText.kTextStyle(16, FontWeight.w400, ColorConstants.kIconsGrey),
-                          prefixIcon: const Icon(Icons.person, color: ColorConstants.kIconsGrey, size: 35,)
-                      ),
+                          hintStyle: customText.kTextStyle(
+                              16, FontWeight.w400, ColorConstants.kIconsGrey),
+                          prefixIcon: const Icon(
+                            Icons.person,
+                            color: ColorConstants.kIconsGrey,
+                            size: 35,
+                          )),
                     ),
-
-                    SizedBox(height: size.width * 0.03,),
+                    SizedBox(
+                      height: size.width * 0.03,
+                    ),
                     TextField(
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       controller: emailController,
                       decoration: InputDecoration(
                           hintText: "Email",
-                          hintStyle: customText.kTextStyle(16, FontWeight.w400, ColorConstants.kIconsGrey),
-                          prefixIcon: const Icon(Icons.email, color: ColorConstants.kIconsGrey, size: 35,)
-                      ),
+                          hintStyle: customText.kTextStyle(
+                              16, FontWeight.w400, ColorConstants.kIconsGrey),
+                          prefixIcon: const Icon(
+                            Icons.email,
+                            color: ColorConstants.kIconsGrey,
+                            size: 35,
+                          )),
                     ),
-
-                    SizedBox(height: size.width * 0.03,),
+                    SizedBox(
+                      height: size.width * 0.03,
+                    ),
                     TextField(
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
@@ -160,22 +187,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: hidePass,
                       decoration: InputDecoration(
                           hintText: "Password",
-                          hintStyle: customText.kTextStyle(16, FontWeight.w400, ColorConstants.kIconsGrey),
-                          prefixIcon: const Icon(Icons.lock, color: ColorConstants.kIconsGrey, size: 35,),
+                          hintStyle: customText.kTextStyle(
+                              16, FontWeight.w400, ColorConstants.kIconsGrey),
+                          prefixIcon: const Icon(
+                            Icons.lock,
+                            color: ColorConstants.kIconsGrey,
+                            size: 35,
+                          ),
                           suffixIcon: GestureDetector(
                             child: hidePass
-                                ? const Icon(Icons.visibility_off_outlined, size: 35, color: ColorConstants.kIconsGrey,)
-                                : const Icon(Icons.visibility_outlined, size: 35, color: ColorConstants.kIconsGrey,),
+                                ? const Icon(
+                                    Icons.visibility_off_outlined,
+                                    size: 35,
+                                    color: ColorConstants.kIconsGrey,
+                                  )
+                                : const Icon(
+                                    Icons.visibility_outlined,
+                                    size: 35,
+                                    color: ColorConstants.kIconsGrey,
+                                  ),
                             onTap: () {
                               setState(() {
                                 hidePass = !hidePass;
                               });
                             },
-                          )
-                      ),
+                          )),
                     ),
-
-                    SizedBox(height: size.width * 0.03,),
+                    SizedBox(
+                      height: size.width * 0.03,
+                    ),
                     TextField(
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
@@ -183,29 +223,116 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText: hideConfirmPass,
                       decoration: InputDecoration(
                           hintText: "Confirm password",
-                          hintStyle: customText.kTextStyle(16, FontWeight.w400, ColorConstants.kIconsGrey),
-                          prefixIcon: const Icon(Icons.lock, color: ColorConstants.kIconsGrey, size: 35,),
+                          hintStyle: customText.kTextStyle(
+                              16, FontWeight.w400, ColorConstants.kIconsGrey),
+                          prefixIcon: const Icon(
+                            Icons.lock,
+                            color: ColorConstants.kIconsGrey,
+                            size: 35,
+                          ),
                           suffixIcon: GestureDetector(
                             child: hideConfirmPass
-                                ? const Icon(Icons.visibility_off_outlined, size: 35, color: ColorConstants.kIconsGrey,)
-                                : const Icon(Icons.visibility_outlined, size: 35, color: ColorConstants.kIconsGrey,),
+                                ? const Icon(
+                                    Icons.visibility_off_outlined,
+                                    size: 35,
+                                    color: ColorConstants.kIconsGrey,
+                                  )
+                                : const Icon(
+                                    Icons.visibility_outlined,
+                                    size: 35,
+                                    color: ColorConstants.kIconsGrey,
+                                  ),
                             onTap: () {
                               setState(() {
                                 hideConfirmPass = !hideConfirmPass;
                               });
                             },
-                          )
+                          )),
+                    ),
+                    SizedBox(
+                      height: size.width * 0.03,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      child: customText.kText(
+                          "Are you registering as a business or the individuals ?",
+                          18,
+                          FontWeight.w400,
+                          Colors.black,
+                          TextAlign.left),
+                    ),
+                    SizedBox(
+                      height: size.width * 0.03,
+                    ),
+                    // Radio
+                    Container(
+                      height: 50,
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              child: RadioListTile(
+                                activeColor: ColorConstants.kGradientDarkGreen,
+                                contentPadding: EdgeInsets.all(0),
+                                title: customText.kText(
+                                    "Individual",
+                                    16,
+                                    FontWeight.w400,
+                                    Colors.black,
+                                    TextAlign.left),
+                                value: 1,
+                                groupValue: _selectedValue,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedValue = value!;
+                                  });
+                                  print('selected value-----${_selectedValue}');
+                                },
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              child: RadioListTile(
+                                activeColor: ColorConstants.kGradientDarkGreen,
+                                title: customText.kText(
+                                    "Business",
+                                    16,
+                                    FontWeight.w400,
+                                    Colors.black,
+                                    TextAlign.left),
+                                value: 2,
+                                groupValue: _selectedValue,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedValue = value!;
+                                  });
+                                  print('selected value-----${_selectedValue}');
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
 
-                SizedBox(height: size.width * 0.25,),
+                    SizedBox(
+                      // height: size.width * 0.25,
+                      height: size.width * .100,
+                    ),
                     GestureDetector(
                       child: Container(
                         height: size.width * 0.13,
                         width: size.width,
                         decoration: BoxDecoration(
                             color: Colors.black,
-                            borderRadius: BorderRadius.circular(size.width * 0.02),
+                            borderRadius:
+                                BorderRadius.circular(size.width * 0.02),
                             gradient: const RadialGradient(
                               center: Alignment(0.19, -0.9),
                               colors: [
@@ -213,20 +340,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ColorConstants.kGradientBlack,
                               ],
                               radius: 4.0,
-                            )
-                        ),
+                            )),
                         child: Center(
                           child: isApiCalling
-                            ? const CircularProgressIndicator(color: Colors.white,)
-                            : customText.kText("Register", 30, FontWeight.w700, Colors.white, TextAlign.center),
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : customText.kText(
+                                  "Register",
+                                  30,
+                                  FontWeight.w700,
+                                  Colors.white,
+                                  TextAlign.center),
                         ),
                       ),
                       onTap: () {
                         FocusScope.of(context).unfocus();
                         register();
+                        setState(() {
+                          // if (_selectedValue == 1) {
+                          //   selected = "business";
+                          //   print('ontap selected=== ${selected}');
+                          // } else {
+                          //   selected = "individual";
+                          //   print('ontap selected=== ${selected}');
+                          // }
+                          print('set value---- ${_selectedValue}');
+                        });
+                        print('ontap selection:----${_selectedValue}');
                       },
                     )
-
                   ],
                 ),
               ),
@@ -236,5 +379,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
 }

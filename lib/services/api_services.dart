@@ -20,7 +20,7 @@ class API {
   }
 
   // user registration api
-  register(String name, String email, String password) async {
+  register(String name, String email, String password, String userType) async {
     var url = "$baseUrl/auth/userRegistration";
 
     Map<String, dynamic> body = {
@@ -29,6 +29,7 @@ class API {
       "email": email,
       "password": password,
       "confirm_password": password,
+      "user_type": userType
     };
 
     http.Response response = await http.post(Uri.parse(url), body: body);
@@ -147,7 +148,7 @@ class API {
 
   // popular communities api integration
   popularCommunities() async {
-    var popularCommunities = '$baseUrl/app/communities_category';
+    var popularCommunities = '$baseUrl/app/category_list';
 
     Map<String, dynamic> body = {
       "token": loginController.accessToken,
