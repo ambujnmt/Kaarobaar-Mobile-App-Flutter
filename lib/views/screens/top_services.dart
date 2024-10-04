@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
+import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/text.dart';
 
@@ -16,6 +18,7 @@ class _TopServicesState extends State<TopServices> {
   List<dynamic> viewAllTopServicesList = [];
   bool isApiCalling = false;
   final api = API();
+  SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
   // get popular communities  list
   viewAllTopServices() async {
@@ -83,7 +86,7 @@ class _TopServicesState extends State<TopServices> {
                                   ])),
                           child: Center(
                             child: customText.kText(
-                                "Popular Communities",
+                                "Top Services",
                                 20,
                                 FontWeight.w700,
                                 Colors.white,
@@ -106,54 +109,63 @@ class _TopServicesState extends State<TopServices> {
                             ),
                             itemCount: viewAllTopServicesList.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                                // margin: EdgeInsets.all(size.width * 0.02),
-                                padding: EdgeInsets.all(size.width * 0.02),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: ColorConstants.kIndicatorDots),
-                                    borderRadius: BorderRadius.circular(
-                                        size.width * 0.03)),
-                                child: Column(
-                                  // crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height: size.width * 0.38,
-                                      width: size.width * 0.38,
-                                      margin: EdgeInsets.only(
-                                          bottom: size.width * 0.02),
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey.shade800,
-                                          borderRadius: BorderRadius.circular(
-                                              size.width * 0.03)),
-                                      child: viewAllTopServicesList[index]
-                                                      ['featured_image']
-                                                  .toString() ==
-                                              ""
-                                          ? Center(
-                                              child: customText.kText(
-                                                  "No image",
-                                                  20,
-                                                  FontWeight.w700,
-                                                  Colors.white,
-                                                  TextAlign.center),
-                                            )
-                                          : Image.network(
-                                              "${viewAllTopServicesList[index]['featured_image'].toString()}",
-                                              fit: BoxFit.fill,
-                                            ),
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.45,
-                                      // height: size.width * 0.09,
-                                      child: customText.kText(
-                                          "${viewAllTopServicesList[index]['business_title'].toString()}",
-                                          15,
-                                          FontWeight.w700,
-                                          Colors.black,
-                                          TextAlign.center),
-                                    ),
-                                  ],
+                              return GestureDetector(
+                                onTap: () {
+                                  sideDrawerController.pageIndex.value = 31;
+                                  sideDrawerController.topServicesDetailId =
+                                      viewAllTopServicesList[index]["id"];
+                                  sideDrawerController.pageController
+                                      .jumpToPage(31);
+                                },
+                                child: Container(
+                                  // margin: EdgeInsets.all(size.width * 0.02),
+                                  padding: EdgeInsets.all(size.width * 0.02),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: ColorConstants.kIndicatorDots),
+                                      borderRadius: BorderRadius.circular(
+                                          size.width * 0.03)),
+                                  child: Column(
+                                    // crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: size.width * 0.38,
+                                        width: size.width * 0.38,
+                                        margin: EdgeInsets.only(
+                                            bottom: size.width * 0.02),
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey.shade800,
+                                            borderRadius: BorderRadius.circular(
+                                                size.width * 0.03)),
+                                        child: viewAllTopServicesList[index]
+                                                        ['featured_image']
+                                                    .toString() ==
+                                                ""
+                                            ? Center(
+                                                child: customText.kText(
+                                                    "No image",
+                                                    20,
+                                                    FontWeight.w700,
+                                                    Colors.white,
+                                                    TextAlign.center),
+                                              )
+                                            : Image.network(
+                                                "${viewAllTopServicesList[index]['featured_image'].toString()}",
+                                                fit: BoxFit.fill,
+                                              ),
+                                      ),
+                                      SizedBox(
+                                        width: size.width * 0.45,
+                                        // height: size.width * 0.09,
+                                        child: customText.kText(
+                                            "${viewAllTopServicesList[index]['business_title'].toString()}",
+                                            15,
+                                            FontWeight.w700,
+                                            Colors.black,
+                                            TextAlign.center),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },

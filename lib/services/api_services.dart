@@ -176,6 +176,22 @@ class API {
     return jsonDecode(response.body);
   }
 
+  // get feautred listing api integration
+
+  featuredListingDashboard() async {
+    var testimonials = '$baseUrl/app/featured_category_list';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+    };
+    http.Response response = await http.post(
+      Uri.parse(testimonials),
+      body: body,
+    );
+    log(' featured listing dashboard response======${response.body}');
+    return jsonDecode(response.body);
+  }
+
   // about us
   aboutUs() async {
     var aboutUs = '$baseUrl/app/about_us';
@@ -702,6 +718,20 @@ class API {
     };
     http.Response response = await http.post(Uri.parse(url), body: body);
     debugPrint("home top services response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // api integration of all business by category
+
+  allCommunityByCategory(String id) async {
+    var url = '$baseUrl/app/all_business_by_category';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "category_id": id,
+    };
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" all community by category response :- ${response.body}");
     return jsonDecode(response.body);
   }
 }

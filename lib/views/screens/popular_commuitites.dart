@@ -116,6 +116,9 @@ class _PopularCommunitiesState extends State<PopularCommunities> {
                                   return GestureDetector(
                                     onTap: () {
                                       sideDrawerController.pageIndex.value = 29;
+                                      sideDrawerController
+                                              .communityByCategoryId =
+                                          popularCommunitiesList[index]["id"];
                                       sideDrawerController.pageController
                                           .jumpToPage(29);
                                     },

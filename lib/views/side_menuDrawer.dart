@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
+import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/text.dart';
 import 'package:kaarobaar/views/authorization/login_screen.dart';
 import 'package:kaarobaar/views/authorization/register_screen.dart';
@@ -15,6 +16,7 @@ import 'package:kaarobaar/views/screens/blog_detail_screen.dart';
 import 'package:kaarobaar/views/screens/blogs_screen.dart';
 import 'package:kaarobaar/views/screens/category.dart';
 import 'package:kaarobaar/views/screens/change_password.dart';
+import 'package:kaarobaar/views/screens/community_detail_two.dart';
 import 'package:kaarobaar/views/screens/contact_admin.dart';
 import 'package:kaarobaar/views/screens/dashboard_screen.dart';
 import 'package:kaarobaar/views/screens/events_screen.dart';
@@ -34,6 +36,7 @@ import 'package:kaarobaar/views/screens/special_offers.dart';
 import 'package:kaarobaar/views/screens/terms_coditions.dart';
 import 'package:kaarobaar/views/screens/testimonials_screen.dart';
 import 'package:kaarobaar/views/screens/top_services.dart';
+import 'package:kaarobaar/views/screens/top_services_detail.dart';
 import 'package:kaarobaar/views/screens/updated_advertise.dart';
 
 import '../controllers/login_controller.dart';
@@ -53,11 +56,39 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
   LoginController loginController = Get.put(LoginController());
 
+  bool isApiCalling = false;
+  final api = API();
+  String userName = "";
+  String userEmail = "";
+  String profileURL = "";
+
+  getProfileDataForSideMenu() async {
+    setState(() {
+      isApiCalling = true;
+    });
+    final response = await api.getProfileData();
+    setState(() {
+      userName = response['result']['username'];
+      userEmail = response['result']['email'];
+      profileURL = response['result']['profile_img'];
+    });
+    setState(() {
+      isApiCalling = false;
+    });
+
+    print(' user name----$userName');
+    print('user email--- $userEmail');
+    print('response my account------- ${response}');
+  }
+
   @override
   void initState() {
     super.initState();
     // pageController.jumpToPage(0);
     print('side menu access token----${loginController.accessToken}');
+    if (loginController.accessToken.isNotEmpty) {
+      getProfileDataForSideMenu();
+    }
   }
 
   customDrawer() {
@@ -135,18 +166,22 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                             children: [
                               Container(
                                 height: size.width * 0.25,
-                                padding: EdgeInsets.all(size.width * 0.01),
-                                decoration: const BoxDecoration(
+                                padding: const EdgeInsets.all(50),
+                                decoration: BoxDecoration(
                                   color: Colors.white,
                                   shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: NetworkImage(profileURL),
+                                      fit: BoxFit.fill),
                                 ),
-                                child:
-                                    Image.asset("assets/images/sampleGirl.png"),
+                                // child:
+                                //     Image.asset("assets/images/sampleGirl.png"),
+                                // child: Image.network(profileURL),
                               ),
                               SizedBox(width: size.width * 0.02),
                               Expanded(
                                 child: customText.kText(
-                                    "Lucifer",
+                                    "${userName}",
                                     30,
                                     FontWeight.w900,
                                     Colors.white,
@@ -608,6 +643,8 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       AddEditMyJob(),
                       TopServices(), // page number 28
                       PopularCommunitiesDetails(),
+                      CommunityDetailTwo(), // page number 30
+                      TopServicesDetail(),
                     ],
                   )),
             )
