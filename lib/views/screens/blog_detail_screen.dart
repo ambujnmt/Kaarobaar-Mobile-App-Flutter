@@ -67,7 +67,17 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                       TextAlign.center,
                     ),
                     blogDetailList[0]['image'] == ""
-                        ? Container()
+                        ? Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: const DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/no_image.jpeg',
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          )
                         : Container(
                             height: size.height * 0.2,
                             width: size.width,

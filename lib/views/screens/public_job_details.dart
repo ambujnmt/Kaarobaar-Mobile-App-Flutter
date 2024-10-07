@@ -262,16 +262,15 @@ class _PublicJobDetailsState extends State<PublicJobDetails> {
                             height: 30,
                             width: width * .450,
                             decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(8),
-                                gradient: const RadialGradient(
-                                  center: Alignment(0.19, -0.9),
-                                  colors: [
-                                    Color(0xffa40000),
-                                    Color(0xff262626)
-                                  ],
-                                  radius: 4.0,
-                                )),
+                              // color: Colors.black,
+                              borderRadius: BorderRadius.circular(8),
+                              // gradient: const RadialGradient(
+                              //   center: Alignment(0.19, -0.9),
+                              //   colors: [Color(0xffa40000), Color(0xff262626)],
+                              //   radius: 4.0,
+                              // ),
+                              color: Color(0xffEE0200),
+                            ),
                             child: Center(
                               child: customText.kText(
                                   "Back to Job Listings",

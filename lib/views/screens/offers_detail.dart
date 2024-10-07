@@ -67,7 +67,17 @@ class _OffersDetailState extends State<OffersDetail> {
                       TextAlign.center,
                     ),
                     offersDetailList[0]['image'] == ""
-                        ? Container()
+                        ? Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: const DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/no_image.jpeg',
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          )
                         : Container(
                             height: size.height * 0.2,
                             width: size.width,
@@ -75,17 +85,12 @@ class _OffersDetailState extends State<OffersDetail> {
                                 vertical: size.width * 0.03),
                             decoration: BoxDecoration(
                               color: Colors.grey,
-                              borderRadius:
-                                  BorderRadius.circular(size.width * 0.05),
-                              // image: DecorationImage(
-                              //     image: NetworkImage(
-                              //         servicesListData[index]
-                              //             ["image"]),
-                              //     fit: BoxFit.cover),
-                            ),
-                            child: Image.network(
-                              offersDetailList[0]['image'].toString(),
-                              fit: BoxFit.fill,
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                image:
+                                    NetworkImage(offersDetailList[0]["image"]),
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
                     HtmlWidget(

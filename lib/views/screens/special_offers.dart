@@ -105,18 +105,33 @@ class _SpecialOffersState extends State<SpecialOffers> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  height: size.width * 0.38,
-                                  width: size.width * 0.5,
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade800,
-                                      borderRadius: BorderRadius.circular(
-                                          size.width * 0.03)),
-                                  child: Image.network(
-                                    "${offersListData[index]['image']}",
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
+                                offersListData[index]['image'].toString() == ""
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          image: const DecorationImage(
+                                            image: AssetImage(
+                                              'assets/images/no_image.jpeg',
+                                            ),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        height: size.width * 0.38,
+                                        width: size.width * 0.5,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade800,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          image: DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: NetworkImage(
+                                                '${offersListData[index]['image']}'),
+                                          ),
+                                        ),
+                                      ),
                                 SizedBox(
                                   width: size.width * 0.45,
                                   height: size.width * 0.12,
@@ -159,17 +174,19 @@ class _SpecialOffersState extends State<SpecialOffers> {
                                       width: size.width * 0.3,
                                       // margin: EdgeInsets.symmetric(vertical: size.width * 0.03, horizontal: size.width * 0.25),
                                       decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.circular(
-                                              size.width * 0.03),
-                                          gradient: const RadialGradient(
-                                            center: Alignment(0.19, -0.9),
-                                            colors: [
-                                              Color(0xffa40000),
-                                              Color(0xff262626)
-                                            ],
-                                            radius: 4.0,
-                                          )),
+                                        // color: Colors.black,
+                                        borderRadius: BorderRadius.circular(
+                                            size.width * 0.03),
+                                        // gradient: const RadialGradient(
+                                        //   center: Alignment(0.19, -0.9),
+                                        //   colors: [
+                                        //     Color(0xffa40000),
+                                        //     Color(0xff262626)
+                                        //   ],
+                                        //   radius: 4.0,
+                                        // ),
+                                        color: Color(0xffEE0200),
+                                      ),
                                       child: Center(
                                         child: customText.kText(
                                             "Read More",

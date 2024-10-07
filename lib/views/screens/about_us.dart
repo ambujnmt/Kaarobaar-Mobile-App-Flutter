@@ -112,20 +112,36 @@ class _AboutUsState extends State<AboutUs> {
                       children: [
                         customText.kText("${aboutUsData["title"]}", 20,
                             FontWeight.w700, Colors.black, TextAlign.center),
-                        Container(
-                          height: size.height * 0.2,
-                          width: size.width,
-                          margin:
-                              EdgeInsets.symmetric(vertical: size.width * 0.03),
-                          decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius:
-                                  BorderRadius.circular(size.width * 0.05),
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                      aboutUsData["about_image"].toString()),
-                                  fit: BoxFit.cover)),
-                        ),
+                        aboutUsData["about_image"].toString() == ""
+                            ? Container(
+                                height: size.height * 0.2,
+                                width: size.width,
+                                margin: EdgeInsets.symmetric(
+                                    vertical: size.width * 0.03),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(
+                                        size.width * 0.05),
+                                    image: const DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/no_image.jpeg'),
+                                        fit: BoxFit.fill)),
+                              )
+                            : Container(
+                                height: size.height * 0.2,
+                                width: size.width,
+                                margin: EdgeInsets.symmetric(
+                                    vertical: size.width * 0.03),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(
+                                        size.width * 0.05),
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            aboutUsData["about_image"]
+                                                .toString()),
+                                        fit: BoxFit.cover)),
+                              ),
                         HtmlWidget(
                           aboutUsData["about_content"],
                           textStyle: customText.kTextStyle(

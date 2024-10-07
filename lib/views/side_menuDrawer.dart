@@ -104,11 +104,12 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
               padding: EdgeInsets.fromLTRB(
                   size.width * 0.03, 0, size.width * 0.03, 0),
               decoration: const BoxDecoration(
-                gradient: RadialGradient(
-                  center: Alignment(0.25, -2.5),
-                  colors: [Color(0xffa40000), Color(0xff262626)],
-                  radius: 2.1,
-                ),
+                color: Color(0xffEE0200),
+                // gradient: RadialGradient(
+                //   center: Alignment(0.25, -2.5),
+                //   colors: [Color(0xffa40000), Color(0xff262626)],
+                //   radius: 2.1,
+                // ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -508,15 +509,17 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                 padding: EdgeInsets.fromLTRB(
                     size.width * 0.03, size.width * 0.12, size.width * 0.03, 0),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(size.width * 0.05),
-                      bottomRight: Radius.circular(size.width * 0.05),
-                    ),
-                    gradient: const RadialGradient(
-                      center: Alignment(0.25, -2.5),
-                      colors: [Color(0xffa40000), Color(0xff262626)],
-                      radius: 2.1,
-                    )),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(size.width * 0.05),
+                    bottomRight: Radius.circular(size.width * 0.05),
+                  ),
+                  // gradient: const RadialGradient(
+                  //   center: Alignment(0.25, -2.5),
+                  //   colors: [Color(0xffa40000), Color(0xff262626)],
+                  //   radius: 2.1,
+                  // ),
+                  color: Color(0xffEE0200),
+                ),
                 child: Column(
                   children: [
                     Row(

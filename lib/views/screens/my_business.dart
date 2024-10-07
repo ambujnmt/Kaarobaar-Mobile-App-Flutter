@@ -161,13 +161,17 @@ class _MyBusinessState extends State<MyBusiness> {
                                                       ['featured_image']
                                                   .toString() ==
                                               ""
-                                          ? Center(
-                                              child: customText.kText(
-                                                  "No image",
-                                                  20,
-                                                  FontWeight.w700,
-                                                  Colors.white,
-                                                  TextAlign.center),
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                image: const DecorationImage(
+                                                  image: AssetImage(
+                                                    'assets/images/no_image.jpeg',
+                                                  ),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
                                             )
                                           : Image.network(
                                               "${myBusinessListData[index]['featured_image'].toString()}",
@@ -273,22 +277,21 @@ class _MyBusinessState extends State<MyBusiness> {
                                               height: 30,
                                               width: width * .2,
                                               decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.white),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          size.width * 0.05),
-                                                  gradient:
-                                                      const LinearGradient(
-                                                          begin: Alignment
-                                                              .centerLeft,
-                                                          end:
-                                                              Alignment
-                                                                  .centerRight,
-                                                          colors: [
-                                                        Color(0xffa40000),
-                                                        Color(0xff262626)
-                                                      ])),
+                                                border: Border.all(
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        size.width * 0.05),
+                                                // gradient: const LinearGradient(
+                                                //   begin: Alignment.centerLeft,
+                                                //   end: Alignment.centerRight,
+                                                //   colors: [
+                                                //     Color(0xffa40000),
+                                                //     Color(0xff262626)
+                                                //   ],
+                                                // ),
+                                                color: Color(0xffEE0200),
+                                              ),
                                               child: const Center(
                                                 child: Icon(
                                                   Icons.delete,

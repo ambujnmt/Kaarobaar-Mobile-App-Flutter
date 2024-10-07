@@ -202,8 +202,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ColorConstants.kGradientLightGreen
                     ])),
             child: Center(
-              child: customText.kText("Popular Communities", 20,
-                  FontWeight.w700, Colors.white, TextAlign.center),
+              child: customText.kText("Popular Categories", 20, FontWeight.w700,
+                  Colors.white, TextAlign.center),
             ),
           ),
           popularCommunitiesList.isEmpty
@@ -249,14 +249,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ? 4
                         : popularCommunitiesList.length,
                     itemBuilder: (context, index) {
-                      return SizedBox(
+                      return Container(
+                        margin: const EdgeInsets.only(right: 20, left: 20),
                         height: size.width * 0.2,
                         width: size.width * 0.5,
                         child: Column(
                           children: [
                             Container(
                               height: size.width * 0.4,
-                              width: size.width * 0.4,
+                              width: size.width * 0.5,
                               decoration: BoxDecoration(
                                 color: Colors.grey,
                                 borderRadius: BorderRadius.circular(
@@ -266,13 +267,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: popularCommunitiesList[index]['image']
                                           .toString() ==
                                       ""
-                                  ? Center(
-                                      child: customText.kText(
-                                          "No image",
-                                          20,
-                                          FontWeight.w700,
-                                          Colors.white,
-                                          TextAlign.center),
+                                  ? Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        image: const DecorationImage(
+                                          image: AssetImage(
+                                            'assets/images/no_image.jpeg',
+                                          ),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
                                     )
                                   : Image.network(
                                       "${popularCommunitiesList[index]['image'].toString()}",
@@ -356,7 +360,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ? 4
                   : homeTopServicesList.length,
               itemBuilder: (context, index) {
-                return SizedBox(
+                return Container(
+                  margin: const EdgeInsets.only(right: 20, left: 20),
                   height: size.width * 0.2,
                   width: size.width * 0.5,
                   child: Column(
@@ -364,7 +369,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Container(
                         margin: const EdgeInsets.only(bottom: 2),
                         height: size.width * 0.4,
-                        width: size.width * 0.4,
+                        width: size.width * 0.5,
                         decoration: BoxDecoration(
                           color: Colors.grey,
                           borderRadius: BorderRadius.circular(
@@ -374,13 +379,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: homeTopServicesList[index]['featured_image']
                                     .toString() ==
                                 ""
-                            ? Center(
-                                child: customText.kText(
-                                    "No image",
-                                    20,
-                                    FontWeight.w700,
-                                    Colors.white,
-                                    TextAlign.center),
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: const DecorationImage(
+                                    image: AssetImage(
+                                      'assets/images/no_image.jpeg',
+                                    ),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
                               )
                             : Image.network(
                                 "${homeTopServicesList[index]['featured_image'].toString()}",
@@ -458,7 +466,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ? 4
                   : featuredListingData.length,
               itemBuilder: (context, index) {
-                return SizedBox(
+                return Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
                   height: size.width * 0.2,
                   width: size.width * 0.5,
                   child: Column(
@@ -466,7 +475,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Container(
                         margin: const EdgeInsets.only(bottom: 2),
                         height: size.width * 0.4,
-                        width: size.width * 0.4,
+                        width: size.width * 0.5,
                         decoration: BoxDecoration(
                           color: Colors.grey,
                           borderRadius: BorderRadius.circular(
@@ -475,13 +484,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         child:
                             featuredListingData[index]['image'].toString() == ""
-                                ? Center(
-                                    child: customText.kText(
-                                        "No image",
-                                        20,
-                                        FontWeight.w700,
-                                        Colors.white,
-                                        TextAlign.center),
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      image: const DecorationImage(
+                                        image: AssetImage(
+                                          'assets/images/no_image.jpeg',
+                                        ),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
                                   )
                                 : Image.network(
                                     "${featuredListingData[index]['image'].toString()}",

@@ -149,13 +149,19 @@ class _PopularCommunitiesState extends State<PopularCommunities> {
                                                             ['image']
                                                         .toString() ==
                                                     ""
-                                                ? Center(
-                                                    child: customText.kText(
-                                                        "No image",
-                                                        20,
-                                                        FontWeight.w700,
-                                                        Colors.white,
-                                                        TextAlign.center),
+                                                ? Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      image:
+                                                          const DecorationImage(
+                                                        image: AssetImage(
+                                                          'assets/images/no_image.jpeg',
+                                                        ),
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                    ),
                                                   )
                                                 : Image.network(
                                                     "${popularCommunitiesList[index]['image'].toString()}",

@@ -112,10 +112,31 @@ class _BlogsState extends State<Blogs> {
                                       color: Colors.grey.shade800,
                                       borderRadius: BorderRadius.circular(
                                           size.width * 0.03)),
-                                  child: Image.network(
-                                    "${blogListData[index]['image']}",
-                                    fit: BoxFit.fill,
-                                  ),
+                                  child: blogListData[index]['image'] == ""
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            image: const DecorationImage(
+                                              image: AssetImage(
+                                                'assets/images/no_image.jpeg',
+                                              ),
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                '${blogListData[index]['image']}',
+                                              ),
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        ),
                                 ),
                                 SizedBox(
                                   width: size.width * 0.45,
@@ -159,17 +180,19 @@ class _BlogsState extends State<Blogs> {
                                       width: size.width * 0.3,
                                       // margin: EdgeInsets.symmetric(vertical: size.width * 0.03, horizontal: size.width * 0.25),
                                       decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.circular(
-                                              size.width * 0.03),
-                                          gradient: const RadialGradient(
-                                            center: Alignment(0.19, -0.9),
-                                            colors: [
-                                              Color(0xffa40000),
-                                              Color(0xff262626)
-                                            ],
-                                            radius: 4.0,
-                                          )),
+                                        // color: Colors.black,
+                                        borderRadius: BorderRadius.circular(
+                                            size.width * 0.03),
+                                        // gradient: const RadialGradient(
+                                        //   center: Alignment(0.19, -0.9),
+                                        //   colors: [
+                                        //     Color(0xffa40000),
+                                        //     Color(0xff262626)
+                                        //   ],
+                                        //   radius: 4.0,
+                                        // ),
+                                        color: Color(0xffEE0200),
+                                      ),
                                       child: Center(
                                         child: customText.kText(
                                             "Read More",
