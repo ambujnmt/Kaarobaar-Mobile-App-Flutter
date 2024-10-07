@@ -84,6 +84,7 @@ class _MyJobsState extends State<MyJobs> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print('init page --- ${sideDrawerController.pageIndex.value}');
     getMyJobs();
   }
 

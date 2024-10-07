@@ -549,9 +549,22 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                                           "assets/images/reply.png")),
                                 ),
                                 onTap: () {
-                                  sideDrawerController.pageIndex.value = 0;
-                                  sideDrawerController.pageController
-                                      .jumpToPage(0);
+                                  if (sideDrawerController.pageIndex.value ==
+                                      27) {
+                                    sideDrawerController.pageIndex.value = 26;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(26);
+                                  } else if (sideDrawerController
+                                          .pageIndex.value ==
+                                      25) {
+                                    sideDrawerController.pageIndex.value = 24;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(24);
+                                  } else {
+                                    sideDrawerController.pageIndex.value = 0;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(0);
+                                  }
                                 },
                               )
                             : const SizedBox())
