@@ -109,12 +109,15 @@ class _FAQState extends State<FAQ> {
                                       SizedBox(
                                         width: size.width * 0.83,
                                         // color: Colors.yellow,
-                                        child: customText.kText(
-                                            "${faqListData[index]['question']}",
-                                            18,
-                                            FontWeight.w700,
-                                            ColorConstants.kQuestionRed,
-                                            TextAlign.start),
+                                        child: Text(
+                                          "${faqListData[index]['question']}",
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                              color:
+                                                  ColorConstants.kQuestionRed,
+                                              fontFamily: "Raleway"),
+                                        ),
                                       ),
                                       Icon(
                                         openQuestion == index
@@ -127,12 +130,14 @@ class _FAQState extends State<FAQ> {
                                   Visibility(
                                     visible:
                                         openQuestion == index ? true : false,
-                                    child: customText.kText(
-                                        "${faqListData[index]['answer']}",
-                                        18,
-                                        FontWeight.w500,
-                                        Colors.black,
-                                        TextAlign.start),
+                                    child: Text(
+                                      "${faqListData[index]['answer']}",
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black,
+                                          fontFamily: "Raleway"),
+                                    ),
                                   )
                                 ],
                               ),

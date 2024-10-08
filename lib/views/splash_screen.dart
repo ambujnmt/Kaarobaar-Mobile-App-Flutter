@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Image.asset(
               "assets/images/upperCurve.png",
-              color: Color(0xffEE0200),
+              // color: Color(0xffEE0200),
             ),
             const Spacer(),
             Container(

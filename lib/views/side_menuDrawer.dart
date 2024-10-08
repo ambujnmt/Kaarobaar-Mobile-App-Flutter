@@ -21,6 +21,7 @@ import 'package:kaarobaar/views/screens/contact_admin.dart';
 import 'package:kaarobaar/views/screens/dashboard_screen.dart';
 import 'package:kaarobaar/views/screens/events_screen.dart';
 import 'package:kaarobaar/views/screens/faq_screen.dart';
+import 'package:kaarobaar/views/screens/featured_listing.dart';
 import 'package:kaarobaar/views/screens/my_account.dart';
 import 'package:kaarobaar/views/screens/my_business.dart';
 import 'package:kaarobaar/views/screens/my_jobs.dart';
@@ -104,12 +105,15 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
               padding: EdgeInsets.fromLTRB(
                   size.width * 0.03, 0, size.width * 0.03, 0),
               decoration: const BoxDecoration(
-                color: Color(0xffEE0200),
-                // gradient: RadialGradient(
-                //   center: Alignment(0.25, -2.5),
-                //   colors: [Color(0xffa40000), Color(0xff262626)],
-                //   radius: 2.1,
-                // ),
+                // color: Color(0xffEE0200),
+                gradient: RadialGradient(
+                  center: Alignment(0.25, -2.5),
+                  colors: [
+                    Color(0xffD50000),
+                    Color(0xff760000),
+                  ],
+                  radius: 2.1,
+                ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -513,12 +517,15 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     bottomLeft: Radius.circular(size.width * 0.05),
                     bottomRight: Radius.circular(size.width * 0.05),
                   ),
-                  // gradient: const RadialGradient(
-                  //   center: Alignment(0.25, -2.5),
-                  //   colors: [Color(0xffa40000), Color(0xff262626)],
-                  //   radius: 2.1,
-                  // ),
-                  color: Color(0xffEE0200),
+                  gradient: const RadialGradient(
+                    center: Alignment(0.25, -2.5),
+                    colors: [
+                      Color(0xffD50000),
+                      Color(0xff760000),
+                    ],
+                    radius: 2.1,
+                  ),
+                  // color: Color(0xffEE0200),
                 ),
                 child: Column(
                   children: [
@@ -661,6 +668,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       PopularCommunitiesDetails(),
                       CommunityDetailTwo(), // page number 30
                       TopServicesDetail(),
+                      FeaturedScreen(), // page number 32
                     ],
                   )),
             )

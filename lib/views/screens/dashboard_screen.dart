@@ -249,53 +249,62 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ? 4
                         : popularCommunitiesList.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.only(right: 20, left: 20),
-                        height: size.width * 0.2,
-                        width: size.width * 0.5,
-                        child: Column(
-                          children: [
-                            Container(
-                              height: size.width * 0.4,
-                              width: size.width * 0.5,
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(
-                                  size.width * 0.05,
+                      return GestureDetector(
+                        onTap: () {
+                          sideDrawerController.pageIndex.value = 29;
+                          sideDrawerController.communityByCategoryId =
+                              popularCommunitiesList[index]["id"];
+                          sideDrawerController.pageController.jumpToPage(29);
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 20, left: 20),
+                          height: size.width * 0.2,
+                          width: size.width * 0.5,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: size.width * 0.4,
+                                width: size.width * 0.5,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.circular(
+                                    size.width * 0.05,
+                                  ),
                                 ),
-                              ),
-                              child: popularCommunitiesList[index]['image']
-                                          .toString() ==
-                                      ""
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        image: const DecorationImage(
-                                          image: AssetImage(
-                                            'assets/images/no_image.jpeg',
+                                child: popularCommunitiesList[index]['image']
+                                            .toString() ==
+                                        ""
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          image: const DecorationImage(
+                                            image: AssetImage(
+                                              'assets/images/no_image.jpeg',
+                                            ),
+                                            fit: BoxFit.fill,
                                           ),
-                                          fit: BoxFit.fill,
                                         ),
+                                      )
+                                    : Image.network(
+                                        "${popularCommunitiesList[index]['image'].toString()}",
+                                        fit: BoxFit.fill,
                                       ),
-                                    )
-                                  : Image.network(
-                                      "${popularCommunitiesList[index]['image'].toString()}",
-                                      fit: BoxFit.fill,
-                                    ),
-                            ),
-                            customText.kText(
-                                "${popularCommunitiesList[index]['category_name'].toString()}",
-                                16,
-                                FontWeight.w900,
-                                Colors.black,
-                                TextAlign.center),
-                            customText.kText(
-                                "${popularCommunitiesList[index]['listing'].toString()} Listing",
-                                16,
-                                FontWeight.w400,
-                                Colors.black,
-                                TextAlign.center)
-                          ],
+                              ),
+                              customText.kText(
+                                  "${popularCommunitiesList[index]['category_name'].toString()}",
+                                  16,
+                                  FontWeight.w900,
+                                  Colors.black,
+                                  TextAlign.center),
+                              customText.kText(
+                                  "${popularCommunitiesList[index]['listing'].toString()} Listing",
+                                  16,
+                                  FontWeight.w400,
+                                  Colors.black,
+                                  TextAlign.center)
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -360,48 +369,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ? 4
                   : homeTopServicesList.length,
               itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.only(right: 20, left: 20),
-                  height: size.width * 0.2,
-                  width: size.width * 0.5,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 2),
-                        height: size.width * 0.4,
-                        width: size.width * 0.5,
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(
-                            size.width * 0.05,
+                return GestureDetector(
+                  onTap: () {
+                    sideDrawerController.pageIndex.value = 31;
+                    sideDrawerController.topServicesDetailId =
+                        homeTopServicesList[index]["id"];
+                    sideDrawerController.pageController.jumpToPage(31);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 20, left: 20),
+                    height: size.width * 0.2,
+                    width: size.width * 0.5,
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 2),
+                          height: size.width * 0.4,
+                          width: size.width * 0.5,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(
+                              size.width * 0.05,
+                            ),
                           ),
-                        ),
-                        child: homeTopServicesList[index]['featured_image']
-                                    .toString() ==
-                                ""
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  image: const DecorationImage(
-                                    image: AssetImage(
-                                      'assets/images/no_image.jpeg',
+                          child: homeTopServicesList[index]['featured_image']
+                                      .toString() ==
+                                  ""
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    image: const DecorationImage(
+                                      image: AssetImage(
+                                        'assets/images/no_image.jpeg',
+                                      ),
+                                      fit: BoxFit.fill,
                                     ),
-                                    fit: BoxFit.fill,
                                   ),
+                                )
+                              : Image.network(
+                                  "${homeTopServicesList[index]['featured_image'].toString()}",
+                                  fit: BoxFit.fill,
                                 ),
-                              )
-                            : Image.network(
-                                "${homeTopServicesList[index]['featured_image'].toString()}",
-                                fit: BoxFit.fill,
-                              ),
-                      ),
-                      customText.kText(
-                          "${homeTopServicesList[index]['business_title'].toString()}",
-                          16,
-                          FontWeight.w900,
-                          Colors.black,
-                          TextAlign.center),
-                    ],
+                        ),
+                        customText.kText(
+                            "${homeTopServicesList[index]['business_title'].toString()}",
+                            16,
+                            FontWeight.w900,
+                            Colors.black,
+                            TextAlign.center),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -453,8 +470,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ColorConstants.kIconsGrey, TextAlign.center),
                       )),
                   onTap: () {
-                    // sideDrawerController.pageIndex.value = 28;
-                    // sideDrawerController.pageController.jumpToPage(28);
+                    sideDrawerController.pageIndex.value = 32;
+                    sideDrawerController.pageController.jumpToPage(32);
                   },
                 ),
           SizedBox(
@@ -506,6 +523,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           FontWeight.w900,
                           Colors.black,
                           TextAlign.center),
+                      customText.kText(
+                          "${featuredListingData[index]['listing'].toString()} Listing",
+                          16,
+                          FontWeight.w400,
+                          Colors.black,
+                          TextAlign.center)
                     ],
                   ),
                 );

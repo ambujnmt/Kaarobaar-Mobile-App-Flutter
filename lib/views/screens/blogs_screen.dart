@@ -95,124 +95,136 @@ class _BlogsState extends State<Blogs> {
                         ),
                         itemCount: blogListData.length,
                         itemBuilder: (context, index) {
-                          return Container(
-                            // margin: EdgeInsets.all(size.width * 0.02),
-                            padding: EdgeInsets.all(size.width * 0.01),
-                            decoration: BoxDecoration(
-                                // border: Border.all(color: ColorConstants.kIndicatorDots),
-                                borderRadius:
-                                    BorderRadius.circular(size.width * 0.03)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  height: size.width * 0.38,
-                                  width: size.width * 0.5,
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade800,
-                                      borderRadius: BorderRadius.circular(
-                                          size.width * 0.03)),
-                                  child: blogListData[index]['image'] == ""
-                                      ? Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            image: const DecorationImage(
-                                              image: AssetImage(
-                                                'assets/images/no_image.jpeg',
-                                              ),
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ),
-                                        )
-                                      : Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            image: DecorationImage(
-                                              image: NetworkImage(
-                                                '${blogListData[index]['image']}',
-                                              ),
-                                              fit: BoxFit.fill,
-                                            ),
-                                          ),
-                                        ),
-                                ),
-                                SizedBox(
-                                  width: size.width * 0.45,
-                                  height: size.width * 0.12,
-                                  child: Text(
-                                    // "Blog ${index + 1}",
-                                    "${blogListData[index]['title']}",
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.black,
-                                        fontFamily: "Raleway"),
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: size.width * 0.45,
-                                  height: size.width * 0.2,
-                                  child: Text(
-                                    // "Blog ${index + 1}",
-                                    "${blogListData[index]['short_content']}",
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.black,
-                                        fontFamily: "Raleway"),
-                                    textAlign: TextAlign.start,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 3,
-                                  ),
-                                ),
-                                GestureDetector(
-                                  child: Align(
-                                    alignment: index % 2 == 0
-                                        ? Alignment.bottomLeft
-                                        : Alignment.bottomRight,
-                                    child: Container(
-                                      height: size.width * 0.09,
-                                      width: size.width * 0.3,
-                                      // margin: EdgeInsets.symmetric(vertical: size.width * 0.03, horizontal: size.width * 0.25),
-                                      decoration: BoxDecoration(
-                                        // color: Colors.black,
+                          return GestureDetector(
+                            onTap: () {
+                              sideDrawerController.pageIndex.value = 20;
+                              sideDrawerController.blogId =
+                                  blogListData[index]["id"];
+                              sideDrawerController.pageController
+                                  .jumpToPage(20);
+                            },
+                            child: Container(
+                              // margin: EdgeInsets.all(size.width * 0.02),
+                              padding: EdgeInsets.all(size.width * 0.01),
+                              decoration: BoxDecoration(
+                                  // border: Border.all(color: ColorConstants.kIndicatorDots),
+                                  borderRadius:
+                                      BorderRadius.circular(size.width * 0.03)),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    height: size.width * 0.38,
+                                    width: size.width * 0.5,
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey.shade800,
                                         borderRadius: BorderRadius.circular(
-                                            size.width * 0.03),
-                                        // gradient: const RadialGradient(
-                                        //   center: Alignment(0.19, -0.9),
-                                        //   colors: [
-                                        //     Color(0xffa40000),
-                                        //     Color(0xff262626)
-                                        //   ],
-                                        //   radius: 4.0,
-                                        // ),
-                                        color: Color(0xffEE0200),
-                                      ),
-                                      child: Center(
-                                        child: customText.kText(
-                                            "Read More",
-                                            16,
-                                            FontWeight.w700,
-                                            Colors.white,
-                                            TextAlign.center),
-                                      ),
+                                            size.width * 0.03)),
+                                    child: blogListData[index]['image'] == ""
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              image: const DecorationImage(
+                                                image: AssetImage(
+                                                  'assets/images/no_image.jpeg',
+                                                ),
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                          )
+                                        : Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                  '${blogListData[index]['image']}',
+                                                ),
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                          ),
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.45,
+                                    height: size.width * 0.12,
+                                    child: Text(
+                                      // "Blog ${index + 1}",
+                                      "${blogListData[index]['title']}",
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black,
+                                          fontFamily: "Raleway"),
+                                      textAlign: TextAlign.start,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
                                     ),
                                   ),
-                                  onTap: () {
-                                    // FocusScope.of(context).unfocus();
-                                    sideDrawerController.pageIndex.value = 20;
-                                    sideDrawerController.blogId =
-                                        blogListData[index]["id"];
-                                    sideDrawerController.pageController
-                                        .jumpToPage(20);
-                                  },
-                                ),
-                              ],
+                                  SizedBox(
+                                    width: size.width * 0.45,
+                                    height: size.width * 0.2,
+                                    child: Text(
+                                      // "Blog ${index + 1}",
+                                      "${blogListData[index]['short_content']}",
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black,
+                                          fontFamily: "Raleway"),
+                                      textAlign: TextAlign.start,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 3,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    child: Align(
+                                      alignment: index % 2 == 0
+                                          ? Alignment.bottomLeft
+                                          : Alignment.bottomRight,
+                                      child: Container(
+                                        height: size.width * 0.09,
+                                        width: size.width * 0.3,
+                                        // margin: EdgeInsets.symmetric(vertical: size.width * 0.03, horizontal: size.width * 0.25),
+                                        decoration: BoxDecoration(
+                                          // color: Colors.black,
+                                          borderRadius: BorderRadius.circular(
+                                              size.width * 0.03),
+                                          gradient: const RadialGradient(
+                                            center: Alignment(0.19, -0.9),
+                                            colors: [
+                                              // Color(0xffa40000),
+                                              // Color(0xff262626)
+                                              Color(0xffD50000),
+                                              Color(0xff760000),
+                                            ],
+                                            radius: 4.0,
+                                          ),
+                                          // color: Color(0xffEE0200),
+                                        ),
+                                        child: Center(
+                                          child: customText.kText(
+                                              "Read More",
+                                              16,
+                                              FontWeight.w700,
+                                              Colors.white,
+                                              TextAlign.center),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      // FocusScope.of(context).unfocus();
+                                      sideDrawerController.pageIndex.value = 20;
+                                      sideDrawerController.blogId =
+                                          blogListData[index]["id"];
+                                      sideDrawerController.pageController
+                                          .jumpToPage(20);
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },

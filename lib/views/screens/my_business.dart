@@ -282,15 +282,17 @@ class _MyBusinessState extends State<MyBusiness> {
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         size.width * 0.05),
-                                                // gradient: const LinearGradient(
-                                                //   begin: Alignment.centerLeft,
-                                                //   end: Alignment.centerRight,
-                                                //   colors: [
-                                                //     Color(0xffa40000),
-                                                //     Color(0xff262626)
-                                                //   ],
-                                                // ),
-                                                color: Color(0xffEE0200),
+                                                gradient: const LinearGradient(
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                  colors: [
+                                                    // Color(0xffa40000),
+                                                    // Color(0xff262626)
+                                                    Color(0xffD50000),
+                                                    Color(0xff760000),
+                                                  ],
+                                                ),
+                                                // color: Color(0xffEE0200),
                                               ),
                                               child: const Center(
                                                 child: Icon(

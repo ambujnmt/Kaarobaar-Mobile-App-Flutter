@@ -226,15 +226,17 @@ class _PublicJobsState extends State<PublicJobs> {
                                   decoration: BoxDecoration(
                                     // color: Colors.black,
                                     borderRadius: BorderRadius.circular(8),
-                                    // gradient: const RadialGradient(
-                                    //   center: Alignment(0.19, -0.9),
-                                    //   colors: [
-                                    //     Color(0xffa40000),
-                                    //     Color(0xff262626)
-                                    //   ],
-                                    //   radius: 4.0,
-                                    // ),
-                                    color: Color(0xffEE0200),
+                                    gradient: const RadialGradient(
+                                      center: Alignment(0.19, -0.9),
+                                      colors: [
+                                        // Color(0xffa40000),
+                                        // Color(0xff262626)
+                                        Color(0xffD50000),
+                                        Color(0xff760000),
+                                      ],
+                                      radius: 4.0,
+                                    ),
+                                    // color: Color(0xffEE0200),
                                   ),
                                   child: Center(
                                     child: customText.kText(
