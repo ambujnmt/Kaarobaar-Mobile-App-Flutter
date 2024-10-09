@@ -4,6 +4,7 @@ import 'package:kaarobaar/constants/color_constants.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FeaturedScreen extends StatefulWidget {
   const FeaturedScreen({super.key});
@@ -34,6 +35,19 @@ class _FeaturedScreenState extends State<FeaturedScreen> {
     });
 
     print(' get all featured list ----$featuredListingData');
+  }
+
+  // Function to initiate the phone call
+  _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (await canLaunchUrl(launchUri)) {
+      await launchUrl(launchUri);
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
   }
 
   @override
@@ -107,17 +121,17 @@ class _FeaturedScreenState extends State<FeaturedScreen> {
                               crossAxisSpacing: 5.0,
                               mainAxisSpacing: 5.0,
                               // childAspectRatio: 1 / 1.8,
-                              childAspectRatio: 1 / 1.4,
+                              childAspectRatio: 1 / 1.9,
                             ),
                             itemCount: featuredListingData.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  // sideDrawerController.pageIndex.value = 31;
-                                  // sideDrawerController.topServicesDetailId =
+                                  // sideDrawerController.pageIndex.value = 33;
+                                  // sideDrawerController.featuredDetailId =
                                   //     featuredListingData[index]["id"];
                                   // sideDrawerController.pageController
-                                  //     .jumpToPage(31);
+                                  //     .jumpToPage(33);
                                 },
                                 child: Container(
                                   // margin: EdgeInsets.all(size.width * 0.02),
@@ -128,7 +142,8 @@ class _FeaturedScreenState extends State<FeaturedScreen> {
                                       borderRadius: BorderRadius.circular(
                                           size.width * 0.03)),
                                   child: Column(
-                                    // crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                         height: size.width * 0.38,
@@ -140,7 +155,7 @@ class _FeaturedScreenState extends State<FeaturedScreen> {
                                             borderRadius: BorderRadius.circular(
                                                 size.width * 0.03)),
                                         child: featuredListingData[index]
-                                                        ['image']
+                                                        ['featured_image']
                                                     .toString() ==
                                                 ""
                                             ? Container(
@@ -156,19 +171,108 @@ class _FeaturedScreenState extends State<FeaturedScreen> {
                                                 ),
                                               )
                                             : Image.network(
-                                                "${featuredListingData[index]['image'].toString()}",
+                                                "${featuredListingData[index]['featured_image'].toString()}",
                                                 fit: BoxFit.fill,
                                               ),
                                       ),
-                                      SizedBox(
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 12),
                                         width: size.width * 0.45,
                                         // height: size.width * 0.09,
                                         child: customText.kText(
-                                            "${featuredListingData[index]['category_name'].toString()}",
-                                            15,
-                                            FontWeight.w700,
-                                            Colors.black,
-                                            TextAlign.center),
+                                          "${featuredListingData[index]['business_title'].toString()}",
+                                          15,
+                                          FontWeight.w700,
+                                          Colors.black,
+                                          TextAlign.start,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 5),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Icon(
+                                              Icons.location_on_rounded,
+                                              color: Colors.green,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Container(
+                                              width: size.width * .2,
+                                              child: customText.kText(
+                                                "${featuredListingData[index]['address'].toString()}",
+                                                16,
+                                                FontWeight.w900,
+                                                Colors.black,
+                                                TextAlign.start,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            left: 10, bottom: 10),
+                                        height: 50,
+                                        child: customText.kText(
+                                          "${featuredListingData[index]['business_description'].toString()}",
+                                          16,
+                                          FontWeight.w900,
+                                          Colors.black,
+                                          TextAlign.start,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          // place your make phone call
+                                          _makePhoneCall(
+                                              '${featuredListingData[index]['mobile'].toString()}');
+                                        },
+                                        child: Container(
+                                          height: size.height * 0.05,
+                                          width: size.width * 0.8,
+                                          // margin: EdgeInsets.symmetric(vertical: size.width * 0.02),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: size.width * 0.02),
+                                          decoration: BoxDecoration(
+                                              // border: Border.all(color: Colors.white),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      size.width * 0.02),
+                                              gradient: const LinearGradient(
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                  colors: [
+                                                    ColorConstants
+                                                        .kGradientDarkGreen,
+                                                    ColorConstants
+                                                        .kGradientLightGreen
+                                                  ])),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              customText.kText(
+                                                  "${featuredListingData[index]['category_name'].toString()}",
+                                                  14,
+                                                  FontWeight.w700,
+                                                  Colors.white,
+                                                  TextAlign.center),
+                                              CircleAvatar(
+                                                radius: size.width * 0.042,
+                                                child: SizedBox(
+                                                    height: size.width * 0.055,
+                                                    child: Image.asset(
+                                                        "assets/images/call.png")),
+                                              )
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),

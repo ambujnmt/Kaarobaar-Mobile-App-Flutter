@@ -474,8 +474,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     sideDrawerController.pageController.jumpToPage(32);
                   },
                 ),
-          SizedBox(
-            height: size.height * 0.25,
+          Container(
+            height: size.height * 0.32,
             width: size.width,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -483,53 +483,96 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ? 4
                   : featuredListingData.length,
               itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.only(left: 20, right: 20),
-                  height: size.width * 0.2,
-                  width: size.width * 0.5,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 2),
-                        height: size.width * 0.4,
-                        width: size.width * 0.5,
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(
-                            size.width * 0.05,
+                return GestureDetector(
+                  onTap: () {
+                    // sideDrawerController.pageIndex.value = 33;
+                    // sideDrawerController.featuredDetailId =
+                    //     featuredListingData[index]["id"];
+                    // sideDrawerController.pageController.jumpToPage(33);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 20, right: 20),
+                    height: size.width * 0.2,
+                    width: size.width * 0.5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 2),
+                          height: size.width * 0.4,
+                          width: size.width * 0.5,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(
+                              size.width * 0.05,
+                            ),
+                          ),
+                          child: featuredListingData[index]['featured_image']
+                                      .toString() ==
+                                  ""
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    image: const DecorationImage(
+                                      image: AssetImage(
+                                        'assets/images/no_image.jpeg',
+                                      ),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                )
+                              : Image.network(
+                                  "${featuredListingData[index]['featured_image'].toString()}",
+                                  fit: BoxFit.fill,
+                                ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: customText.kText(
+                            "${featuredListingData[index]['business_title'].toString()}",
+                            16,
+                            FontWeight.w900,
+                            Colors.black,
+                            TextAlign.start,
                           ),
                         ),
-                        child:
-                            featuredListingData[index]['image'].toString() == ""
-                                ? Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      image: const DecorationImage(
-                                        image: AssetImage(
-                                          'assets/images/no_image.jpeg',
-                                        ),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                  )
-                                : Image.network(
-                                    "${featuredListingData[index]['image'].toString()}",
-                                    fit: BoxFit.fill,
-                                  ),
-                      ),
-                      customText.kText(
-                          "${featuredListingData[index]['category_name'].toString()}",
-                          16,
-                          FontWeight.w900,
-                          Colors.black,
-                          TextAlign.center),
-                      customText.kText(
-                          "${featuredListingData[index]['listing'].toString()} Listing",
-                          16,
-                          FontWeight.w400,
-                          Colors.black,
-                          TextAlign.center)
-                    ],
+                        Container(
+                          margin: const EdgeInsets.only(left: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.location_on_rounded,
+                                color: Colors.green,
+                              ),
+                              const SizedBox(width: 10),
+                              Container(
+                                child: customText.kText(
+                                  "${featuredListingData[index]['address'].toString()}",
+                                  16,
+                                  FontWeight.w900,
+                                  Colors.black,
+                                  TextAlign.start,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          height: 50,
+                          child: customText.kText(
+                            "${featuredListingData[index]['business_description'].toString()}",
+                            16,
+                            FontWeight.w900,
+                            Colors.black,
+                            TextAlign.start,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

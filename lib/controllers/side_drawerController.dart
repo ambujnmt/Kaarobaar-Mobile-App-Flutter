@@ -16,4 +16,5 @@ class SideDrawerController extends GetxController {
   String communityByCategoryId = "";
   String detailTwoId = "";
   String topServicesDetailId = "";
+  String featuredDetailId = "";
 }

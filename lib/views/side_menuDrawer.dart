@@ -22,6 +22,7 @@ import 'package:kaarobaar/views/screens/dashboard_screen.dart';
 import 'package:kaarobaar/views/screens/events_screen.dart';
 import 'package:kaarobaar/views/screens/faq_screen.dart';
 import 'package:kaarobaar/views/screens/featured_listing.dart';
+import 'package:kaarobaar/views/screens/featured_listing_detail.dart';
 import 'package:kaarobaar/views/screens/my_account.dart';
 import 'package:kaarobaar/views/screens/my_business.dart';
 import 'package:kaarobaar/views/screens/my_jobs.dart';
@@ -669,6 +670,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       CommunityDetailTwo(), // page number 30
                       TopServicesDetail(),
                       FeaturedScreen(), // page number 32
+                      FeaturedListingDetail(),
                     ],
                   )),
             )

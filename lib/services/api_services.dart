@@ -179,7 +179,7 @@ class API {
   // get feautred listing api integration
 
   featuredListingDashboard() async {
-    var testimonials = '$baseUrl/app/featured_category_list';
+    var testimonials = '$baseUrl/app/featured_business_list';
 
     Map<String, dynamic> body = {
       "token": loginController.accessToken,
