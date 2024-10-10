@@ -110,8 +110,10 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                 gradient: RadialGradient(
                   center: Alignment(0.25, -2.5),
                   colors: [
-                    Color(0xffD50000),
-                    Color(0xff760000),
+                    // Color(0xffD50000),
+                    // Color(0xff760000),
+                    Color(0xffA00000),
+                    Color(0xff8D0000),
                   ],
                   radius: 2.1,
                 ),
@@ -519,14 +521,14 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     bottomRight: Radius.circular(size.width * 0.05),
                   ),
                   gradient: const RadialGradient(
-                    center: Alignment(0.25, -2.5),
+                    // center: Alignment(0.25, -2.5),
                     colors: [
-                      Color(0xffD50000),
-                      Color(0xff760000),
+                      Color(0xffA00000),
+                      Color(0xff8D0000),
                     ],
                     radius: 2.1,
                   ),
-                  // color: Color(0xffEE0200),
+                  // color: Color(0xff8D0000),
                 ),
                 child: Column(
                   children: [
@@ -595,6 +597,18 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                                     sideDrawerController.pageIndex.value = 15;
                                     sideDrawerController.pageController
                                         .jumpToPage(15);
+                                  } else if (sideDrawerController
+                                          .pageIndex.value ==
+                                      20) {
+                                    sideDrawerController.pageIndex.value = 8;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(8);
+                                  } else if (sideDrawerController
+                                          .pageIndex.value ==
+                                      21) {
+                                    sideDrawerController.pageIndex.value = 7;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(7);
                                   } else {
                                     sideDrawerController.pageIndex.value = 0;
                                     sideDrawerController.pageController
@@ -608,49 +622,83 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     SizedBox(
                       height: size.width * 0.02,
                     ),
-                    Obx(() => sideDrawerController.pageIndex == 0 ||
-                            sideDrawerController.pageIndex == 4 ||
-                            sideDrawerController.pageIndex == 7 ||
-                            sideDrawerController.pageIndex == 8 ||
-                            sideDrawerController.pageIndex == 9 ||
-                            sideDrawerController.pageIndex == 10 ||
-                            sideDrawerController.pageIndex == 11 ||
-                            sideDrawerController.pageIndex == 12 ||
-                            sideDrawerController.pageIndex == 13 ||
-                            sideDrawerController.pageIndex == 14 ||
-                            sideDrawerController.pageIndex == 15 ||
-                            sideDrawerController.pageIndex == 16
-                        ? GestureDetector(
-                            child: Container(
-                              height: size.height * 0.06,
-                              width: size.width * 0.8,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.02),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.circular(size.width * 0.03)),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  customText.kText(
-                                      "Search",
-                                      20,
-                                      FontWeight.w700,
-                                      ColorConstants.kTextGrey,
-                                      TextAlign.left),
-                                  const Icon(Icons.search,
-                                      size: 30, color: ColorConstants.kTextGrey)
-                                ],
-                              ),
-                            ),
-                            onTap: () {
-                              sideDrawerController.pageIndex.value = 16;
-                              sideDrawerController.pageController
-                                  .jumpToPage(16);
-                            })
-                        : const SizedBox())
+                    // Obx(
+                    //   () =>
+                    //  sideDrawerController.pageIndex == 0 ||
+                    //         sideDrawerController.pageIndex == 4 ||
+                    //         sideDrawerController.pageIndex == 7 ||
+                    //         sideDrawerController.pageIndex == 8 ||
+                    //         sideDrawerController.pageIndex == 9 ||
+                    //         sideDrawerController.pageIndex == 10 ||
+                    //         sideDrawerController.pageIndex == 11 ||
+                    //         sideDrawerController.pageIndex == 12 ||
+                    //         sideDrawerController.pageIndex == 13 ||
+                    //         sideDrawerController.pageIndex == 14 ||
+                    //         sideDrawerController.pageIndex == 15 ||
+                    //         sideDrawerController.pageIndex == 16
+                    //     ? GestureDetector(
+                    //         child: Container(
+                    //           height: size.height * 0.06,
+                    //           width: size.width * 0.8,
+                    //           padding: EdgeInsets.symmetric(
+                    //               horizontal: size.width * 0.02),
+                    //           decoration: BoxDecoration(
+                    //               color: Colors.white,
+                    //               borderRadius: BorderRadius.circular(
+                    //                   size.width * 0.03)),
+                    //           child: Row(
+                    //             mainAxisAlignment:
+                    //                 MainAxisAlignment.spaceBetween,
+                    //             children: [
+                    //               customText.kText(
+                    //                   "Search Business",
+                    //                   20,
+                    //                   FontWeight.w700,
+                    //                   ColorConstants.kTextGrey,
+                    //                   TextAlign.left),
+                    //               const Icon(Icons.search,
+                    //                   size: 30,
+                    //                   color: ColorConstants.kTextGrey)
+                    //             ],
+                    //           ),
+                    //         ),
+                    //         onTap: () {
+                    //           sideDrawerController.pageIndex.value = 16;
+                    //           sideDrawerController.pageController
+                    //               .jumpToPage(16);
+                    //         })
+                    //     : const SizedBox(),
+                    GestureDetector(
+                      child: Container(
+                        // color: Colors.black,
+                        height: size.height * 0.05,
+                        width: size.width * 0.8,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: size.width * 0.02),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.circular(size.width * 0.03)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            customText.kText(
+                                "Search Business",
+                                20,
+                                FontWeight.w700,
+                                ColorConstants.kTextGrey,
+                                TextAlign.left),
+                            const Icon(Icons.search,
+                                size: 30, color: ColorConstants.kTextGrey)
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 16;
+                        sideDrawerController.pageController.jumpToPage(16);
+                      },
+                    ),
+                    // ),
                   ],
                 )),
             Expanded(

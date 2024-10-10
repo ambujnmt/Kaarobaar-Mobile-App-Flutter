@@ -85,58 +85,64 @@ class _AddBusinessState extends State<AddBusiness> {
                         !cityDropdownController.text.startsWith(" ")) {
                       if (businessAddressController.text.isNotEmpty &&
                           (!businessAddressController.text.startsWith(" "))) {
-                        setState(() {
-                          isApiCalling = true;
-                        });
-                        final response;
+                        if (imageSelected) {
+                          setState(() {
+                            isApiCalling = true;
+                          });
+                          final response;
 
-                        if (sideDrawerController.myBusinessId.isEmpty) {
-                          print('inside the add function');
-                          response = await api.addBusiness(
-                            businessNameController.text,
-                            selectedCategoryId,
-                            businessKeywordController.text,
-                            emailController.text,
-                            phoneController.text,
-                            postalCodeController.text,
-                            websiteURL.text,
-                            businessDescriptionController.text,
-                            selectedStateId,
-                            selectedCityId,
-                            businessAddressController.text,
-                            _image?.path.toString(),
-                          );
+                          if (sideDrawerController.myBusinessId.isEmpty) {
+                            print('inside the add function');
+                            response = await api.addBusiness(
+                              businessNameController.text,
+                              selectedCategoryId,
+                              businessKeywordController.text,
+                              emailController.text,
+                              phoneController.text,
+                              postalCodeController.text,
+                              websiteURL.text,
+                              businessDescriptionController.text,
+                              selectedStateId,
+                              selectedCityId,
+                              businessAddressController.text,
+                              _image?.path.toString(),
+                            );
+                          } else {
+                            print(
+                                'inside the edit function --- ${sideDrawerController.myBusinessId}');
+                            response = await api.updateBusinessDetails(
+                              businessNameController.text,
+                              selectedCategoryId,
+                              businessKeywordController.text,
+                              emailController.text,
+                              phoneController.text,
+                              postalCodeController.text,
+                              websiteURL.text,
+                              businessDescriptionController.text,
+                              selectedStateId,
+                              selectedCityId,
+                              businessAddressController.text,
+                              _image?.path.toString(),
+                              sideDrawerController.myBusinessId,
+                            );
+                          }
+
+                          setState(() {
+                            isApiCalling = false;
+                          });
+
+                          if (response["status"] == 1) {
+                            helper.successDialog(context, response["message"]);
+                            print('Business Added successfully');
+                            sideDrawerController.pageIndex.value = 0;
+                            sideDrawerController.pageController.jumpToPage(0);
+                          } else {
+                            helper.errorDialog(context, response["message"]);
+                          }
+                          // else
                         } else {
-                          print(
-                              'inside the edit function --- ${sideDrawerController.myBusinessId}');
-                          response = await api.updateBusinessDetails(
-                            businessNameController.text,
-                            selectedCategoryId,
-                            businessKeywordController.text,
-                            emailController.text,
-                            phoneController.text,
-                            postalCodeController.text,
-                            websiteURL.text,
-                            businessDescriptionController.text,
-                            selectedStateId,
-                            selectedCityId,
-                            businessAddressController.text,
-                            _image?.path.toString(),
-                            sideDrawerController.myBusinessId,
-                          );
-                        }
-
-                        setState(() {
-                          isApiCalling = false;
-                        });
-
-                        if (response["status"] == 1) {
-                          helper.successDialog(context, response["message"]);
-                          print('Business Added successfully');
-                          sideDrawerController.pageIndex.value = 0;
-                          sideDrawerController.pageController.jumpToPage(0);
-                        } else {
-                          helper.errorDialog(context, response["message"]);
+                          helper.errorDialog(
+                              context, "Please upload business image");
                         }
                       } else {
                         helper.errorDialog(
@@ -209,7 +215,11 @@ class _AddBusinessState extends State<AddBusiness> {
       businessAddressController.text =
           getBusinessDetailData[0]['address'] ?? " ";
       imageURL = getBusinessDetailData[0]['featured_image'] ?? "";
+      selectedStateId = getBusinessDetailData[0]['state_id'] ?? "";
+      selectedCityId = getBusinessDetailData[0]['city_id'] ?? "";
+
       print('image url---- $imageURL');
+      imageSelected = true;
     }
   }
 
@@ -236,11 +246,14 @@ class _AddBusinessState extends State<AddBusiness> {
   SuggestionsBoxController citySuggestionBoxController =
       SuggestionsBoxController();
 
+  bool imageSelected = false;
+
   Future getImageFromGallery() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       _image = image;
+      imageSelected = true;
     });
     print('image path from gallery--- ${_image?.path}');
   }
@@ -250,6 +263,7 @@ class _AddBusinessState extends State<AddBusiness> {
 
     setState(() {
       _image = image;
+      imageSelected = true;
     });
   }
 
@@ -272,7 +286,6 @@ class _AddBusinessState extends State<AddBusiness> {
   }
 
   List<String> getStateSuggestions(String query) {
-
     log("get state suggestions");
 
     List<String> stateMatches = <String>[];
@@ -288,8 +301,7 @@ class _AddBusinessState extends State<AddBusiness> {
       }
     }
 
-    log("selectedState Id :-$selectedStateId")
-;
+    log("selectedState Id :-$selectedStateId");
     stateMatches
         .retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
     return stateMatches;
@@ -355,7 +367,6 @@ class _AddBusinessState extends State<AddBusiness> {
 
   // city list api integration
   getCityList(String stateId) async {
-
     log("selected state Id :- $selectedStateId, $stateId}");
 
     setState(() {
@@ -624,7 +635,8 @@ class _AddBusinessState extends State<AddBusiness> {
                       log("stateController :- ${stateDropdownController.text}");
 
                       for (int i = 0; i < getStateItems.length; i++) {
-                        if (getStateItems[i]['name'] == stateDropdownController.text) {
+                        if (getStateItems[i]['name'] ==
+                            stateDropdownController.text) {
                           setState(() {
                             selectedStateId = getStateItems[i]['id'].toString();
                           });

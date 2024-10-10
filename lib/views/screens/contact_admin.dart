@@ -105,6 +105,11 @@ class _ContactAdminState extends State<ContactAdmin> {
                 ),
               ),
               child: TextField(
+                maxLength: 50,
+                buildCounter: (BuildContext context,
+                    {int? currentLength, int? maxLength, bool? isFocused}) {
+                  return null;
+                },
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 controller: nameController,
@@ -157,6 +162,11 @@ class _ContactAdminState extends State<ContactAdmin> {
                 ),
               ),
               child: TextField(
+                maxLength: 10,
+                buildCounter: (BuildContext context,
+                    {int? currentLength, int? maxLength, bool? isFocused}) {
+                  return null;
+                },
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 controller: phoneNoController,
@@ -182,6 +192,11 @@ class _ContactAdminState extends State<ContactAdmin> {
                 ),
               ),
               child: TextField(
+                maxLength: 150,
+                buildCounter: (BuildContext context,
+                    {int? currentLength, int? maxLength, bool? isFocused}) {
+                  return null;
+                },
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 controller: msgController,
@@ -208,6 +223,11 @@ class _ContactAdminState extends State<ContactAdmin> {
                 ),
               ),
               child: TextField(
+                buildCounter: (BuildContext context,
+                    {int? currentLength, int? maxLength, bool? isFocused}) {
+                  return null;
+                },
+                maxLength: 100,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
                 controller: addressController,

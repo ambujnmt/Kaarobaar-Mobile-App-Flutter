@@ -514,7 +514,7 @@ class API {
     request.fields["zipcode"] = postalCode!;
     request.fields["address"] = businessAddress!;
     request.fields["business_description"] = businessDescription!;
-    request.fields["business_id "] = businessId.toString();
+    request.fields["business_id"] = businessId.toString();
 
     var streamedResponse = await request.send();
 
@@ -522,6 +522,7 @@ class API {
     final responseData = json.decode(response.body);
 
     log("edit business response in api :- $responseData");
+    print("business id in update--- $businessId"); // 29
 
     return responseData;
   }

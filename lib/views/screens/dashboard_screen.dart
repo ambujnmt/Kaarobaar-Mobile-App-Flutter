@@ -241,7 +241,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 )
               : SizedBox(
-                  height: size.height * 0.25,
+                  height: size.height * 0.27,
                   width: size.width,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -297,12 +297,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   FontWeight.w900,
                                   Colors.black,
                                   TextAlign.center),
-                              customText.kText(
-                                  "${popularCommunitiesList[index]['listing'].toString()} Listing",
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.center)
+                              Container(
+                                margin: EdgeInsets.only(bottom: 20),
+                                child: customText.kText(
+                                    "${popularCommunitiesList[index]['listing'].toString()} Listing",
+                                    16,
+                                    FontWeight.w400,
+                                    Colors.black,
+                                    TextAlign.center),
+                              ),
                             ],
                           ),
                         ),
