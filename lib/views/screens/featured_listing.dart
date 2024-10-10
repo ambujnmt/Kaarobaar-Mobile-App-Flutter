@@ -127,11 +127,11 @@ class _FeaturedScreenState extends State<FeaturedScreen> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  // sideDrawerController.pageIndex.value = 33;
-                                  // sideDrawerController.featuredDetailId =
-                                  //     featuredListingData[index]["id"];
-                                  // sideDrawerController.pageController
-                                  //     .jumpToPage(33);
+                                  sideDrawerController.pageIndex.value = 33;
+                                  sideDrawerController.featuredDetailId =
+                                      featuredListingData[index]["id"];
+                                  sideDrawerController.pageController
+                                      .jumpToPage(33);
                                 },
                                 child: Container(
                                   // margin: EdgeInsets.all(size.width * 0.02),

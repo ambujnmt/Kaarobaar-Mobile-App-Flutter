@@ -76,85 +76,80 @@ class _AddBusinessState extends State<AddBusiness> {
             if (phoneController.text.length == 10) {
               if (postalCodeController.text.isNotEmpty &&
                   !postalCodeController.text.startsWith(" ")) {
-                if (websiteURL.text.isNotEmpty &&
-                    !websiteURL.text.startsWith(" ")) {
-                  if (businessDescriptionController.text.isNotEmpty &&
-                      (!businessDescriptionController.text.startsWith(" "))) {
-                    if (stateDropdownController.text.isNotEmpty &&
-                        !stateDropdownController.text.startsWith(" ")) {
-                      if (cityDropdownController.text.isNotEmpty &&
-                          !cityDropdownController.text.startsWith(" ")) {
-                        if (businessAddressController.text.isNotEmpty &&
-                            (!businessAddressController.text.startsWith(" "))) {
-                          setState(() {
-                            isApiCalling = true;
-                          });
-                          final response;
+                if (businessDescriptionController.text.isNotEmpty &&
+                    (!businessDescriptionController.text.startsWith(" "))) {
+                  if (stateDropdownController.text.isNotEmpty &&
+                      !stateDropdownController.text.startsWith(" ")) {
+                    if (cityDropdownController.text.isNotEmpty &&
+                        !cityDropdownController.text.startsWith(" ")) {
+                      if (businessAddressController.text.isNotEmpty &&
+                          (!businessAddressController.text.startsWith(" "))) {
+                        setState(() {
+                          isApiCalling = true;
+                        });
+                        final response;
 
-                          if (sideDrawerController.myBusinessId.isEmpty) {
-                            print('inside the add function');
-                            response = await api.addBusiness(
-                              businessNameController.text,
-                              selectedCategoryId,
-                              businessKeywordController.text,
-                              emailController.text,
-                              phoneController.text,
-                              postalCodeController.text,
-                              websiteURL.text,
-                              businessDescriptionController.text,
-                              selectedStateId,
-                              selectedCityId,
-                              businessAddressController.text,
-                              _image?.path.toString(),
-                            );
-                          } else {
-                            print(
-                                'inside the edit function --- ${sideDrawerController.myBusinessId}');
-                            response = await api.updateBusinessDetails(
-                              businessNameController.text,
-                              selectedCategoryId,
-                              businessKeywordController.text,
-                              emailController.text,
-                              phoneController.text,
-                              postalCodeController.text,
-                              websiteURL.text,
-                              businessDescriptionController.text,
-                              selectedStateId,
-                              selectedCityId,
-                              businessAddressController.text,
-                              _image?.path.toString(),
-                              sideDrawerController.myBusinessId,
-                            );
-                          }
-
-                          setState(() {
-                            isApiCalling = false;
-                          });
-
-                          if (response["status"] == 1) {
-                            helper.successDialog(context, response["message"]);
-                            print('Business Added successfully');
-                            sideDrawerController.pageIndex.value = 0;
-                            sideDrawerController.pageController.jumpToPage(0);
-                          } else {
-                            helper.errorDialog(context, response["message"]);
-                          }
+                        if (sideDrawerController.myBusinessId.isEmpty) {
+                          print('inside the add function');
+                          response = await api.addBusiness(
+                            businessNameController.text,
+                            selectedCategoryId,
+                            businessKeywordController.text,
+                            emailController.text,
+                            phoneController.text,
+                            postalCodeController.text,
+                            websiteURL.text,
+                            businessDescriptionController.text,
+                            selectedStateId,
+                            selectedCityId,
+                            businessAddressController.text,
+                            _image?.path.toString(),
+                          );
                         } else {
-                          helper.errorDialog(
-                              context, "Please enter business address");
+                          print(
+                              'inside the edit function --- ${sideDrawerController.myBusinessId}');
+                          response = await api.updateBusinessDetails(
+                            businessNameController.text,
+                            selectedCategoryId,
+                            businessKeywordController.text,
+                            emailController.text,
+                            phoneController.text,
+                            postalCodeController.text,
+                            websiteURL.text,
+                            businessDescriptionController.text,
+                            selectedStateId,
+                            selectedCityId,
+                            businessAddressController.text,
+                            _image?.path.toString(),
+                            sideDrawerController.myBusinessId,
+                          );
+                        }
+
+                        setState(() {
+                          isApiCalling = false;
+                        });
+
+                        if (response["status"] == 1) {
+                          helper.successDialog(context, response["message"]);
+                          print('Business Added successfully');
+                          sideDrawerController.pageIndex.value = 0;
+                          sideDrawerController.pageController.jumpToPage(0);
+                        } else {
+                          helper.errorDialog(context, response["message"]);
                         }
                       } else {
-                        helper.errorDialog(context, 'Please select city');
+                        helper.errorDialog(
+                            context, "Please enter business address");
                       }
                     } else {
-                      helper.errorDialog(context, 'Please select state');
+                      helper.errorDialog(context, 'Please select city');
                     }
                   } else {
-                    helper.errorDialog(
-                        context, "Please enter business description");
+                    helper.errorDialog(context, 'Please select state');
                   }
                 } else {
-                  helper.errorDialog(context, "Please enter website URL");
+                  helper.errorDialog(
+                      context, "Please enter business description");
                 }
               } else {
                 helper.errorDialog(context, "Please enter postal code");
@@ -357,7 +352,7 @@ class _AddBusinessState extends State<AddBusiness> {
     setState(() {
       isApiCalling = true;
     });
-    final response = await api.cityList("4077");
+    final response = await api.cityList(selectedStateId.toString()); //3805
     setState(() {
       getCityItems = response['result'];
     });
@@ -374,7 +369,7 @@ class _AddBusinessState extends State<AddBusiness> {
     super.initState();
     getCategoryList();
     getStateList();
-    getCityList();
+    // getCityList();
     if (sideDrawerController.myBusinessId.isNotEmpty) {
       getBusinessDetail();
     }
@@ -503,6 +498,11 @@ class _AddBusinessState extends State<AddBusiness> {
                     height: size.width * 0.05,
                   ),
                   TextField(
+                    buildCounter: (BuildContext context,
+                        {int? currentLength, int? maxLength, bool? isFocused}) {
+                      return null;
+                    },
+                    maxLength: 10,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     controller: phoneController,
@@ -517,6 +517,11 @@ class _AddBusinessState extends State<AddBusiness> {
                     height: size.width * 0.05,
                   ),
                   TextField(
+                    buildCounter: (BuildContext context,
+                        {int? currentLength, int? maxLength, bool? isFocused}) {
+                      return null;
+                    },
+                    maxLength: 7,
                     textInputAction: TextInputAction.next,
                     controller: postalCodeController,
                     decoration: InputDecoration(
@@ -532,6 +537,11 @@ class _AddBusinessState extends State<AddBusiness> {
                   ),
 
                   TextField(
+                    buildCounter: (BuildContext context,
+                        {int? currentLength, int? maxLength, bool? isFocused}) {
+                      return null;
+                    },
+                    maxLength: 30,
                     textInputAction: TextInputAction.next,
                     controller: websiteURL,
                     decoration: InputDecoration(
@@ -547,9 +557,14 @@ class _AddBusinessState extends State<AddBusiness> {
                   ),
 
                   TextField(
+                    maxLength: 120,
+                    buildCounter: (BuildContext context,
+                        {int? currentLength, int? maxLength, bool? isFocused}) {
+                      return null;
+                    },
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
-                    textCapitalization: TextCapitalization.words,
+                    textCapitalization: TextCapitalization.none,
                     controller: businessDescriptionController,
                     decoration: InputDecoration(
                       hintText: "Business desciption",
@@ -600,7 +615,9 @@ class _AddBusinessState extends State<AddBusiness> {
                     suggestionsBoxController: stateSuggestionBoxController,
                     validator: (value) =>
                         value!.isEmpty ? 'Please select a state' : null,
-                    onSaved: (value) => selectedState = value,
+                    onSaved: (value) {
+                      selectedState = value;
+                    },
                     displayAllSuggestionWhenTap: true,
                   ),
                   SizedBox(
@@ -628,6 +645,7 @@ class _AddBusinessState extends State<AddBusiness> {
                       return getCitySuggestions(pattern);
                     },
                     itemBuilder: (context, String suggestion) {
+                      print('item builder');
                       return ListTile(
                         title: Text(suggestion),
                       );
@@ -651,6 +669,11 @@ class _AddBusinessState extends State<AddBusiness> {
                     height: size.width * 0.05,
                   ),
                   TextField(
+                    maxLength: 100,
+                    buildCounter: (BuildContext context,
+                        {int? currentLength, int? maxLength, bool? isFocused}) {
+                      return null;
+                    },
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.sentences,

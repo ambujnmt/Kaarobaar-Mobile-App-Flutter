@@ -485,10 +485,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    // sideDrawerController.pageIndex.value = 33;
-                    // sideDrawerController.featuredDetailId =
-                    //     featuredListingData[index]["id"];
-                    // sideDrawerController.pageController.jumpToPage(33);
+                    sideDrawerController.pageIndex.value = 33;
+                    sideDrawerController.featuredDetailId =
+                        featuredListingData[index]["id"];
+                    sideDrawerController.pageController.jumpToPage(33);
                   },
                   child: Container(
                     margin: const EdgeInsets.only(left: 20, right: 20),

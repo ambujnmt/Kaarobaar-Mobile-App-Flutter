@@ -17,19 +17,19 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
   bool isApiLoading = false;
   final api = API();
-  List<dynamic> servicesDetailData = [];
+  List<dynamic> featuredDetailData = [];
   final customText = CustomText();
 
-  getTopServicesDetail() async {
+  featuredListingDetail() async {
     setState(() {
       isApiLoading = true;
     });
 
     final response =
-        await api.myBusinessDetail(sideDrawerController.topServicesDetailId);
+        await api.myBusinessDetail(sideDrawerController.featuredDetailId);
 
     setState(() {
-      servicesDetailData = response['result'];
+      featuredDetailData = response['result'];
     });
 
     setState(() {
@@ -46,7 +46,7 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
     super.initState();
     print(
         'top services detail id: ${sideDrawerController.topServicesDetailId}');
-    getTopServicesDetail();
+    featuredListingDetail();
   }
 
   @override
@@ -59,7 +59,7 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : servicesDetailData.isEmpty
+          : featuredDetailData.isEmpty
               ? Container(
                   height: size.height * 0.25,
                   width: size.width,
@@ -92,7 +92,7 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
                             borderRadius: BorderRadius.circular(8),
                             image: DecorationImage(
                                 image: NetworkImage(
-                                    '${servicesDetailData[0]['featured_image']}'),
+                                    '${featuredDetailData[0]['featured_image']}'),
                                 fit: BoxFit.fill),
                           ),
                         ),
@@ -104,7 +104,7 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
                             Icon(Icons.calendar_month),
                             const SizedBox(width: 10),
                             customText.kText(
-                                "${servicesDetailData[0]['created_at']}",
+                                "${featuredDetailData[0]['created_at']}",
                                 15,
                                 FontWeight.w400,
                                 Colors.black,
@@ -113,14 +113,14 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
                         ),
                         const SizedBox(height: 10),
                         customText.kText(
-                            "${servicesDetailData[0]['business_title']}",
+                            "${featuredDetailData[0]['business_title']}",
                             15,
                             FontWeight.w700,
                             Colors.black,
                             TextAlign.center),
                         const SizedBox(height: 10),
                         customText.kText(
-                            "${servicesDetailData[0]['business_description']}",
+                            "${featuredDetailData[0]['business_description']}",
                             15,
                             FontWeight.w700,
                             Colors.black,
@@ -138,7 +138,7 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
                                 TextAlign.center),
                             const SizedBox(width: 10),
                             customText.kText(
-                                "${servicesDetailData[0]['mobile']}",
+                                "${featuredDetailData[0]['mobile']}",
                                 15,
                                 FontWeight.w400,
                                 Colors.black,
@@ -154,7 +154,7 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
                                 Colors.black, TextAlign.center),
                             const SizedBox(width: 10),
                             customText.kText(
-                                "${servicesDetailData[0]['email']}",
+                                "${featuredDetailData[0]['email']}",
                                 15,
                                 FontWeight.w400,
                                 Colors.black,
@@ -170,7 +170,7 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
                                 Colors.black, TextAlign.center),
                             const SizedBox(width: 10),
                             customText.kText(
-                                "${servicesDetailData[0]['address']}",
+                                "${featuredDetailData[0]['address']}",
                                 15,
                                 FontWeight.w400,
                                 Colors.black,
@@ -186,7 +186,7 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
                                 Colors.black, TextAlign.center),
                             const SizedBox(width: 10),
                             customText.kText(
-                                "${servicesDetailData[0]['city_name']}",
+                                "${featuredDetailData[0]['city_name']}",
                                 15,
                                 FontWeight.w400,
                                 Colors.black,
@@ -202,7 +202,7 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
                                 Colors.black, TextAlign.center),
                             const SizedBox(width: 10),
                             customText.kText(
-                                "${servicesDetailData[0]['country_name']}",
+                                "${featuredDetailData[0]['country_name']}",
                                 15,
                                 FontWeight.w400,
                                 Colors.black,
@@ -222,7 +222,7 @@ class _FeaturedListingDetailState extends State<FeaturedListingDetail> {
                                 TextAlign.center),
                             const SizedBox(width: 10),
                             customText.kText(
-                                "${servicesDetailData[0]['zipcode']}",
+                                "${featuredDetailData[0]['zipcode']}",
                                 15,
                                 FontWeight.w400,
                                 Colors.black,

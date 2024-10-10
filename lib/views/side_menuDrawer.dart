@@ -303,8 +303,8 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                             FontWeight.w700, Colors.black, TextAlign.start),
                       ),
                       onTap: () {
-                        sideDrawerController.pageIndex.value = 4;
-                        sideDrawerController.pageController.jumpToPage(4);
+                        sideDrawerController.pageIndex.value = 15;
+                        sideDrawerController.pageController.jumpToPage(15);
                         scaffoldKey.currentState!.closeEndDrawer();
                       },
                     ),
@@ -571,6 +571,30 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                                     sideDrawerController.pageIndex.value = 24;
                                     sideDrawerController.pageController
                                         .jumpToPage(24);
+                                  } else if (sideDrawerController
+                                          .pageIndex.value ==
+                                      33) {
+                                    sideDrawerController.pageIndex.value = 32;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(32);
+                                  } else if (sideDrawerController
+                                          .pageIndex.value ==
+                                      31) {
+                                    sideDrawerController.pageIndex.value = 28;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(28);
+                                  } else if (sideDrawerController
+                                          .pageIndex.value ==
+                                      30) {
+                                    sideDrawerController.pageIndex.value = 29;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(29);
+                                  } else if (sideDrawerController
+                                          .pageIndex.value ==
+                                      29) {
+                                    sideDrawerController.pageIndex.value = 15;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(15);
                                   } else {
                                     sideDrawerController.pageIndex.value = 0;
                                     sideDrawerController.pageController
