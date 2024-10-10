@@ -11,6 +11,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:drop_down_search_field/drop_down_search_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'dart:developer';
 
 class AddBusiness extends StatefulWidget {
   const AddBusiness({super.key});
@@ -271,6 +272,9 @@ class _AddBusinessState extends State<AddBusiness> {
   }
 
   List<String> getStateSuggestions(String query) {
+
+    log("get state suggestions");
+
     List<String> stateMatches = <String>[];
     final List<String> stateList =
         getStateItems.map((element) => element['name'].toString()).toList();
@@ -284,6 +288,8 @@ class _AddBusinessState extends State<AddBusiness> {
       }
     }
 
+    log("selectedState Id :-$selectedStateId")
+;
     stateMatches
         .retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
     return stateMatches;
@@ -348,7 +354,10 @@ class _AddBusinessState extends State<AddBusiness> {
   }
 
   // city list api integration
-  getCityList() async {
+  getCityList(String stateId) async {
+
+    log("selected state Id :- $selectedStateId, $stateId}");
+
     setState(() {
       isApiCalling = true;
     });
@@ -607,10 +616,24 @@ class _AddBusinessState extends State<AddBusiness> {
                       return const Divider();
                     },
                     transitionBuilder: (context, suggestionsBox, controller) {
+                      log("transition builder of state");
                       return suggestionsBox;
                     },
                     onSuggestionSelected: (String suggestion) {
                       stateDropdownController.text = suggestion;
+                      log("stateController :- ${stateDropdownController.text}");
+
+                      for (int i = 0; i < getStateItems.length; i++) {
+                        if (getStateItems[i]['name'] == stateDropdownController.text) {
+                          setState(() {
+                            selectedStateId = getStateItems[i]['id'].toString();
+                          });
+                        }
+                      }
+
+                      log("selected State Id :- $selectedStateId");
+
+                      getCityList(selectedStateId!);
                     },
                     suggestionsBoxController: stateSuggestionBoxController,
                     validator: (value) =>
