@@ -201,6 +201,27 @@ class _ListByUserEventsState extends State<ListByUserEvents> {
                             ],
                           ),
                         ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              customText.kText(
+                                  'Event Description:  ',
+                                  18,
+                                  FontWeight.w700,
+                                  Colors.black,
+                                  TextAlign.start),
+                              customText.kText(
+                                  '${myEventsListData[index]['event_description']}',
+                                  16,
+                                  FontWeight.w400,
+                                  Colors.black,
+                                  TextAlign.start)
+                            ],
+                          ),
+                        ),
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
