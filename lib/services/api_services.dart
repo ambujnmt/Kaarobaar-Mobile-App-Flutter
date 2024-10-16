@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaarobaar/controllers/login_controller.dart';
+import 'package:kaarobaar/controllers/side_drawerController.dart';
 
 class API {
   String baseUrl = "https://mean-experts.com/kaarobaar/api";
@@ -733,6 +734,93 @@ class API {
     };
     http.Response response = await http.post(Uri.parse(url), body: body);
     debugPrint(" all community by category response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // add events
+  addEvent(
+    String? businessId,
+    String? eventName,
+    String? eventDate,
+    String? eventTime,
+    String? eventLocation,
+    String? image,
+    String? eventDescription,
+  ) async {
+    var url = '$baseUrl/event/add_event';
+
+    var request = http.MultipartRequest(
+      "POST",
+      Uri.parse(url),
+    );
+    request.files.add(await http.MultipartFile.fromPath("event_image", image!));
+
+    request.fields["user_id"] = loginController.userId;
+    request.fields["business_id"] = businessId!;
+    request.fields["event_title"] = eventName!;
+    request.fields["event_date"] = eventDate!;
+    request.fields["event_time"] = eventTime!;
+    request.fields["event_location"] = eventLocation!;
+    request.fields["event_description"] = eventDescription!;
+    request.fields["token"] = loginController.accessToken;
+
+    var streamedResponse = await request.send();
+
+    var response = await http.Response.fromStream(streamedResponse);
+    final responseData = json.decode(response.body);
+
+    log("add event api response :- $responseData");
+
+    return responseData;
+  }
+
+  // event list api integration
+  eventList() async {
+    var eventUrl = '$baseUrl/event/all_event_list';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      // "user_id": loginController.userId,
+    };
+    http.Response response = await http.post(
+      Uri.parse(eventUrl),
+      body: body,
+    );
+    log(' get event list api response======${response.body}');
+    return jsonDecode(response.body);
+  }
+
+  // event list api integration
+  myEventList() async {
+    var eventUrl = '$baseUrl/event/event_list_by_user';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+    };
+    http.Response response = await http.post(
+      Uri.parse(eventUrl),
+      body: body,
+    );
+    log('my event list api response======${response.body}');
+    return jsonDecode(response.body);
+  }
+
+  // delete my events
+
+  deleteMyEvent(String eventId) async {
+    var url = '$baseUrl/event/delete_event';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+      "event_id": eventId,
+    };
+    print('user id----- ${loginController.userId}');
+    print('job id----- ${eventId}');
+    http.Response response = await http.post(Uri.parse(url), body: body);
+
+    debugPrint(" delete event api response :- ${response.body}");
     return jsonDecode(response.body);
   }
 }

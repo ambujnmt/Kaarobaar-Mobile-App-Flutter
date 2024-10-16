@@ -25,6 +25,7 @@ import 'package:kaarobaar/views/screens/featured_listing.dart';
 import 'package:kaarobaar/views/screens/featured_listing_detail.dart';
 import 'package:kaarobaar/views/screens/my_account.dart';
 import 'package:kaarobaar/views/screens/my_business.dart';
+import 'package:kaarobaar/views/screens/my_events.dart';
 import 'package:kaarobaar/views/screens/my_jobs.dart';
 import 'package:kaarobaar/views/screens/offers_detail.dart';
 import 'package:kaarobaar/views/screens/our_services_detail.dart';
@@ -331,6 +332,18 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       onTap: () {
                         sideDrawerController.pageIndex.value = 5;
                         sideDrawerController.pageController.jumpToPage(5);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
+                    ),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("My Events", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 34;
+                        sideDrawerController.pageController.jumpToPage(34);
                         scaffoldKey.currentState!.closeEndDrawer();
                       },
                     ),
@@ -743,6 +756,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       TopServicesDetail(),
                       FeaturedScreen(), // page number 32
                       FeaturedListingDetail(),
+                      ListByUserEvents(),
                     ],
                   )),
             )
