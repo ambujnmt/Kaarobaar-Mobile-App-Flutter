@@ -31,6 +31,7 @@ class _AddEventState extends State<AddEvent> {
   bool isApiCalling = false;
   final api = API();
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
+  Map<String, dynamic> getEventDetailData = {};
 
   galleryCameraDialog() {
     return showDialog<void>(
@@ -100,15 +101,32 @@ class _AddEventState extends State<AddEvent> {
                   isApiCalling = true;
                 });
 
-                final response = await api.addEvent(
-                  sideDrawerController.businessListingId,
-                  eventNameController.text,
-                  eventDate.toString(),
-                  eventTime.toString(),
-                  eventLocationController.text,
-                  eventImage.toString(),
-                  eventDescController.text,
-                );
+                var response;
+
+                if (sideDrawerController.myEventsId.isEmpty) {
+                  print('inside the add event function');
+                  response = await api.addEvent(
+                    sideDrawerController.businessListingId,
+                    eventNameController.text,
+                    eventDate.toString(),
+                    eventTime.toString(),
+                    eventLocationController.text,
+                    eventImage.toString(),
+                    eventDescController.text,
+                  );
+                } else {
+                  print('inside the event edit function');
+                  response = await api.updateEventDetails(
+                    eventNameController.text,
+                    eventDate.toString(),
+                    eventTime.toString(),
+                    eventLocationController.text,
+                    eventImage.toString(),
+                    eventDescController.text,
+                    sideDrawerController.myEventsId,
+                    sideDrawerController.eventBusinessId,
+                  );
+                }
 
                 setState(() {
                   isApiCalling = false;
@@ -141,11 +159,40 @@ class _AddEventState extends State<AddEvent> {
     }
   }
 
+  getEventsDetail() async {
+    setState(() {
+      isApiCalling = true;
+    });
+
+    final response = await api.myEventDetail(sideDrawerController.myEventsId);
+
+    setState(() {
+      getEventDetailData = response['result'];
+    });
+
+    setState(() {
+      isApiCalling = false;
+    });
+    if (response['status'] == 1) {
+      print('status 1');
+      eventNameController.text = getEventDetailData['event_title'];
+      eventDate = getEventDetailData['event_date'];
+      eventTime = getEventDetailData['event_time'];
+      eventLocationController.text = getEventDetailData['event_location'];
+      eventImage = getEventDetailData['event_image'];
+      eventDescController.text = getEventDetailData['event_description'];
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     print('my event list id: ${sideDrawerController.businessListingId}');
+    print('my event id for edit:  ${sideDrawerController.myEventsId}');
+    if (sideDrawerController.myEventsId.isNotEmpty) {
+      getEventsDetail();
+    }
   }
 
   @override

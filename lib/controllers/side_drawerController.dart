@@ -17,4 +17,6 @@ class SideDrawerController extends GetxController {
   String detailTwoId = "";
   String topServicesDetailId = "";
   String featuredDetailId = "";
+  String myEventsId = "";
+  String eventBusinessId = "";
 }

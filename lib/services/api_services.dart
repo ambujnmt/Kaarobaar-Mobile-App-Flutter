@@ -823,4 +823,72 @@ class API {
     debugPrint(" delete event api response :- ${response.body}");
     return jsonDecode(response.body);
   }
+
+  // get event details for update
+  myEventDetail(String eventId) async {
+    var url = '$baseUrl/event/event_details';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "event_id": eventId,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("Get Event Details :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // update event details
+
+  updateEventDetails(
+    String? eventName,
+    String? eventDate,
+    String? eventTime,
+    String? eventLocation,
+    String? image,
+    String? eventDescription,
+    String? eventId,
+    String? businessId,
+  ) async {
+    var url = '$baseUrl/event/update_event';
+
+    var request = http.MultipartRequest(
+      "POST",
+      Uri.parse(url),
+    );
+    request.files.add(await http.MultipartFile.fromPath("event_image", image!));
+    request.fields["token"] = loginController.accessToken;
+    request.fields["user_id"] = loginController.userId;
+    request.fields["event_title"] = eventName!;
+    request.fields["event_date"] = eventDate!;
+    request.fields["event_time"] = eventTime!;
+    request.fields["event_locaton"] = eventLocation!;
+    request.fields["event_descitpion"] = eventDescription!;
+    request.fields["event_id"] = eventId.toString();
+    request.fields["business_id"] = businessId.toString();
+
+    var streamedResponse = await request.send();
+
+    var response = await http.Response.fromStream(streamedResponse);
+    final responseData = json.decode(response.body);
+
+    log("edit business response in api :- $responseData");
+    print("business id in update--- $businessId"); // 29
+
+    return responseData;
+  }
+
+  //search for business
+  searchForBusiness(String searchText) async {
+    var url = '$baseUrl/app/search_business';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "search_text": searchText,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint("search result :- ${response.body}");
+    return jsonDecode(response.body);
+  }
 }

@@ -254,13 +254,13 @@ class _ListByUserEventsState extends State<ListByUserEvents> {
                               ),
                               onTap: () {
                                 // FocusScope.of(context).unfocus();
-                                // sideDrawerController.pageIndex.value = 27;
-                                // sideDrawerController.myJobDetailId =
-                                //     myEventsListData[index]["id"];
-                                // sideDrawerController.businessId =
-                                //     myEventsListData[index]["business_id"];
-                                // sideDrawerController.pageController
-                                //     .jumpToPage(27);
+                                sideDrawerController.pageIndex.value = 17;
+                                sideDrawerController.myEventsId =
+                                    myEventsListData[index]["id"];
+                                sideDrawerController.eventBusinessId =
+                                    myEventsListData[index]["business_id"];
+                                sideDrawerController.pageController
+                                    .jumpToPage(17);
                               },
                             ),
                             GestureDetector(

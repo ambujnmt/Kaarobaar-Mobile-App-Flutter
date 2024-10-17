@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
+import 'package:kaarobaar/controllers/business_controllers.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/text.dart';
@@ -57,6 +58,8 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
+  BusinessController businessController = Get.put(BusinessController());
+
   LoginController loginController = Get.put(LoginController());
 
   bool isApiCalling = false;
@@ -64,6 +67,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
   String userName = "";
   String userEmail = "";
   String profileURL = "";
+  List<dynamic> searchResult = [];
 
   getProfileDataForSideMenu() async {
     setState(() {
@@ -82,6 +86,16 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
     print(' user name----$userName');
     print('user email--- $userEmail');
     print('response my account------- ${response}');
+  }
+
+  searchBusiness(String value) async {
+    final response;
+    response = await api.searchForBusiness(value);
+    if (response['status'] == 1) {
+      setState(() {
+        businessController.businessList.value = response['result'];
+      });
+    }
   }
 
   @override
@@ -681,35 +695,39 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     //               .jumpToPage(16);
                     //         })
                     //     : const SizedBox(),
-                    GestureDetector(
-                      child: Container(
-                        // color: Colors.black,
-                        height: size.height * 0.05,
-                        width: size.width * 0.8,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.02),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.circular(size.width * 0.03)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            customText.kText(
-                                "Search Business",
-                                20,
-                                FontWeight.w700,
-                                ColorConstants.kTextGrey,
-                                TextAlign.left),
-                            const Icon(Icons.search,
-                                size: 30, color: ColorConstants.kTextGrey)
-                          ],
+                    Container(
+                      height: size.height * 0.05,
+                      width: size.width * 0.8,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.width * 0.02),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius:
+                              BorderRadius.circular(size.width * 0.03)),
+                      child: TextFormField(
+                        onTap: () {
+                          sideDrawerController.pageIndex.value = 22;
+                          sideDrawerController.pageController.jumpToPage(22);
+                        },
+                        onChanged: (value) async {
+                          searchBusiness(value);
+                        },
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          suffixIcon: Icon(
+                            Icons.search,
+                            size: 30,
+                            color: ColorConstants.kTextGrey,
+                          ),
+                          hintText: "Search Business",
+                          hintStyle: TextStyle(
+                            fontSize: 20,
+                            color: ColorConstants.kTextGrey,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Raleway",
+                          ),
                         ),
                       ),
-                      onTap: () {
-                        sideDrawerController.pageIndex.value = 16;
-                        sideDrawerController.pageController.jumpToPage(16);
-                      },
                     ),
                     // ),
                   ],

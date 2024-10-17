@@ -24,7 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool isApiCalling = false;
 
   // slider images
-  String images = " ";
+  List<dynamic> sliderImages = [];
 
   // testimonials data
   List<dynamic> featuredListingData = [];
@@ -40,13 +40,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
     final response = await api.sliderImagesDashboard();
     setState(() {
-      images = response['result'][0]['image'];
+      sliderImages = response['result'];
     });
     setState(() {
       isApiCalling = false;
     });
 
-    print('slider list images ----$images');
+    print('slider list images ----$sliderImages');
   }
 
   // get popular communities  list
@@ -112,82 +112,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
         body: SingleChildScrollView(
       child: Column(
         children: [
-          CarouselSlider(
-            items: [
-              Container(
-                margin: const EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage(images),
-                    fit: BoxFit.cover,
+          sliderImages.isEmpty
+              ? Container(
+                  height: size.height * 0.25,
+                  width: size.width,
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(8)),
+                      height: 50,
+                      width: size.width * .400,
+                      child: Center(
+                        child: customText.kText("No data found", 15,
+                            FontWeight.w700, Colors.black, TextAlign.center),
+                      ),
+                    ),
+                  ),
+                )
+              : CarouselSlider.builder(
+                  itemCount: sliderImages.length,
+                  itemBuilder: (BuildContext context, int index, realIndex) =>
+                      Container(
+                    margin: const EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      image: DecorationImage(
+                        image: NetworkImage(sliderImages[index]['image']),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  options: CarouselOptions(
+                      height: 180.0,
+                      enlargeCenterPage: true,
+                      autoPlay: true,
+                      aspectRatio: 16 / 9,
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enableInfiniteScroll: true,
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 800),
+                      viewportFraction: 0.8,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          currentIndex = index;
+                        });
+                      }),
+                ),
+          sliderImages.isEmpty
+              ? Container()
+              : DotsIndicator(
+                  dotsCount: sliderImages.length,
+                  position: currentIndex,
+                  decorator: const DotsDecorator(
+                    color: ColorConstants.kIndicatorDots, // Inactive color
+                    activeColor: ColorConstants.kCircleRed,
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage(images),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage(images),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage(images),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    image: NetworkImage(images),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ],
-            options: CarouselOptions(
-                height: 180.0,
-                enlargeCenterPage: true,
-                autoPlay: true,
-                aspectRatio: 16 / 9,
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enableInfiniteScroll: true,
-                autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                viewportFraction: 0.8,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                }),
-          ),
-          DotsIndicator(
-            dotsCount: 5,
-            position: currentIndex,
-            decorator: const DotsDecorator(
-              color: ColorConstants.kIndicatorDots, // Inactive color
-              activeColor: ColorConstants.kCircleRed,
-            ),
-          ),
           Container(
             height: size.height * 0.05,
             width: size.width * 0.8,

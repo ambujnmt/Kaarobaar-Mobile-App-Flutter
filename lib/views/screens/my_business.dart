@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
+import 'package:kaarobaar/controllers/business_controllers.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/text.dart';
@@ -19,6 +20,7 @@ class _MyBusinessState extends State<MyBusiness> {
   bool isApiCalling = false;
   final api = API();
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
+  BusinessController businessController = Get.put(BusinessController());
 
   // Function to show an alert dialog
   void _showAlertDialog(BuildContext context, Function() deleteItem) {
@@ -70,13 +72,13 @@ class _MyBusinessState extends State<MyBusiness> {
     });
     final response = await api.businessListByUser();
     setState(() {
-      myBusinessListData = response['result'];
+      businessController.businessList.value = response['result'];
     });
     setState(() {
       isApiCalling = false;
     });
 
-    print('Get my business list----$myBusinessListData');
+    print('Get my business list----${businessController.businessList}');
   }
 
   @override
@@ -121,7 +123,7 @@ class _MyBusinessState extends State<MyBusiness> {
                             FontWeight.w700, Colors.white, TextAlign.center),
                       ),
                     ),
-                    Container(
+                    Obx(() => Container(
                         height: size.height * 0.67,
                         width: size.width,
                         // color: Colors.grey.shade400,
@@ -135,7 +137,7 @@ class _MyBusinessState extends State<MyBusiness> {
                               // childAspectRatio: 1 / 1.8,
                               childAspectRatio: 1 / 2.2,
                             ),
-                            itemCount: myBusinessListData.length,
+                            itemCount: businessController.businessList.length,
                             itemBuilder: (context, index) {
                               return Container(
                                 // margin: EdgeInsets.all(size.width * 0.02),
@@ -157,7 +159,8 @@ class _MyBusinessState extends State<MyBusiness> {
                                           color: Colors.grey.shade800,
                                           borderRadius: BorderRadius.circular(
                                               size.width * 0.03)),
-                                      child: myBusinessListData[index]
+                                      child: businessController
+                                                  .businessList[index]
                                                       ['featured_image']
                                                   .toString() ==
                                               ""
@@ -174,7 +177,7 @@ class _MyBusinessState extends State<MyBusiness> {
                                               ),
                                             )
                                           : Image.network(
-                                              "${myBusinessListData[index]['featured_image'].toString()}",
+                                              "${businessController.businessList[index]['featured_image'].toString()}",
                                               fit: BoxFit.fill,
                                             ),
                                     ),
@@ -182,7 +185,7 @@ class _MyBusinessState extends State<MyBusiness> {
                                       width: size.width * 0.45,
                                       height: size.width * 0.09,
                                       child: customText.kText(
-                                          "${myBusinessListData[index]['business_title'].toString()}",
+                                          "${businessController.businessList[index]['business_title'].toString()}",
                                           15,
                                           FontWeight.w700,
                                           Colors.black,
@@ -192,7 +195,7 @@ class _MyBusinessState extends State<MyBusiness> {
                                       width: size.width * 0.45,
                                       height: size.width * 0.09,
                                       child: customText.kText(
-                                          "${myBusinessListData[index]['address'].toString()}",
+                                          "${businessController.businessList[index]['address'].toString()}",
                                           15,
                                           FontWeight.w400,
                                           Colors.black,
@@ -203,7 +206,7 @@ class _MyBusinessState extends State<MyBusiness> {
                                       // height: size.width * 0.09,
                                       // height: h * .120,
                                       child: customText.kText(
-                                          "${myBusinessListData[index]['business_description'].toString()}",
+                                          "${businessController.businessList[index]['business_description'].toString()}",
                                           15,
                                           FontWeight.w400,
                                           Colors.black,
@@ -226,7 +229,8 @@ class _MyBusinessState extends State<MyBusiness> {
                                                   .pageIndex.value = 2;
                                               sideDrawerController
                                                       .myBusinessId =
-                                                  myBusinessListData[index]
+                                                  businessController
+                                                          .businessList[index]
                                                       ["id"];
                                               sideDrawerController
                                                   .pageController
@@ -267,8 +271,9 @@ class _MyBusinessState extends State<MyBusiness> {
                                                 context,
                                                 () async {
                                                   await api.deleteBusiness(
-                                                      myBusinessListData[index]
-                                                          ['id']);
+                                                      businessController
+                                                              .businessList[
+                                                          index]['id']);
                                                   getMyBusiness();
                                                 },
                                               );
@@ -311,7 +316,8 @@ class _MyBusinessState extends State<MyBusiness> {
                                         sideDrawerController.pageIndex.value =
                                             27;
                                         sideDrawerController.businessListingId =
-                                            myBusinessListData[index]["id"];
+                                            businessController
+                                                .businessList[index]["id"];
                                         sideDrawerController.pageController
                                             .jumpToPage(27);
                                       },
@@ -348,7 +354,8 @@ class _MyBusinessState extends State<MyBusiness> {
                                         sideDrawerController.pageIndex.value =
                                             17;
                                         sideDrawerController.businessListingId =
-                                            myBusinessListData[index]["id"];
+                                            businessController
+                                                .businessList[index]["id"];
                                         sideDrawerController.pageController
                                             .jumpToPage(17);
                                       },
@@ -443,7 +450,7 @@ class _MyBusinessState extends State<MyBusiness> {
                                   ],
                                 ),
                               );
-                            }))
+                            })))
                   ],
                 ),
               ),
