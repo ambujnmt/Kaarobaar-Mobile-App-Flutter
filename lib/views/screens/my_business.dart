@@ -66,12 +66,15 @@ class _MyBusinessState extends State<MyBusiness> {
   }
 
   // get my business  list
+  int statusValue = 0;
   getMyBusiness() async {
     setState(() {
       isApiCalling = true;
     });
     final response = await api.businessListByUser();
     setState(() {
+      statusValue = response['status'];
+      print("Status Value: ${statusValue} ");
       businessController.businessList.value = response['result'];
     });
     setState(() {
@@ -98,15 +101,16 @@ class _MyBusinessState extends State<MyBusiness> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Container(
-              margin: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-              child: SingleChildScrollView(
-                child: Column(
+          : statusValue == 0
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       height: size.height * 0.05,
                       width: size.width * 0.8,
-                      margin: EdgeInsets.symmetric(vertical: size.width * 0.05),
+                      margin: EdgeInsets.all(20),
+                      // margin: EdgeInsets.symmetric(vertical: size.width * 0.05),
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.white),
                           borderRadius:
@@ -123,338 +127,406 @@ class _MyBusinessState extends State<MyBusiness> {
                             FontWeight.w700, Colors.white, TextAlign.center),
                       ),
                     ),
-                    Obx(() => Container(
-                        height: size.height * 0.67,
-                        width: size.width,
-                        // color: Colors.grey.shade400,
-                        child: GridView.builder(
-                            padding: EdgeInsets.zero,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 5.0,
-                              mainAxisSpacing: 5.0,
-                              // childAspectRatio: 1 / 1.8,
-                              childAspectRatio: 1 / 2.2,
-                            ),
-                            itemCount: businessController.businessList.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                // margin: EdgeInsets.all(size.width * 0.02),
-                                padding: EdgeInsets.all(size.width * 0.02),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: ColorConstants.kIndicatorDots),
-                                    borderRadius: BorderRadius.circular(
-                                        size.width * 0.03)),
-                                child: Column(
-                                  // crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height: size.width * 0.38,
-                                      width: size.width * 0.38,
-                                      margin: EdgeInsets.only(
-                                          bottom: size.width * 0.02),
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey.shade800,
-                                          borderRadius: BorderRadius.circular(
-                                              size.width * 0.03)),
-                                      child: businessController
-                                                  .businessList[index]
-                                                      ['featured_image']
-                                                  .toString() ==
-                                              ""
-                                          ? Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                image: const DecorationImage(
-                                                  image: AssetImage(
-                                                    'assets/images/no_image.jpeg',
+                    Expanded(
+                        child: Container(
+                      child: Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(8)),
+                          height: 50,
+                          width: size.width * .400,
+                          child: Center(
+                            child: customText.kText(
+                                "No data found",
+                                15,
+                                FontWeight.w700,
+                                Colors.black,
+                                TextAlign.center),
+                          ),
+                        ),
+                      ),
+                    ))
+                  ],
+                )
+              : Container(
+                  margin: EdgeInsets.symmetric(horizontal: size.width * 0.02),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: size.height * 0.05,
+                          width: size.width * 0.8,
+                          margin:
+                              EdgeInsets.symmetric(vertical: size.width * 0.05),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white),
+                              borderRadius:
+                                  BorderRadius.circular(size.width * 0.05),
+                              gradient: const LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    ColorConstants.kGradientDarkGreen,
+                                    ColorConstants.kGradientLightGreen
+                                  ])),
+                          child: Center(
+                            child: customText.kText(
+                                "My Business",
+                                20,
+                                FontWeight.w700,
+                                Colors.white,
+                                TextAlign.center),
+                          ),
+                        ),
+                        Obx(() => Container(
+                            height: size.height * 0.67,
+                            width: size.width,
+                            // color: Colors.grey.shade400,
+                            child: GridView.builder(
+                                padding: EdgeInsets.zero,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 5.0,
+                                  mainAxisSpacing: 5.0,
+                                  // childAspectRatio: 1 / 1.8,
+                                  childAspectRatio: 1 / 2.2,
+                                ),
+                                itemCount:
+                                    businessController.businessList.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    // margin: EdgeInsets.all(size.width * 0.02),
+                                    padding: EdgeInsets.all(size.width * 0.02),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color:
+                                                ColorConstants.kIndicatorDots),
+                                        borderRadius: BorderRadius.circular(
+                                            size.width * 0.03)),
+                                    child: Column(
+                                      // crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: size.width * 0.38,
+                                          width: size.width * 0.38,
+                                          margin: EdgeInsets.only(
+                                              bottom: size.width * 0.02),
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey.shade800,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      size.width * 0.03)),
+                                          child: businessController
+                                                      .businessList[index]
+                                                          ['featured_image']
+                                                      .toString() ==
+                                                  ""
+                                              ? Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    image:
+                                                        const DecorationImage(
+                                                      image: AssetImage(
+                                                        'assets/images/no_image.jpeg',
+                                                      ),
+                                                      fit: BoxFit.fill,
+                                                    ),
                                                   ),
+                                                )
+                                              : Image.network(
+                                                  "${businessController.businessList[index]['featured_image'].toString()}",
                                                   fit: BoxFit.fill,
                                                 ),
-                                              ),
-                                            )
-                                          : Image.network(
-                                              "${businessController.businessList[index]['featured_image'].toString()}",
-                                              fit: BoxFit.fill,
-                                            ),
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.45,
-                                      height: size.width * 0.09,
-                                      child: customText.kText(
-                                          "${businessController.businessList[index]['business_title'].toString()}",
-                                          15,
-                                          FontWeight.w700,
-                                          Colors.black,
-                                          TextAlign.center),
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.45,
-                                      height: size.width * 0.09,
-                                      child: customText.kText(
-                                          "${businessController.businessList[index]['address'].toString()}",
-                                          15,
-                                          FontWeight.w400,
-                                          Colors.black,
-                                          TextAlign.center),
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.45,
-                                      // height: size.width * 0.09,
-                                      // height: h * .120,
-                                      child: customText.kText(
-                                          "${businessController.businessList[index]['business_description'].toString()}",
-                                          15,
-                                          FontWeight.w400,
-                                          Colors.black,
-                                          TextAlign.center),
-                                    ),
+                                        ),
+                                        SizedBox(
+                                          width: size.width * 0.45,
+                                          height: size.width * 0.09,
+                                          child: customText.kText(
+                                              "${businessController.businessList[index]['business_title'].toString()}",
+                                              15,
+                                              FontWeight.w700,
+                                              Colors.black,
+                                              TextAlign.center),
+                                        ),
+                                        SizedBox(
+                                          width: size.width * 0.45,
+                                          height: size.width * 0.09,
+                                          child: customText.kText(
+                                              "${businessController.businessList[index]['address'].toString()}",
+                                              15,
+                                              FontWeight.w400,
+                                              Colors.black,
+                                              TextAlign.center),
+                                        ),
+                                        SizedBox(
+                                          width: size.width * 0.45,
+                                          // height: size.width * 0.09,
+                                          // height: h * .120,
+                                          child: customText.kText(
+                                              "${businessController.businessList[index]['business_description'].toString()}",
+                                              15,
+                                              FontWeight.w400,
+                                              Colors.black,
+                                              TextAlign.center),
+                                        ),
 
-                                    Container(
-                                      margin: const EdgeInsets.only(top: 25),
-                                      height: h * .050,
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              sideDrawerController
-                                                  .pageIndex.value = 2;
-                                              sideDrawerController
-                                                      .myBusinessId =
-                                                  businessController
-                                                          .businessList[index]
-                                                      ["id"];
-                                              sideDrawerController
-                                                  .pageController
-                                                  .jumpToPage(2);
-                                            },
-                                            child: Container(
-                                              height: 30,
-                                              width: width * .2,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          size.width * 0.05),
-                                                  gradient:
-                                                      const LinearGradient(
-                                                          begin: Alignment
-                                                              .centerLeft,
-                                                          end:
-                                                              Alignment
-                                                                  .centerRight,
-                                                          colors: [
-                                                        ColorConstants
-                                                            .kGradientDarkGreen,
-                                                        ColorConstants
-                                                            .kGradientLightGreen
-                                                      ])),
-                                              child: const Center(
-                                                child: Icon(
-                                                  Icons.edit,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 10),
-                                          GestureDetector(
-                                            onTap: () {
-                                              _showAlertDialog(
-                                                context,
-                                                () async {
-                                                  await api.deleteBusiness(
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(top: 25),
+                                          height: h * .050,
+                                          width: double.infinity,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  sideDrawerController
+                                                      .pageIndex.value = 2;
+                                                  sideDrawerController
+                                                          .fromEditBusiness =
+                                                      "fromEditBusiness";
+                                                  sideDrawerController
+                                                          .myBusinessId =
                                                       businessController
                                                               .businessList[
-                                                          index]['id']);
-                                                  getMyBusiness();
+                                                          index]["id"];
+                                                  sideDrawerController
+                                                      .pageController
+                                                      .jumpToPage(2);
                                                 },
-                                              );
-                                            },
-                                            child: Container(
-                                              height: 30,
-                                              width: width * .2,
-                                              decoration: BoxDecoration(
+                                                child: Container(
+                                                  height: 30,
+                                                  width: width * .2,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              size.width *
+                                                                  0.05),
+                                                      gradient:
+                                                          const LinearGradient(
+                                                              begin: Alignment
+                                                                  .centerLeft,
+                                                              end: Alignment
+                                                                  .centerRight,
+                                                              colors: [
+                                                            ColorConstants
+                                                                .kGradientDarkGreen,
+                                                            ColorConstants
+                                                                .kGradientLightGreen
+                                                          ])),
+                                                  child: const Center(
+                                                    child: Icon(
+                                                      Icons.edit,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  _showAlertDialog(
+                                                    context,
+                                                    () async {
+                                                      await api.deleteBusiness(
+                                                          businessController
+                                                                  .businessList[
+                                                              index]['id']);
+                                                      getMyBusiness();
+                                                    },
+                                                  );
+                                                },
+                                                child: Container(
+                                                  height: 30,
+                                                  width: width * .2,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.white),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            size.width * 0.05),
+                                                    gradient:
+                                                        const LinearGradient(
+                                                      begin:
+                                                          Alignment.centerLeft,
+                                                      end:
+                                                          Alignment.centerRight,
+                                                      colors: [
+                                                        // Color(0xffa40000),
+                                                        // Color(0xff262626)
+                                                        Color(0xffD50000),
+                                                        Color(0xff760000),
+                                                      ],
+                                                    ),
+                                                    // color: Color(0xffEE0200),
+                                                  ),
+                                                  child: const Center(
+                                                    child: Icon(
+                                                      Icons.delete,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        GestureDetector(
+                                          onTap: () {
+                                            sideDrawerController
+                                                .pageIndex.value = 27;
+                                            sideDrawerController
+                                                    .businessListingId =
+                                                businessController
+                                                    .businessList[index]["id"];
+                                            sideDrawerController.pageController
+                                                .jumpToPage(27);
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
                                                 border: Border.all(
                                                     color: Colors.white),
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         size.width * 0.05),
                                                 gradient: const LinearGradient(
-                                                  begin: Alignment.centerLeft,
-                                                  end: Alignment.centerRight,
-                                                  colors: [
-                                                    // Color(0xffa40000),
-                                                    // Color(0xff262626)
-                                                    Color(0xffD50000),
-                                                    Color(0xff760000),
-                                                  ],
-                                                ),
-                                                // color: Color(0xffEE0200),
-                                              ),
-                                              child: const Center(
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
+                                                    begin: Alignment.centerLeft,
+                                                    end: Alignment.centerRight,
+                                                    colors: [
+                                                      ColorConstants
+                                                          .kGradientDarkGreen,
+                                                      ColorConstants
+                                                          .kGradientLightGreen
+                                                    ])),
+                                            child: Center(
+                                              child: customText.kText(
+                                                  "Post Job",
+                                                  15,
+                                                  FontWeight.w600,
+                                                  Colors.white,
+                                                  TextAlign.center),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-
-                                    GestureDetector(
-                                      onTap: () {
-                                        sideDrawerController.pageIndex.value =
-                                            27;
-                                        sideDrawerController.businessListingId =
-                                            businessController
-                                                .businessList[index]["id"];
-                                        sideDrawerController.pageController
-                                            .jumpToPage(27);
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: Colors.white),
-                                            borderRadius: BorderRadius.circular(
-                                                size.width * 0.05),
-                                            gradient: const LinearGradient(
-                                                begin: Alignment.centerLeft,
-                                                end: Alignment.centerRight,
-                                                colors: [
-                                                  ColorConstants
-                                                      .kGradientDarkGreen,
-                                                  ColorConstants
-                                                      .kGradientLightGreen
-                                                ])),
-                                        child: Center(
-                                          child: customText.kText(
-                                              "Post Job",
-                                              15,
-                                              FontWeight.w600,
-                                              Colors.white,
-                                              TextAlign.center),
                                         ),
-                                      ),
-                                    ),
 
-                                    GestureDetector(
-                                      onTap: () {
-                                        sideDrawerController.pageIndex.value =
-                                            17;
-                                        sideDrawerController.businessListingId =
-                                            businessController
-                                                .businessList[index]["id"];
-                                        sideDrawerController.pageController
-                                            .jumpToPage(17);
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: Colors.white),
-                                            borderRadius: BorderRadius.circular(
-                                                size.width * 0.05),
-                                            gradient: const LinearGradient(
-                                                begin: Alignment.centerLeft,
-                                                end: Alignment.centerRight,
-                                                colors: [
-                                                  ColorConstants
-                                                      .kGradientDarkGreen,
-                                                  ColorConstants
-                                                      .kGradientLightGreen
-                                                ])),
-                                        child: Center(
-                                          child: customText.kText(
-                                              "Post Event",
-                                              15,
-                                              FontWeight.w600,
-                                              Colors.white,
-                                              TextAlign.center),
+                                        GestureDetector(
+                                          onTap: () {
+                                            sideDrawerController
+                                                .pageIndex.value = 17;
+                                            sideDrawerController
+                                                    .businessListingId =
+                                                businessController
+                                                    .businessList[index]["id"];
+                                            sideDrawerController.pageController
+                                                .jumpToPage(17);
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        size.width * 0.05),
+                                                gradient: const LinearGradient(
+                                                    begin: Alignment.centerLeft,
+                                                    end: Alignment.centerRight,
+                                                    colors: [
+                                                      ColorConstants
+                                                          .kGradientDarkGreen,
+                                                      ColorConstants
+                                                          .kGradientLightGreen
+                                                    ])),
+                                            child: Center(
+                                              child: customText.kText(
+                                                  "Post Event",
+                                                  15,
+                                                  FontWeight.w600,
+                                                  Colors.white,
+                                                  TextAlign.center),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+
+                                        // move to page number 17
+
+                                        // Linear gradient color button
+                                        // Row(
+                                        //   mainAxisAlignment:
+                                        //       MainAxisAlignment.spaceBetween,
+                                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                                        //   children: [
+                                        //     SizedBox(
+                                        //       height: size.width * 0.07,
+                                        //       child: Image.asset("assets/images/map.png"),
+                                        //     ),
+                                        //     SizedBox(
+                                        //         width: size.width * 0.33,
+                                        //         height: size.height * 0.09,
+                                        //         child: customText.kText(
+                                        //             "20102 Kabul Range Road, Afghanistan 1001.",
+                                        //             13,
+                                        //             FontWeight.w500,
+                                        //             Colors.black,
+                                        //             TextAlign.left))
+                                        //   ],
+                                        // ),
+                                        // Container(
+                                        //   height: size.height * 0.05,
+                                        //   width: size.width * 0.8,
+                                        //   // margin: EdgeInsets.symmetric(vertical: size.width * 0.02),
+                                        //   padding: EdgeInsets.symmetric(
+                                        //       horizontal: size.width * 0.02),
+                                        //   decoration: BoxDecoration(
+                                        //       // border: Border.all(color: Colors.white),
+                                        //       borderRadius: BorderRadius.circular(
+                                        //           size.width * 0.02),
+                                        //       gradient: const LinearGradient(
+                                        //           begin: Alignment.centerLeft,
+                                        //           end: Alignment.centerRight,
+                                        //           colors: [
+                                        //             ColorConstants.kGradientDarkGreen,
+                                        //             ColorConstants.kGradientLightGreen
+                                        //           ])),
+                                        //   child: Row(
+                                        //     mainAxisAlignment:
+                                        //         MainAxisAlignment.spaceBetween,
+                                        //     children: [
+                                        //       customText.kText(
+                                        //           "Event",
+                                        //           14,
+                                        //           FontWeight.w700,
+                                        //           Colors.white,
+                                        //           TextAlign.center),
+                                        //       CircleAvatar(
+                                        //         radius: size.width * 0.042,
+                                        //         child: SizedBox(
+                                        //             height: size.width * 0.055,
+                                        //             child: Image.asset(
+                                        //                 "assets/images/call.png")),
+                                        //       )
+                                        //     ],
+                                        //   ),
+                                        // ),
+                                      ],
                                     ),
-
-                                    // move to page number 17
-
-                                    // Linear gradient color button
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceBetween,
-                                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                                    //   children: [
-                                    //     SizedBox(
-                                    //       height: size.width * 0.07,
-                                    //       child: Image.asset("assets/images/map.png"),
-                                    //     ),
-                                    //     SizedBox(
-                                    //         width: size.width * 0.33,
-                                    //         height: size.height * 0.09,
-                                    //         child: customText.kText(
-                                    //             "20102 Kabul Range Road, Afghanistan 1001.",
-                                    //             13,
-                                    //             FontWeight.w500,
-                                    //             Colors.black,
-                                    //             TextAlign.left))
-                                    //   ],
-                                    // ),
-                                    // Container(
-                                    //   height: size.height * 0.05,
-                                    //   width: size.width * 0.8,
-                                    //   // margin: EdgeInsets.symmetric(vertical: size.width * 0.02),
-                                    //   padding: EdgeInsets.symmetric(
-                                    //       horizontal: size.width * 0.02),
-                                    //   decoration: BoxDecoration(
-                                    //       // border: Border.all(color: Colors.white),
-                                    //       borderRadius: BorderRadius.circular(
-                                    //           size.width * 0.02),
-                                    //       gradient: const LinearGradient(
-                                    //           begin: Alignment.centerLeft,
-                                    //           end: Alignment.centerRight,
-                                    //           colors: [
-                                    //             ColorConstants.kGradientDarkGreen,
-                                    //             ColorConstants.kGradientLightGreen
-                                    //           ])),
-                                    //   child: Row(
-                                    //     mainAxisAlignment:
-                                    //         MainAxisAlignment.spaceBetween,
-                                    //     children: [
-                                    //       customText.kText(
-                                    //           "Event",
-                                    //           14,
-                                    //           FontWeight.w700,
-                                    //           Colors.white,
-                                    //           TextAlign.center),
-                                    //       CircleAvatar(
-                                    //         radius: size.width * 0.042,
-                                    //         child: SizedBox(
-                                    //             height: size.width * 0.055,
-                                    //             child: Image.asset(
-                                    //                 "assets/images/call.png")),
-                                    //       )
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
-                              );
-                            })))
-                  ],
+                                  );
+                                })))
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
     );
   }
 }

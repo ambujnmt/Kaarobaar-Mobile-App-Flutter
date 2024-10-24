@@ -82,6 +82,10 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
                             mobileController.text,
                             salaryController.text,
                             vacancyControlller.text);
+
+                        if (response['status'] == 1) {
+                          sideDrawerController.myJobDetailId = "";
+                        }
                       }
 
                       setState(() {

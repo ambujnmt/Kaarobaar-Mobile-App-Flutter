@@ -64,12 +64,15 @@ class _ListByUserEventsState extends State<ListByUserEvents> {
     );
   }
 
+  int statusValue = 0;
   getMyEvents() async {
     setState(() {
       isApiCalling = true;
     });
     final response = await api.myEventList();
     setState(() {
+      statusValue = response['status'];
+      print("status value: ${statusValue}");
       myEventsListData = response['result'];
     });
     setState(() {
@@ -83,6 +86,10 @@ class _ListByUserEventsState extends State<ListByUserEvents> {
   void initState() {
     super.initState();
     getMyEvents();
+    print("init status == ${statusValue}");
+    if (statusValue == 0) {
+      isApiCalling = false;
+    }
   }
 
   @override
@@ -95,228 +102,275 @@ class _ListByUserEventsState extends State<ListByUserEvents> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Container(
-              margin: const EdgeInsets.all(10),
-              child: ListView.builder(
-                padding: const EdgeInsets.only(top: 0),
-                itemCount: myEventsListData.length,
-                itemBuilder: (BuildContext context, int index) => Card(
-                  // elevation: 4,
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    // height: height * .250,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      // color: Colors.lightGreen,
-                      borderRadius: BorderRadius.circular(8),
+          : statusValue == 0
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: height * 0.05,
+                      width: width * 0.8,
+                      margin: EdgeInsets.all(20),
+                      // margin: EdgeInsets.symmetric(vertical: size.width * 0.05),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(width * 0.05),
+                          gradient: const LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                ColorConstants.kGradientDarkGreen,
+                                ColorConstants.kGradientLightGreen
+                              ])),
+                      child: Center(
+                        child: customText.kText("My Event", 20, FontWeight.w700,
+                            Colors.white, TextAlign.center),
+                      ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Event title:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              Container(
-                                width: width * .5,
-                                child: customText.kText(
-                                    '${myEventsListData[index]['event_title']}',
-                                    16,
-                                    FontWeight.w400,
-                                    Colors.black,
-                                    TextAlign.start),
-                              ),
-                            ],
+                    Expanded(
+                        child: Container(
+                      child: Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(8)),
+                          height: 50,
+                          width: width * .400,
+                          child: Center(
+                            child: customText.kText(
+                                "No data found",
+                                15,
+                                FontWeight.w700,
+                                Colors.black,
+                                TextAlign.center),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Event Location:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${myEventsListData[index]['event_location']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start)
-                            ],
-                          ),
+                      ),
+                    ))
+                  ],
+                )
+              : Container(
+                  margin: const EdgeInsets.all(10),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(top: 0),
+                    itemCount: myEventsListData.length,
+                    itemBuilder: (BuildContext context, int index) => Card(
+                      // elevation: 4,
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        // height: height * .250,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          // color: Colors.lightGreen,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Event Date:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${myEventsListData[index]['event_date']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start)
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Event Time:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${myEventsListData[index]['event_time']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start)
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Event Description:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${myEventsListData[index]['event_description']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start)
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              child: Container(
-                                height: 30,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(8),
-                                  gradient: const RadialGradient(
-                                    center: Alignment(0.19, -0.9),
-                                    colors: [
-                                      ColorConstants.kGradientDarkGreen,
-                                      ColorConstants.kGradientLightGreen
-                                    ],
-                                    radius: 4.0,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: customText.kText(
-                                      "Edit",
-                                      16,
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Event title:  ',
+                                      18,
                                       FontWeight.w700,
-                                      Colors.white,
-                                      TextAlign.center),
-                                ),
+                                      Colors.black,
+                                      TextAlign.start),
+                                  Container(
+                                    width: width * .5,
+                                    child: customText.kText(
+                                        '${myEventsListData[index]['event_title']}',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
+                                  ),
+                                ],
                               ),
-                              onTap: () {
-                                // FocusScope.of(context).unfocus();
-                                sideDrawerController.pageIndex.value = 17;
-                                sideDrawerController.myEventsId =
-                                    myEventsListData[index]["id"];
-                                sideDrawerController.eventBusinessId =
-                                    myEventsListData[index]["business_id"];
-                                sideDrawerController.pageController
-                                    .jumpToPage(17);
-                              },
                             ),
-                            GestureDetector(
-                              child: Container(
-                                height: 30,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  // color: Colors.black,
-                                  borderRadius: BorderRadius.circular(8),
-                                  gradient: const RadialGradient(
-                                    center: Alignment(0.19, -0.9),
-                                    colors: [
-                                      // Color(0xffa40000),
-                                      // Color(0xff262626)
-                                      Color(0xffD50000),
-                                      Color(0xff760000),
-                                    ],
-                                    radius: 4.0,
-                                  ),
-                                  // color: Color(0xffEE0200),
-                                ),
-                                child: Center(
-                                  child: customText.kText(
-                                      "Delete",
-                                      16,
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Event Location:  ',
+                                      18,
                                       FontWeight.w700,
-                                      Colors.white,
-                                      TextAlign.center),
-                                ),
+                                      Colors.black,
+                                      TextAlign.start),
+                                  customText.kText(
+                                      '${myEventsListData[index]['event_location']}',
+                                      16,
+                                      FontWeight.w400,
+                                      Colors.black,
+                                      TextAlign.start)
+                                ],
                               ),
-                              onTap: () {
-                                _showAlertDialog(
-                                  context,
-                                  () async {
-                                    final deleteResponse =
-                                        await api.deleteMyEvent(
-                                            myEventsListData[index]['id']);
-                                    if (deleteResponse['status'] == 1) {
-                                      helper.successDialog(
-                                          context, deleteResponse['message']);
-                                    } else {
-                                      helper.errorDialog(
-                                          context, deleteResponse['message']);
-                                    }
-                                    getMyEvents();
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Event Date:  ',
+                                      18,
+                                      FontWeight.w700,
+                                      Colors.black,
+                                      TextAlign.start),
+                                  customText.kText(
+                                      '${myEventsListData[index]['event_date']}',
+                                      16,
+                                      FontWeight.w400,
+                                      Colors.black,
+                                      TextAlign.start)
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Event Time:  ',
+                                      18,
+                                      FontWeight.w700,
+                                      Colors.black,
+                                      TextAlign.start),
+                                  customText.kText(
+                                      '${myEventsListData[index]['event_time']}',
+                                      16,
+                                      FontWeight.w400,
+                                      Colors.black,
+                                      TextAlign.start)
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Event Description:  ',
+                                      18,
+                                      FontWeight.w700,
+                                      Colors.black,
+                                      TextAlign.start),
+                                  customText.kText(
+                                      '${myEventsListData[index]['event_description']}',
+                                      16,
+                                      FontWeight.w400,
+                                      Colors.black,
+                                      TextAlign.start)
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  child: Container(
+                                    height: 30,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(8),
+                                      gradient: const RadialGradient(
+                                        center: Alignment(0.19, -0.9),
+                                        colors: [
+                                          ColorConstants.kGradientDarkGreen,
+                                          ColorConstants.kGradientLightGreen
+                                        ],
+                                        radius: 4.0,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: customText.kText(
+                                          "Edit",
+                                          16,
+                                          FontWeight.w700,
+                                          Colors.white,
+                                          TextAlign.center),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    // FocusScope.of(context).unfocus();
+                                    sideDrawerController.pageIndex.value = 17;
+                                    sideDrawerController.myEventsId =
+                                        myEventsListData[index]["id"];
+                                    sideDrawerController.eventBusinessId =
+                                        myEventsListData[index]["business_id"];
+                                    sideDrawerController.pageController
+                                        .jumpToPage(17);
                                   },
-                                );
-                              },
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    height: 30,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      // color: Colors.black,
+                                      borderRadius: BorderRadius.circular(8),
+                                      gradient: const RadialGradient(
+                                        center: Alignment(0.19, -0.9),
+                                        colors: [
+                                          // Color(0xffa40000),
+                                          // Color(0xff262626)
+                                          Color(0xffD50000),
+                                          Color(0xff760000),
+                                        ],
+                                        radius: 4.0,
+                                      ),
+                                      // color: Color(0xffEE0200),
+                                    ),
+                                    child: Center(
+                                      child: customText.kText(
+                                          "Delete",
+                                          16,
+                                          FontWeight.w700,
+                                          Colors.white,
+                                          TextAlign.center),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    _showAlertDialog(
+                                      context,
+                                      () async {
+                                        final deleteResponse =
+                                            await api.deleteMyEvent(
+                                                myEventsListData[index]['id']);
+                                        if (deleteResponse['status'] == 1) {
+                                          helper.successDialog(context,
+                                              deleteResponse['message']);
+                                        } else {
+                                          helper.errorDialog(context,
+                                              deleteResponse['message']);
+                                        }
+                                        getMyEvents();
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              )),
+                  )),
     );
   }
 }

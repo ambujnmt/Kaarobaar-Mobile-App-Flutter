@@ -126,6 +126,10 @@ class _AddEventState extends State<AddEvent> {
                     sideDrawerController.myEventsId,
                     sideDrawerController.eventBusinessId,
                   );
+
+                  if (response['status'] == 1) {
+                    sideDrawerController.myEventsId = "";
+                  }
                 }
 
                 setState(() {
@@ -193,6 +197,7 @@ class _AddEventState extends State<AddEvent> {
     if (sideDrawerController.myEventsId.isNotEmpty) {
       getEventsDetail();
     }
+    print("page value is ==== ${sideDrawerController.pageIndex.value}");
   }
 
   @override

@@ -67,7 +67,7 @@ class _ContactAdminState extends State<ContactAdmin> {
             helper.errorDialog(context, "Please enter description");
           }
         } else {
-          helper.errorDialog(context, "Please enter valid contact number");
+          helper.errorDialog(context, "Please enter contact number");
         }
       } else {
         helper.errorDialog(context, "Please enter valid email");
@@ -105,7 +105,7 @@ class _ContactAdminState extends State<ContactAdmin> {
                 ),
               ),
               child: TextField(
-                maxLength: 50,
+                maxLength: 30,
                 buildCounter: (BuildContext context,
                     {int? currentLength, int? maxLength, bool? isFocused}) {
                   return null;

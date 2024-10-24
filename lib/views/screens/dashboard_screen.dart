@@ -190,14 +190,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
           popularCommunitiesList.isEmpty
               ? Container()
               : GestureDetector(
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(right: 5, top: 2, bottom: 2),
-                        child: customText.kText("View All", 16, FontWeight.w700,
-                            ColorConstants.kIconsGrey, TextAlign.center),
-                      )),
+                  child: Container(
+                    margin: EdgeInsets.only(right: 15, bottom: 10, top: 10),
+                    child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 5, top: 2, bottom: 2),
+                          child: customText.kText(
+                              "View All",
+                              18,
+                              FontWeight.w900,
+                              ColorConstants.kIconsGrey,
+                              TextAlign.center),
+                        )),
+                  ),
                   onTap: () {
                     sideDrawerController.pageIndex.value = 15;
                     sideDrawerController.pageController.jumpToPage(15);
@@ -331,14 +338,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 )
               : GestureDetector(
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(right: 5, top: 2, bottom: 2),
-                        child: customText.kText("View All", 16, FontWeight.w700,
-                            ColorConstants.kIconsGrey, TextAlign.center),
-                      )),
+                  child: Container(
+                    margin: EdgeInsets.only(right: 15, bottom: 10, top: 10),
+                    child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 5, top: 2, bottom: 2),
+                          child: customText.kText(
+                              "View All",
+                              18,
+                              FontWeight.w700,
+                              ColorConstants.kIconsGrey,
+                              TextAlign.center),
+                        )),
+                  ),
                   onTap: () {
                     sideDrawerController.pageIndex.value = 28;
                     sideDrawerController.pageController.jumpToPage(28);
@@ -445,14 +459,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 )
               : GestureDetector(
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(right: 5, top: 2, bottom: 2),
-                        child: customText.kText("View All", 16, FontWeight.w700,
-                            ColorConstants.kIconsGrey, TextAlign.center),
-                      )),
+                  child: Container(
+                    margin: EdgeInsets.only(right: 15, bottom: 10, top: 10),
+                    child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 5, top: 2, bottom: 2),
+                          child: customText.kText(
+                              "View All",
+                              18,
+                              FontWeight.w700,
+                              ColorConstants.kIconsGrey,
+                              TextAlign.center),
+                        )),
+                  ),
                   onTap: () {
                     sideDrawerController.pageIndex.value = 32;
                     sideDrawerController.pageController.jumpToPage(32);
@@ -605,6 +626,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   13,
                                   FontWeight.w500,
                                   Colors.black,
+                                  maxLines: 4,
                                   TextAlign.start))
                         ],
                       ),

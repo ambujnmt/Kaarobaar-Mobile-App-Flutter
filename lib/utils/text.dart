@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomText {
   kText(String hint, double fontSize, FontWeight fontWeight, Color color,
-      TextAlign textAlign) {
+      TextAlign textAlign,
+      {int? maxLines}) {
     return Text(
+      maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
       hint,
       style: TextStyle(

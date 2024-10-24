@@ -125,6 +125,9 @@ class _AddBusinessState extends State<AddBusiness> {
                               _image?.path.toString(),
                               sideDrawerController.myBusinessId,
                             );
+                            if (response['status'] == 1) {
+                              sideDrawerController.myBusinessId = "";
+                            }
                           }
 
                           setState(() {
@@ -394,6 +397,8 @@ class _AddBusinessState extends State<AddBusiness> {
       getBusinessDetail();
     }
     print('my business id is---- ${sideDrawerController.myBusinessId}');
+    print("from edit ${sideDrawerController.fromEditBusiness}");
+    print('page value: ${sideDrawerController.pageIndex.value}');
 
     // if (sideDrawerController.myBusinessId.isNotEmpty) {
     //   businessDescriptionController.text =

@@ -591,6 +591,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                                 onTap: () {
                                   if (sideDrawerController.pageIndex.value ==
                                       27) {
+                                    sideDrawerController.myJobDetailId = "";
                                     sideDrawerController.pageIndex.value = 26;
                                     sideDrawerController.pageController
                                         .jumpToPage(26);
@@ -636,6 +637,20 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                                     sideDrawerController.pageIndex.value = 7;
                                     sideDrawerController.pageController
                                         .jumpToPage(7);
+                                  } else if (sideDrawerController
+                                          .pageIndex.value ==
+                                      2) {
+                                    sideDrawerController.myBusinessId = "";
+                                    sideDrawerController.pageIndex.value = 0;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(0);
+                                  } else if (sideDrawerController
+                                          .pageIndex.value ==
+                                      17) {
+                                    sideDrawerController.myEventsId = "";
+                                    sideDrawerController.pageIndex.value = 0;
+                                    sideDrawerController.pageController
+                                        .jumpToPage(0);
                                   } else {
                                     sideDrawerController.pageIndex.value = 0;
                                     sideDrawerController.pageController

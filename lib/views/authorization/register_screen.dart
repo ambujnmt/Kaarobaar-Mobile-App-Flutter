@@ -49,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   register() async {
-    if (nameController.text.length > 6) {
+    if (nameController.text.isNotEmpty) {
       if (EmailValidator.validate(emailController.text)) {
         if (passwordController.text.length >= 6 &&
             (!passwordController.text.contains(" "))) {
@@ -90,8 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         helper.errorDialog(context, "Please enter a valid email address");
       }
     } else {
-      helper.errorDialog(
-          context, "Please enter a name of atleast 6 characters");
+      helper.errorDialog(context, "Please enter name");
     }
   }
 
@@ -146,6 +145,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: size.width * 0.1,
                     ),
                     TextField(
+                      buildCounter: (BuildContext context,
+                          {int? currentLength,
+                          int? maxLength,
+                          bool? isFocused}) {
+                        return null;
+                      },
+                      maxLength: 30,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       controller: nameController,
@@ -255,15 +261,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Container(
                       margin: const EdgeInsets.only(left: 10),
                       child: customText.kText(
+                          maxLines: 2,
                           "Are you registering as a business or the individuals ?",
                           18,
                           FontWeight.w400,
                           Colors.black,
                           TextAlign.left),
                     ),
-                    SizedBox(
-                      height: size.width * 0.03,
-                    ),
+
                     // Radio
                     Container(
                       height: 50,
