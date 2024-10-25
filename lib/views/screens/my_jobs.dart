@@ -65,12 +65,15 @@ class _MyJobsState extends State<MyJobs> {
   }
 
   // get public jobs list api
+  int statusValue = 0;
   getMyJobs() async {
     setState(() {
       isApiCalling = true;
     });
     final response = await api.myJobsListing();
     setState(() {
+      statusValue = response['status'];
+      print("Status Value: ${statusValue} ");
       myJobsListData = response['result'];
     });
     setState(() {
@@ -86,6 +89,9 @@ class _MyJobsState extends State<MyJobs> {
     super.initState();
     print('init page --- ${sideDrawerController.pageIndex.value}');
     getMyJobs();
+    if (statusValue == 0) {
+      isApiCalling = false;
+    }
   }
 
   @override
@@ -98,300 +104,351 @@ class _MyJobsState extends State<MyJobs> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Container(
-              margin: const EdgeInsets.all(10),
-              child: ListView.builder(
-                padding: const EdgeInsets.only(top: 0),
-                itemCount: myJobsListData.length,
-                itemBuilder: (BuildContext context, int index) => Card(
-                  // elevation: 4,
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    // height: height * .250,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      // color: Colors.lightGreen,
-                      borderRadius: BorderRadius.circular(8),
+          : statusValue == 0
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: height * 0.05,
+                      width: width * 0.8,
+                      margin: EdgeInsets.all(20),
+                      // margin: EdgeInsets.symmetric(vertical: size.width * 0.05),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(width * 0.05),
+                          gradient: const LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                ColorConstants.kGradientDarkGreen,
+                                ColorConstants.kGradientLightGreen
+                              ])),
+                      child: Center(
+                        child: customText.kText("My Jobs", 20, FontWeight.w700,
+                            Colors.white, TextAlign.center),
+                      ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Job title:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              Container(
-                                width: width * .5,
-                                child: customText.kText(
-                                    '${myJobsListData[index]['job_title']}',
-                                    16,
-                                    FontWeight.w400,
-                                    Colors.black,
-                                    TextAlign.start),
-                              ),
-                            ],
+                    Expanded(
+                        child: Container(
+                      child: Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(8)),
+                          height: 50,
+                          width: width * .400,
+                          child: Center(
+                            child: customText.kText(
+                                "No data found",
+                                15,
+                                FontWeight.w700,
+                                Colors.black,
+                                TextAlign.center),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Job type:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${myJobsListData[index]['job_type']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start)
-                            ],
-                          ),
+                      ),
+                    ))
+                  ],
+                )
+              : Container(
+                  margin: const EdgeInsets.all(10),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(top: 0),
+                    itemCount: myJobsListData.length,
+                    itemBuilder: (BuildContext context, int index) => Card(
+                      // elevation: 4,
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        // height: height * .250,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          // color: Colors.lightGreen,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Location:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${myJobsListData[index]['job_location']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start)
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Qualification:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${myJobsListData[index]['job_qualification']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start)
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(
-                            bottom: 5,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  customText.kText(
-                                      'Salary:  ',
-                                      18,
-                                      FontWeight.w700,
-                                      Colors.black,
-                                      TextAlign.start),
-                                  customText.kText(
-                                      '${myJobsListData[index]['job_salary']}',
-                                      16,
-                                      FontWeight.w400,
-                                      Colors.black,
-                                      TextAlign.start),
-                                  const SizedBox(width: 24),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  customText.kText(
-                                      'Vacancy:  ',
-                                      18,
-                                      FontWeight.w700,
-                                      Colors.black,
-                                      TextAlign.start),
-                                  customText.kText(
-                                      '${myJobsListData[index]['vacancy']}',
-                                      16,
-                                      FontWeight.w400,
-                                      Colors.black,
-                                      TextAlign.start),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Posted on:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              Container(
-                                child: customText.kText(
-                                    '${myJobsListData[index]['created_at']}',
-                                    16,
-                                    FontWeight.w400,
-                                    Colors.black,
-                                    TextAlign.start),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Approval Status:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              Container(
-                                child: customText.kText(
-                                    myJobsListData[index]['job_status'] == "0"
-                                        ? 'Pending'
-                                        : 'Approved',
-                                    16,
-                                    FontWeight.w400,
-                                    Colors.black,
-                                    TextAlign.start),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              child: Container(
-                                height: 30,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(8),
-                                    gradient: const RadialGradient(
-                                      center: Alignment(0.19, -0.9),
-                                      colors: [
-                                        ColorConstants.kGradientDarkGreen,
-                                        ColorConstants.kGradientLightGreen
-                                      ],
-                                      radius: 4.0,
-                                    )),
-                                child: Center(
-                                  child: customText.kText(
-                                      "Edit",
-                                      16,
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Job title:  ',
+                                      18,
                                       FontWeight.w700,
-                                      Colors.white,
-                                      TextAlign.center),
-                                ),
-                              ),
-                              onTap: () {
-                                // FocusScope.of(context).unfocus();
-                                sideDrawerController.pageIndex.value = 27;
-                                sideDrawerController.myJobDetailId =
-                                    myJobsListData[index]["id"];
-                                sideDrawerController.businessId =
-                                    myJobsListData[index]["business_id"];
-                                sideDrawerController.pageController
-                                    .jumpToPage(27);
-                              },
-                            ),
-                            GestureDetector(
-                              child: Container(
-                                height: 30,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  // color: Colors.black,
-                                  borderRadius: BorderRadius.circular(8),
-                                  gradient: const RadialGradient(
-                                    center: Alignment(0.19, -0.9),
-                                    colors: [
-                                      // Color(0xffa40000),
-                                      // Color(0xff262626)
-                                      Color(0xffD50000),
-                                      Color(0xff760000),
-                                    ],
-                                    radius: 4.0,
+                                      Colors.black,
+                                      TextAlign.start),
+                                  Container(
+                                    width: width * .5,
+                                    child: customText.kText(
+                                        '${myJobsListData[index]['job_title']}',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
                                   ),
-                                  // color: Color(0xffEE0200),
-                                ),
-                                child: Center(
-                                  child: customText.kText(
-                                      "Delete",
-                                      16,
-                                      FontWeight.w700,
-                                      Colors.white,
-                                      TextAlign.center),
-                                ),
+                                ],
                               ),
-                              onTap: () {
-                                _showAlertDialog(
-                                  context,
-                                  () async {
-                                    final deleteResponse =
-                                        await api.deleteMyJobs(
-                                            myJobsListData[index]['id']);
-                                    if (deleteResponse['status'] == 1) {
-                                      helper.successDialog(
-                                          context, deleteResponse['message']);
-                                    } else {
-                                      helper.errorDialog(
-                                          context, deleteResponse['message']);
-                                    }
-                                    getMyJobs();
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Job type:  ',
+                                      18,
+                                      FontWeight.w700,
+                                      Colors.black,
+                                      TextAlign.start),
+                                  customText.kText(
+                                      '${myJobsListData[index]['job_type']}',
+                                      16,
+                                      FontWeight.w400,
+                                      Colors.black,
+                                      TextAlign.start)
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Location:  ',
+                                      18,
+                                      FontWeight.w700,
+                                      Colors.black,
+                                      TextAlign.start),
+                                  customText.kText(
+                                      '${myJobsListData[index]['job_location']}',
+                                      16,
+                                      FontWeight.w400,
+                                      Colors.black,
+                                      TextAlign.start)
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Qualification:  ',
+                                      18,
+                                      FontWeight.w700,
+                                      Colors.black,
+                                      TextAlign.start),
+                                  customText.kText(
+                                      '${myJobsListData[index]['job_qualification']}',
+                                      16,
+                                      FontWeight.w400,
+                                      Colors.black,
+                                      TextAlign.start)
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(
+                                bottom: 5,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      customText.kText(
+                                          'Salary:  ',
+                                          18,
+                                          FontWeight.w700,
+                                          Colors.black,
+                                          TextAlign.start),
+                                      customText.kText(
+                                          '${myJobsListData[index]['job_salary']}',
+                                          16,
+                                          FontWeight.w400,
+                                          Colors.black,
+                                          TextAlign.start),
+                                      const SizedBox(width: 24),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      customText.kText(
+                                          'Vacancy:  ',
+                                          18,
+                                          FontWeight.w700,
+                                          Colors.black,
+                                          TextAlign.start),
+                                      customText.kText(
+                                          '${myJobsListData[index]['vacancy']}',
+                                          16,
+                                          FontWeight.w400,
+                                          Colors.black,
+                                          TextAlign.start),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Posted on:  ',
+                                      18,
+                                      FontWeight.w700,
+                                      Colors.black,
+                                      TextAlign.start),
+                                  Container(
+                                    child: customText.kText(
+                                        '${myJobsListData[index]['created_at']}',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText.kText(
+                                      'Approval Status:  ',
+                                      18,
+                                      FontWeight.w700,
+                                      Colors.black,
+                                      TextAlign.start),
+                                  Container(
+                                    child: customText.kText(
+                                        myJobsListData[index]['job_status'] ==
+                                                "0"
+                                            ? 'Pending'
+                                            : 'Approved',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  child: Container(
+                                    height: 30,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(8),
+                                        gradient: const RadialGradient(
+                                          center: Alignment(0.19, -0.9),
+                                          colors: [
+                                            ColorConstants.kGradientDarkGreen,
+                                            ColorConstants.kGradientLightGreen
+                                          ],
+                                          radius: 4.0,
+                                        )),
+                                    child: Center(
+                                      child: customText.kText(
+                                          "Edit",
+                                          16,
+                                          FontWeight.w700,
+                                          Colors.white,
+                                          TextAlign.center),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    // FocusScope.of(context).unfocus();
+                                    sideDrawerController.pageIndex.value = 27;
+                                    sideDrawerController.myJobDetailId =
+                                        myJobsListData[index]["id"];
+                                    sideDrawerController.businessId =
+                                        myJobsListData[index]["business_id"];
+                                    sideDrawerController.pageController
+                                        .jumpToPage(27);
                                   },
-                                );
-                              },
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    height: 30,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      // color: Colors.black,
+                                      borderRadius: BorderRadius.circular(8),
+                                      gradient: const RadialGradient(
+                                        center: Alignment(0.19, -0.9),
+                                        colors: [
+                                          // Color(0xffa40000),
+                                          // Color(0xff262626)
+                                          Color(0xffD50000),
+                                          Color(0xff760000),
+                                        ],
+                                        radius: 4.0,
+                                      ),
+                                      // color: Color(0xffEE0200),
+                                    ),
+                                    child: Center(
+                                      child: customText.kText(
+                                          "Delete",
+                                          16,
+                                          FontWeight.w700,
+                                          Colors.white,
+                                          TextAlign.center),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    _showAlertDialog(
+                                      context,
+                                      () async {
+                                        final deleteResponse =
+                                            await api.deleteMyJobs(
+                                                myJobsListData[index]['id']);
+                                        if (deleteResponse['status'] == 1) {
+                                          helper.successDialog(context,
+                                              deleteResponse['message']);
+                                        } else {
+                                          helper.errorDialog(context,
+                                              deleteResponse['message']);
+                                        }
+                                        getMyJobs();
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              )),
+                  )),
     );
   }
 }

@@ -9,7 +9,8 @@ class Helper {
     return ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        content: Flexible(
+        content: Container(
+          // height: 30,
           // child: customText.kText(
           //     message, 20, FontWeight.w900, Colors.white, TextAlign.start),
           child: Text(
@@ -34,7 +35,7 @@ class Helper {
       SnackBar(
         // content: customText.kText(
         //     message, 20, FontWeight.w900, Colors.white, TextAlign.start),
-        content: Flexible(
+        content: Container(
           child: Text(
             message,
             style: const TextStyle(

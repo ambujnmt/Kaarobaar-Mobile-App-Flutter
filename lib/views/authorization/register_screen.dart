@@ -304,6 +304,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             flex: 1,
                             child: Container(
                               child: RadioListTile(
+                                contentPadding: EdgeInsets.only(left: 0),
                                 activeColor: ColorConstants.kGradientDarkGreen,
                                 title: customText.kText(
                                     "Business",

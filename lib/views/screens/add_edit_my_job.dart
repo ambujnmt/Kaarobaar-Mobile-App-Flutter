@@ -33,11 +33,43 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
 
   Map<String, dynamic> myJobDetail = {};
 
+  // Function to show an alert dialog
+  void _showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: const Text(''),
+          content: Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: const Text(
+              'Your job is under admin approval. Once is approved will be publicly visible to all',
+              style: TextStyle(fontFamily: 'Raleway'),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  fontFamily: 'Raleway',
+                  color: Color.fromRGBO(18, 131, 43, 1),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   addEditJob() async {
     if (jobTitleController.text.isNotEmpty &&
         (!jobTitleController.text.startsWith(" "))) {
-      if (jobTypeController.text.isNotEmpty &&
-          (!jobTypeController.text.startsWith(" "))) {
+      if (dropdownvalue.isNotEmpty && dropdownvalue != "Select") {
         if (jobDescriptionController.text.isNotEmpty &&
             (!jobDescriptionController.text.startsWith(" "))) {
           if (jobLocationController.text.isNotEmpty &&
@@ -60,7 +92,7 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
                         response = await api.addJobs(
                             sideDrawerController.businessListingId,
                             jobTitleController.text,
-                            jobTypeController.text,
+                            dropdownvalue.toString(),
                             jobDescriptionController.text,
                             jobLocationController.text,
                             qualificationController.text,
@@ -68,13 +100,17 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
                             mobileController.text,
                             salaryController.text,
                             vacancyControlller.text);
+
+                        if (response['status'] == 1) {
+                          _showAlertDialog(context);
+                        }
                       } else {
                         print('inside the edit job');
                         response = await api.updateJobs(
                             sideDrawerController.businessId,
                             sideDrawerController.myJobDetailId,
                             jobTitleController.text,
-                            jobTypeController.text,
+                            dropdownvalue.toString(),
                             jobDescriptionController.text,
                             jobLocationController.text,
                             qualificationController.text,
@@ -85,6 +121,7 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
 
                         if (response['status'] == 1) {
                           sideDrawerController.myJobDetailId = "";
+                          _showAlertDialog(context);
                         }
                       }
 
@@ -147,7 +184,7 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
     });
     if (response['status'] == 1) {
       jobTitleController.text = myJobDetail['job_title'] ?? "";
-      jobTypeController.text = myJobDetail['job_type'] ?? "";
+      dropdownvalue = myJobDetail['job_type'] ?? "";
       jobDescriptionController.text = myJobDetail['job_description'] ?? "";
       jobLocationController.text = myJobDetail['job_location'] ?? "";
       qualificationController.text = myJobDetail['job_qualification'] ?? "";
@@ -157,6 +194,15 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
       vacancyControlller.text = myJobDetail['vacancy'] ?? "";
     }
   }
+
+  String dropdownvalue = 'Select';
+  var items = [
+    'Select',
+    'Full Time',
+    'Part Time',
+    'Hybrid',
+    'Work From Home',
+  ];
 
   @override
   void initState() {
@@ -195,16 +241,54 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
               SizedBox(
                 height: size.width * 0.05,
               ),
-              TextField(
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.words,
-                controller: jobTypeController,
-                decoration: InputDecoration(
-                  hintText: "Job Type",
-                  hintStyle: customText.kTextStyle(
-                      16, FontWeight.w400, ColorConstants.kIconsGrey),
+              // TextField(
+              //   keyboardType: TextInputType.text,
+              //   textInputAction: TextInputAction.next,
+              //   textCapitalization: TextCapitalization.words,
+              //   controller: jobTypeController,
+              //   decoration: InputDecoration(
+              //     hintText: "Job Type",
+              //     hintStyle: customText.kTextStyle(
+              //         16, FontWeight.w400, ColorConstants.kIconsGrey),
+              //   ),
+              // ),
+              DropdownButtonFormField(
+                decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: ColorConstants.kIconsGrey, width: 1),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide:
+                        BorderSide(color: ColorConstants.kIconsGrey, width: 1),
+                  ),
                 ),
+                style: customText.kTextStyle(
+                  16,
+                  FontWeight.w200,
+                  ColorConstants.kIconsGrey,
+                ),
+                isExpanded: true,
+                value: dropdownvalue,
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: items.map((String items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(
+                      items,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownvalue = newValue!;
+                    print("Drop down value: ${dropdownvalue}");
+                  });
+                },
               ),
               SizedBox(
                 height: size.width * 0.05,
@@ -266,11 +350,13 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
                 height: size.width * 0.05,
               ),
               TextField(
+                maxLength: 10,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.words,
                 controller: mobileController,
                 decoration: InputDecoration(
+                  counterText: "",
                   hintText: "Mobile",
                   hintStyle: customText.kTextStyle(
                       16, FontWeight.w400, ColorConstants.kIconsGrey),
