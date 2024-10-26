@@ -124,8 +124,8 @@ class _CreatePasswordState extends State<CreatePassword> {
                 children: [
                   customText.kText("Create New Password", 30, FontWeight.w800,
                       Colors.black, TextAlign.left),
-                  customText.kText("Enter your new password", 18,
-                      FontWeight.w400, Colors.black, TextAlign.left),
+                  // customText.kText("Enter your new password", 18,
+                  //     FontWeight.w400, Colors.black, TextAlign.left),
                   SizedBox(
                     height: size.width * 0.1,
                   ),

@@ -201,7 +201,7 @@ class _EventsState extends State<Events> {
                                   ),
                                 ),
                                 Text(
-                                  "${eventListData[index]["event_description"]}",
+                                  "${eventListData[index]["event_description"]} ",
                                   style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
@@ -209,7 +209,7 @@ class _EventsState extends State<Events> {
                                       fontFamily: "Raleway"),
                                   textAlign: TextAlign.start,
                                   overflow: TextOverflow.ellipsis,
-                                  maxLines: 7,
+                                  maxLines: 5,
                                 ),
                               ],
                             ),

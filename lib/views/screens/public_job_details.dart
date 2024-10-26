@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kaarobaar/constants/color_constants.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/helper.dart';
@@ -53,251 +54,307 @@ class _PublicJobDetailsState extends State<PublicJobDetails> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Container(
-              margin: EdgeInsets.all(10),
-              child: SingleChildScrollView(
-                child: Card(
-                  elevation: 8,
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
                   child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: customText.kText('Company Name:  ', 18,
-                              FontWeight.w700, Colors.black, TextAlign.start),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: customText.kText(
-                              '${publicJobDetail['company_name']}',
-                              16,
-                              FontWeight.w400,
-                              Colors.black,
-                              TextAlign.start),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Row(
+                    height: height * 0.05,
+                    width: width * 0.8,
+                    margin: const EdgeInsets.only(
+                        left: 20, right: 20, top: 20, bottom: 10),
+                    // margin: EdgeInsets.symmetric(vertical: size.width * 0.05),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.circular(width * 0.05),
+                        gradient: const LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              ColorConstants.kGradientDarkGreen,
+                              ColorConstants.kGradientLightGreen
+                            ])),
+                    child: Center(
+                      child: customText.kText("Job Detail", 20, FontWeight.w700,
+                          Colors.white, TextAlign.center),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: SingleChildScrollView(
+                      child: Card(
+                        elevation: 8,
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              customText.kText(
-                                  'Job Title:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${publicJobDetail['job_title']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Location:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${publicJobDetail['job_location']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Qualifications:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
                               Container(
-                                width: width * .52,
+                                margin: EdgeInsets.only(bottom: 10),
                                 child: customText.kText(
-                                    '${publicJobDetail['job_qualification']}',
+                                    'Company Name:  ',
+                                    18,
+                                    FontWeight.w700,
+                                    Colors.black,
+                                    TextAlign.start),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: customText.kText(
+                                    '${publicJobDetail['company_name']}',
                                     16,
                                     FontWeight.w400,
                                     Colors.black,
                                     TextAlign.start),
                               ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText('Salary:  ', 18, FontWeight.w700,
-                                  Colors.black, TextAlign.start),
-                              customText.kText(
-                                  '${publicJobDetail['job_salary']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Vacancies:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${publicJobDetail['vacancy']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText(
-                                  'Posted On:  ',
-                                  18,
-                                  FontWeight.w700,
-                                  Colors.black,
-                                  TextAlign.start),
-                              customText.kText(
-                                  '${publicJobDetail['created_at']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: customText.kText('Description:  ', 18,
-                              FontWeight.w700, Colors.black, TextAlign.start),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: customText.kText(
-                              '${publicJobDetail['job_description']}',
-                              16,
-                              FontWeight.w400,
-                              Colors.black,
-                              TextAlign.start),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: customText.kText('Contact Information:  ', 18,
-                              FontWeight.w700, Colors.black, TextAlign.start),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText('Email:  ', 18, FontWeight.w700,
-                                  Colors.black, TextAlign.start),
-                              customText.kText(
-                                  '${publicJobDetail['job_email']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText.kText('Mobile:  ', 18, FontWeight.w700,
-                                  Colors.black, TextAlign.start),
-                              customText.kText(
-                                  '${publicJobDetail['job_mobile']}',
-                                  16,
-                                  FontWeight.w400,
-                                  Colors.black,
-                                  TextAlign.start),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          child: Container(
-                            margin: EdgeInsets.only(bottom: 20),
-                            height: 30,
-                            width: width * .450,
-                            decoration: BoxDecoration(
-                              // color: Colors.black,
-                              borderRadius: BorderRadius.circular(8),
-                              gradient: const RadialGradient(
-                                center: Alignment(0.19, -0.9),
-                                colors: [
-                                  // Color(0xffa40000),
-                                  // Color(0xff262626),
-                                  Color(0xffD50000),
-                                  Color(0xff760000),
-                                ],
-                                radius: 4.0,
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        'Job Title:  ',
+                                        18,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.start),
+                                    customText.kText(
+                                        '${publicJobDetail['job_title']}',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
+                                  ],
+                                ),
                               ),
-                              // color: Color(0xffEE0200),
-                            ),
-                            child: Center(
-                              child: customText.kText(
-                                  "Back to Job Listings",
-                                  16,
-                                  FontWeight.w700,
-                                  Colors.white,
-                                  TextAlign.center),
-                            ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        'Location:  ',
+                                        18,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.start),
+                                    customText.kText(
+                                        '${publicJobDetail['job_location']}',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        'Qualifications:  ',
+                                        18,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.start),
+                                    Container(
+                                      width: width * .52,
+                                      child: customText.kText(
+                                          '${publicJobDetail['job_qualification']}',
+                                          16,
+                                          FontWeight.w400,
+                                          Colors.black,
+                                          TextAlign.start),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        'Salary:  ',
+                                        18,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.start),
+                                    customText.kText(
+                                        '${publicJobDetail['job_salary']}',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        'Vacancies:  ',
+                                        18,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.start),
+                                    customText.kText(
+                                        '${publicJobDetail['vacancy']}',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        'Posted On:  ',
+                                        18,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.start),
+                                    customText.kText(
+                                        '${publicJobDetail['created_at']}',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: customText.kText(
+                                    'Description:  ',
+                                    18,
+                                    FontWeight.w700,
+                                    Colors.black,
+                                    TextAlign.start),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: customText.kText(
+                                    '${publicJobDetail['job_description']}',
+                                    16,
+                                    FontWeight.w400,
+                                    Colors.black,
+                                    TextAlign.start),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: customText.kText(
+                                    'Contact Information:  ',
+                                    18,
+                                    FontWeight.w700,
+                                    Colors.black,
+                                    TextAlign.start),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        'Email:  ',
+                                        18,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.start),
+                                    customText.kText(
+                                        '${publicJobDetail['job_email']}',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        'Mobile:  ',
+                                        18,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.start),
+                                    customText.kText(
+                                        '${publicJobDetail['job_mobile']}',
+                                        16,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.start),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: 20),
+                                  height: 30,
+                                  width: width * .450,
+                                  decoration: BoxDecoration(
+                                    // color: Colors.black,
+                                    borderRadius: BorderRadius.circular(8),
+                                    gradient: const RadialGradient(
+                                      center: Alignment(0.19, -0.9),
+                                      colors: [
+                                        // Color(0xffa40000),
+                                        // Color(0xff262626),
+                                        Color(0xffD50000),
+                                        Color(0xff760000),
+                                      ],
+                                      radius: 4.0,
+                                    ),
+                                    // color: Color(0xffEE0200),
+                                  ),
+                                  child: Center(
+                                    child: customText.kText(
+                                        "Back to Job Listings",
+                                        16,
+                                        FontWeight.w700,
+                                        Colors.white,
+                                        TextAlign.center),
+                                  ),
+                                ),
+                                onTap: () {
+                                  // FocusScope.of(context).unfocus();
+                                  sideDrawerController.pageIndex.value = 24;
+                                  // sideDrawerController.jobDetailId =
+                                  //     publicJobsListData[index]["id"];
+                                  sideDrawerController.pageController
+                                      .jumpToPage(24);
+                                },
+                              ),
+                            ],
                           ),
-                          onTap: () {
-                            // FocusScope.of(context).unfocus();
-                            sideDrawerController.pageIndex.value = 24;
-                            // sideDrawerController.jobDetailId =
-                            //     publicJobsListData[index]["id"];
-                            sideDrawerController.pageController.jumpToPage(24);
-                          },
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
     );
   }

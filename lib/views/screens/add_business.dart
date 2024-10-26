@@ -137,8 +137,15 @@ class _AddBusinessState extends State<AddBusiness> {
                           if (response["status"] == 1) {
                             helper.successDialog(context, response["message"]);
                             print('Business Added successfully');
-                            sideDrawerController.pageIndex.value = 0;
-                            sideDrawerController.pageController.jumpToPage(0);
+                            if (sideDrawerController
+                                .fromEditBusinessForm.isEmpty) {
+                              sideDrawerController.pageIndex.value = 0;
+                              sideDrawerController.pageController.jumpToPage(0);
+                            } else {
+                              sideDrawerController.pageIndex.value = 22;
+                              sideDrawerController.pageController
+                                  .jumpToPage(22);
+                            }
                           } else {
                             helper.errorDialog(context, response["message"]);
                           }
@@ -394,7 +401,10 @@ class _AddBusinessState extends State<AddBusiness> {
     getStateList();
     // getCityList();
     if (sideDrawerController.myBusinessId.isNotEmpty) {
+      sideDrawerController.fromEditBusinessForm = "fromEditBusinessForm";
       getBusinessDetail();
+    } else {
+      sideDrawerController.fromEditBusinessForm = "";
     }
     print('my business id is---- ${sideDrawerController.myBusinessId}');
     print("from edit ${sideDrawerController.fromEditBusiness}");
@@ -404,6 +414,9 @@ class _AddBusinessState extends State<AddBusiness> {
     //   businessDescriptionController.text =
     //       getBusinessDetailData[0]['business_description'];
     // }
+
+    print(
+        " from edit business form: ${sideDrawerController.fromEditBusinessForm}");
   }
 
   @override

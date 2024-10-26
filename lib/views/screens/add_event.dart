@@ -328,7 +328,7 @@ class _AddEventState extends State<AddEvent> {
                         if (pickedTime.minute > DateTime.now().minute) {
                           eventTime = pickedTime.format(context);
                         } else {
-                          helper.successDialog(
+                          helper.errorDialog(
                               context, "Please select future time");
                         }
                       }
@@ -455,6 +455,7 @@ class _AddEventState extends State<AddEvent> {
                 ),
               ),
               child: TextField(
+                maxLength: 200,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.words,
@@ -462,6 +463,7 @@ class _AddEventState extends State<AddEvent> {
                 maxLines: null,
                 style: customText.kTextStyle(20, FontWeight.w500, Colors.black),
                 decoration: InputDecoration(
+                  counterText: "",
                   border: InputBorder.none,
                   hintText: "Event Description",
                   hintStyle: customText.kTextStyle(
@@ -488,13 +490,17 @@ class _AddEventState extends State<AddEvent> {
                       radius: 4.0,
                     )),
                 child: Center(
-                  child: customText.kText("Continue", 30, FontWeight.w700,
-                      Colors.white, TextAlign.center),
+                  child: isApiCalling
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : customText.kText("Continue", 30, FontWeight.w700,
+                          Colors.white, TextAlign.center),
                 ),
               ),
               onTap: () {
                 // ontap of continue
-                addEventForm();
+                isApiCalling == false ? addEventForm() : null;
               },
             )
           ],

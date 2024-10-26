@@ -66,7 +66,7 @@ class _CommunityDetailTwoState extends State<CommunityDetailTwo> {
                     child: Container(
                       decoration: BoxDecoration(
                           color: Colors.grey,
-                          borderRadius: BorderRadius.circular(8)),
+                          borderRadius: BorderRadius.circular(12)),
                       height: 50,
                       width: size.width * .400,
                       child: Center(
@@ -95,138 +95,212 @@ class _CommunityDetailTwoState extends State<CommunityDetailTwo> {
                                 fit: BoxFit.fill),
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.calendar_month),
-                            const SizedBox(width: 10),
-                            customText.kText(
-                                "${detailTwoListData[0]['created_at']}",
-                                15,
-                                FontWeight.w400,
-                                Colors.black,
-                                TextAlign.center),
-                          ],
-                        ),
                         const SizedBox(height: 10),
-                        customText.kText(
-                            "${detailTwoListData[0]['business_title']}",
-                            15,
-                            FontWeight.w700,
-                            Colors.black,
-                            TextAlign.center),
-                        const SizedBox(height: 10),
-                        customText.kText(
-                            "${detailTwoListData[0]['business_description']}",
-                            15,
-                            FontWeight.w700,
-                            Colors.black,
-                            TextAlign.center),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            customText.kText(
-                                "Contact Number:",
-                                15,
-                                FontWeight.w700,
-                                Colors.black,
-                                TextAlign.center),
-                            const SizedBox(width: 10),
-                            customText.kText(
-                                "${detailTwoListData[0]['mobile']}",
-                                15,
-                                FontWeight.w400,
-                                Colors.black,
-                                TextAlign.center),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            customText.kText("Email:", 15, FontWeight.w700,
-                                Colors.black, TextAlign.center),
-                            const SizedBox(width: 10),
-                            customText.kText(
-                                "${detailTwoListData[0]['email']}",
-                                15,
-                                FontWeight.w400,
-                                Colors.black,
-                                TextAlign.center),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            customText.kText("Address:", 15, FontWeight.w700,
-                                Colors.black, TextAlign.center),
-                            const SizedBox(width: 10),
-                            customText.kText(
-                                "${detailTwoListData[0]['address']}",
-                                15,
-                                FontWeight.w400,
-                                Colors.black,
-                                TextAlign.center),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            customText.kText("City:", 15, FontWeight.w700,
-                                Colors.black, TextAlign.center),
-                            const SizedBox(width: 10),
-                            customText.kText(
-                                "${detailTwoListData[0]['city_name']}",
-                                15,
-                                FontWeight.w400,
-                                Colors.black,
-                                TextAlign.center),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            customText.kText("Country:", 15, FontWeight.w700,
-                                Colors.black, TextAlign.center),
-                            const SizedBox(width: 10),
-                            customText.kText(
-                                "${detailTwoListData[0]['country_name']}",
-                                15,
-                                FontWeight.w400,
-                                Colors.black,
-                                TextAlign.center),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            customText.kText(
-                                "Postal Code:",
-                                15,
-                                FontWeight.w700,
-                                Colors.black,
-                                TextAlign.center),
-                            const SizedBox(width: 10),
-                            customText.kText(
-                                "${detailTwoListData[0]['zipcode']}",
-                                15,
-                                FontWeight.w400,
-                                Colors.black,
-                                TextAlign.center),
-                          ],
+                        Card(
+                          elevation: 10,
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, bottom: 10, top: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.calendar_month),
+                                    const SizedBox(width: 10),
+                                    customText.kText(
+                                        "${detailTwoListData[0]['created_at']}",
+                                        15,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.center),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        "Title:",
+                                        15,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.center),
+                                    const SizedBox(width: 10),
+                                    customText.kText(
+                                        "${detailTwoListData[0]['business_title']}",
+                                        15,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.center),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        "Contact Number:",
+                                        15,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.center),
+                                    const SizedBox(width: 10),
+                                    customText.kText(
+                                        "${detailTwoListData[0]['mobile']}",
+                                        15,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.center),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        "Email:",
+                                        15,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.center),
+                                    const SizedBox(width: 10),
+                                    customText.kText(
+                                        "${detailTwoListData[0]['email']}",
+                                        15,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.center),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        "Address:",
+                                        15,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.center),
+                                    const SizedBox(width: 10),
+                                    customText.kText(
+                                        "${detailTwoListData[0]['address']}",
+                                        15,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.center),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        "City:",
+                                        15,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.center),
+                                    const SizedBox(width: 10),
+                                    customText.kText(
+                                        "${detailTwoListData[0]['city_name']}",
+                                        15,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.center),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        "State:",
+                                        15,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.center),
+                                    const SizedBox(width: 10),
+                                    customText.kText(
+                                        "${detailTwoListData[0]['state_name'] ?? ""}",
+                                        15,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.center),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        "Country:",
+                                        15,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.center),
+                                    const SizedBox(width: 10),
+                                    customText.kText(
+                                        "${detailTwoListData[0]['country_name']}",
+                                        15,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.center),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText.kText(
+                                        "Postal Code:",
+                                        15,
+                                        FontWeight.w700,
+                                        Colors.black,
+                                        TextAlign.center),
+                                    const SizedBox(width: 10),
+                                    customText.kText(
+                                        "${detailTwoListData[0]['zipcode'] ?? ""}",
+                                        15,
+                                        FontWeight.w400,
+                                        Colors.black,
+                                        TextAlign.center),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                customText.kText(
+                                    "Description:",
+                                    15,
+                                    FontWeight.w700,
+                                    Colors.black,
+                                    TextAlign.center),
+                                const SizedBox(height: 10),
+                                Container(
+                                  width: width,
+                                  child: Text(
+                                    "${detailTwoListData[0]['business_description']}",
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black,
+                                        fontFamily: "Raleway"),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),

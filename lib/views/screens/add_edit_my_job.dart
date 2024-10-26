@@ -35,6 +35,8 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
 
   // Function to show an alert dialog
   void _showAlertDialog(BuildContext context) {
+    final double h = MediaQuery.of(context).size.height;
+    final double w = MediaQuery.of(context).size.width;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -43,8 +45,13 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
           content: Container(
             margin: const EdgeInsets.only(top: 20),
             child: const Text(
-              'Your job is under admin approval. Once is approved will be publicly visible to all',
-              style: TextStyle(fontFamily: 'Raleway'),
+              'Admin approval is pending. Once it is approved will be visible to all',
+              style: TextStyle(
+                fontFamily: 'Raleway',
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
           actions: <Widget>[
@@ -52,11 +59,29 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text(
-                'OK',
-                style: TextStyle(
-                  fontFamily: 'Raleway',
-                  color: Color.fromRGBO(18, 131, 43, 1),
+              child: Container(
+                height: h * .030,
+                width: w * .2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  gradient: const RadialGradient(
+                    center: Alignment(0.19, -0.9),
+                    colors: [
+                      ColorConstants.kGradientDarkGreen,
+                      ColorConstants.kGradientLightGreen
+                    ],
+                    radius: 4.0,
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                      fontFamily: 'Raleway',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ),
               ),
             ),

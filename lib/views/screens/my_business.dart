@@ -24,6 +24,8 @@ class _MyBusinessState extends State<MyBusiness> {
 
   // Function to show an alert dialog
   void _showAlertDialog(BuildContext context, Function() deleteItem) {
+    final double h = MediaQuery.of(context).size.height;
+    final double w = MediaQuery.of(context).size.width;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -32,8 +34,13 @@ class _MyBusinessState extends State<MyBusiness> {
           content: Container(
             margin: const EdgeInsets.only(top: 20),
             child: const Text(
-              ' Are you sure want to delete this item ?',
-              style: TextStyle(fontFamily: 'Raleway'),
+              ' Are you sure want to delete this business ?',
+              style: TextStyle(
+                fontFamily: 'Raleway',
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
           actions: <Widget>[
@@ -41,10 +48,30 @@ class _MyBusinessState extends State<MyBusiness> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                    fontFamily: 'Raleway', color: Color.fromRGBO(164, 0, 0, 1)),
+              child: Container(
+                height: h * .030,
+                width: w * .2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  gradient: const RadialGradient(
+                    center: Alignment(0.19, -0.9),
+                    colors: [
+                      Color(0xffD50000),
+                      Color(0xff760000),
+                    ],
+                    radius: 4.0,
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      fontFamily: 'Raleway',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
               ),
             ),
             TextButton(
@@ -53,10 +80,30 @@ class _MyBusinessState extends State<MyBusiness> {
                 deleteItem();
                 Navigator.of(context).pop();
               },
-              child: const Text(
-                'OK',
-                style: TextStyle(
-                    fontFamily: 'Raleway', color: Color.fromRGBO(9, 103, 9, 1)),
+              child: Container(
+                height: h * .030,
+                width: w * .2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  gradient: const RadialGradient(
+                    center: Alignment(0.19, -0.9),
+                    colors: [
+                      ColorConstants.kGradientDarkGreen,
+                      ColorConstants.kGradientLightGreen
+                    ],
+                    radius: 4.0,
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                      fontFamily: 'Raleway',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
@@ -208,39 +255,55 @@ class _MyBusinessState extends State<MyBusiness> {
                                     child: Column(
                                       // crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          height: size.width * 0.38,
-                                          width: size.width * 0.38,
-                                          margin: EdgeInsets.only(
-                                              bottom: size.width * 0.02),
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey.shade800,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      size.width * 0.03)),
-                                          child: businessController
-                                                      .businessList[index]
-                                                          ['featured_image']
-                                                      .toString() ==
-                                                  ""
-                                              ? Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    image:
-                                                        const DecorationImage(
-                                                      image: AssetImage(
-                                                        'assets/images/no_image.jpeg',
+                                        GestureDetector(
+                                          onTap: () {
+                                            // ontap
+                                            print("ontap business");
+                                            sideDrawerController
+                                                .pageIndex.value = 30;
+                                            sideDrawerController
+                                                    .fromMyBusinessList =
+                                                "fromMyBusinessList";
+                                            sideDrawerController.detailTwoId =
+                                                businessController
+                                                    .businessList[index]["id"];
+                                            sideDrawerController.pageController
+                                                .jumpToPage(30);
+                                          },
+                                          child: Container(
+                                            height: size.width * 0.38,
+                                            width: size.width * 0.38,
+                                            margin: EdgeInsets.only(
+                                                bottom: size.width * 0.02),
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey.shade800,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        size.width * 0.03)),
+                                            child: businessController
+                                                        .businessList[index]
+                                                            ['featured_image']
+                                                        .toString() ==
+                                                    ""
+                                                ? Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      image:
+                                                          const DecorationImage(
+                                                        image: AssetImage(
+                                                          'assets/images/no_image.jpeg',
+                                                        ),
+                                                        fit: BoxFit.fill,
                                                       ),
-                                                      fit: BoxFit.fill,
                                                     ),
+                                                  )
+                                                : Image.network(
+                                                    "${businessController.businessList[index]['featured_image'].toString()}",
+                                                    fit: BoxFit.fill,
                                                   ),
-                                                )
-                                              : Image.network(
-                                                  "${businessController.businessList[index]['featured_image'].toString()}",
-                                                  fit: BoxFit.fill,
-                                                ),
+                                          ),
                                         ),
                                         SizedBox(
                                           width: size.width * 0.45,

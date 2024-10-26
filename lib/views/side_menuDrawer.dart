@@ -616,9 +616,21 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                                   } else if (sideDrawerController
                                           .pageIndex.value ==
                                       30) {
-                                    sideDrawerController.pageIndex.value = 29;
-                                    sideDrawerController.pageController
-                                        .jumpToPage(29);
+                                    if (sideDrawerController
+                                            .fromMyBusinessList ==
+                                        "") {
+                                      sideDrawerController.fromMyBusinessList =
+                                          "";
+                                      sideDrawerController.pageIndex.value = 29;
+                                      sideDrawerController.pageController
+                                          .jumpToPage(29);
+                                    } else {
+                                      print(
+                                          "Side drawer controller value: ${sideDrawerController.fromMyBusinessList}");
+                                      sideDrawerController.pageIndex.value = 22;
+                                      sideDrawerController.pageController
+                                          .jumpToPage(22);
+                                    }
                                   } else if (sideDrawerController
                                           .pageIndex.value ==
                                       29) {
@@ -641,9 +653,26 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                                           .pageIndex.value ==
                                       2) {
                                     sideDrawerController.myBusinessId = "";
-                                    sideDrawerController.pageIndex.value = 0;
-                                    sideDrawerController.pageController
-                                        .jumpToPage(0);
+                                    if (sideDrawerController
+                                        .fromEditBusinessForm.isEmpty) {
+                                      setState(() {
+                                        sideDrawerController
+                                            .fromEditBusinessForm = "";
+                                        sideDrawerController.pageIndex.value =
+                                            0;
+                                        sideDrawerController.pageController
+                                            .jumpToPage(0);
+                                      });
+                                    } else {
+                                      setState(() {
+                                        sideDrawerController
+                                            .fromEditBusinessForm = "";
+                                        sideDrawerController.pageIndex.value =
+                                            22;
+                                        sideDrawerController.pageController
+                                            .jumpToPage(22);
+                                      });
+                                    }
                                   } else if (sideDrawerController
                                           .pageIndex.value ==
                                       17) {
