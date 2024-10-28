@@ -37,6 +37,11 @@ class _AddBusinessState extends State<AddBusiness> {
   TextEditingController businessDescriptionController = TextEditingController();
   TextEditingController businessAddressController = TextEditingController();
   TextEditingController businessKeywordController = TextEditingController();
+
+  TextEditingController areaController = TextEditingController();
+  TextEditingController addressTwoController = TextEditingController();
+  TextEditingController addressThreeController = TextEditingController();
+
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
   addBusiness() async {
@@ -75,14 +80,14 @@ class _AddBusinessState extends State<AddBusiness> {
             !businessKeywordController.text.startsWith(" ")) {
           if (EmailValidator.validate(emailController.text)) {
             if (phoneController.text.length == 10) {
-              if (postalCodeController.text.isNotEmpty &&
-                  !postalCodeController.text.startsWith(" ")) {
-                if (businessDescriptionController.text.isNotEmpty &&
-                    (!businessDescriptionController.text.startsWith(" "))) {
-                  if (stateDropdownController.text.isNotEmpty &&
-                      !stateDropdownController.text.startsWith(" ")) {
-                    if (cityDropdownController.text.isNotEmpty &&
-                        !cityDropdownController.text.startsWith(" ")) {
+              if (businessDescriptionController.text.isNotEmpty &&
+                  (!businessDescriptionController.text.startsWith(" "))) {
+                if (stateDropdownController.text.isNotEmpty &&
+                    !stateDropdownController.text.startsWith(" ")) {
+                  if (cityDropdownController.text.isNotEmpty &&
+                      !cityDropdownController.text.startsWith(" ")) {
+                    if (postalCodeController.text.isNotEmpty &&
+                        !postalCodeController.text.startsWith("pattern")) {
                       if (businessAddressController.text.isNotEmpty &&
                           (!businessAddressController.text.startsWith(" "))) {
                         if (imageSelected) {
@@ -104,7 +109,10 @@ class _AddBusinessState extends State<AddBusiness> {
                               businessDescriptionController.text,
                               selectedStateId,
                               selectedCityId,
+                              areaController.text,
                               businessAddressController.text,
+                              addressTwoController.text,
+                              addressThreeController.text,
                               _image?.path.toString(),
                             );
                           } else {
@@ -121,7 +129,10 @@ class _AddBusinessState extends State<AddBusiness> {
                               businessDescriptionController.text,
                               selectedStateId,
                               selectedCityId,
+                              areaController.text,
                               businessAddressController.text,
+                              addressTwoController.text,
+                              addressThreeController.text,
                               _image?.path.toString(),
                               sideDrawerController.myBusinessId,
                             );
@@ -156,20 +167,20 @@ class _AddBusinessState extends State<AddBusiness> {
                         }
                       } else {
                         helper.errorDialog(
-                            context, "Please enter business address");
+                            context, "Please enter address line 1");
                       }
                     } else {
-                      helper.errorDialog(context, 'Please select city');
+                      helper.errorDialog(context, "Please enter postal code");
                     }
                   } else {
-                    helper.errorDialog(context, 'Please select state');
+                    helper.errorDialog(context, 'Please select city');
                   }
                 } else {
-                  helper.errorDialog(
-                      context, "Please enter business description");
+                  helper.errorDialog(context, 'Please select state');
                 }
               } else {
-                helper.errorDialog(context, "Please enter postal code");
+                helper.errorDialog(
+                    context, "Please enter business description");
               }
             } else {
               helper.errorDialog(
@@ -227,6 +238,9 @@ class _AddBusinessState extends State<AddBusiness> {
       imageURL = getBusinessDetailData[0]['featured_image'] ?? "";
       selectedStateId = getBusinessDetailData[0]['state_id'] ?? "";
       selectedCityId = getBusinessDetailData[0]['city_id'] ?? "";
+      areaController.text = getBusinessDetailData[0]['area'] ?? "";
+      addressTwoController.text = getBusinessDetailData[0]['address_2'] ?? "";
+      addressThreeController.text = getBusinessDetailData[0]['address_3'] ?? "";
 
       print('image url---- $imageURL');
       imageSelected = true;
@@ -340,6 +354,7 @@ class _AddBusinessState extends State<AddBusiness> {
   List<dynamic> getCategoryItems = [];
   List<dynamic> getStateItems = [];
   List<dynamic> getCityItems = [];
+  List<dynamic> getSubCategoryItem = [];
 
   // category list api integration
 
@@ -356,6 +371,22 @@ class _AddBusinessState extends State<AddBusiness> {
     });
 
     print('get category response list ----$getCategoryItems');
+  }
+
+  // sub category api itegration
+  getSubCategoryList() async {
+    setState(() {
+      isApiCalling = true;
+    });
+    final response = await api.subCategoryList(selectedCategoryId.toString());
+    setState(() {
+      getSubCategoryItem = response['result'];
+    });
+    setState(() {
+      isApiCalling = false;
+    });
+
+    print('get sub category response list ----$getSubCategoryItem');
   }
 
   // state list api integration
@@ -493,6 +524,8 @@ class _AddBusinessState extends State<AddBusiness> {
                     },
                     onSuggestionSelected: (String suggestion) {
                       categoryDropdownController.text = suggestion;
+                      print('selected cat ID --- ${selectedCategoryId}');
+
                       print(
                           'category controller------${categoryDropdownController.text}---id ${selectedCategoryId}');
                     },
@@ -546,24 +579,6 @@ class _AddBusinessState extends State<AddBusiness> {
                     controller: phoneController,
                     decoration: InputDecoration(
                       hintText: "Contact Number",
-                      hintStyle: customText.kTextStyle(
-                          16, FontWeight.w400, ColorConstants.kIconsGrey),
-                      // prefixIcon: const Icon(Icons.phone_android, color: ColorConstants.kIconsGrey, size: 35,),
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.width * 0.05,
-                  ),
-                  TextField(
-                    buildCounter: (BuildContext context,
-                        {int? currentLength, int? maxLength, bool? isFocused}) {
-                      return null;
-                    },
-                    maxLength: 7,
-                    textInputAction: TextInputAction.next,
-                    controller: postalCodeController,
-                    decoration: InputDecoration(
-                      hintText: "Postal Code",
                       hintStyle: customText.kTextStyle(
                           16, FontWeight.w400, ColorConstants.kIconsGrey),
                       // prefixIcon: const Icon(Icons.phone_android, color: ColorConstants.kIconsGrey, size: 35,),
@@ -722,6 +737,42 @@ class _AddBusinessState extends State<AddBusiness> {
                     height: size.width * 0.05,
                   ),
                   TextField(
+                    buildCounter: (BuildContext context,
+                        {int? currentLength, int? maxLength, bool? isFocused}) {
+                      return null;
+                    },
+                    maxLength: 7,
+                    textInputAction: TextInputAction.next,
+                    controller: postalCodeController,
+                    decoration: InputDecoration(
+                      hintText: "Postal Code",
+                      hintStyle: customText.kTextStyle(
+                          16, FontWeight.w400, ColorConstants.kIconsGrey),
+                      // prefixIcon: const Icon(Icons.phone_android, color: ColorConstants.kIconsGrey, size: 35,),
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.width * 0.05,
+                  ),
+                  TextField(
+                    buildCounter: (BuildContext context,
+                        {int? currentLength, int? maxLength, bool? isFocused}) {
+                      return null;
+                    },
+                    maxLength: 50,
+                    textInputAction: TextInputAction.next,
+                    controller: areaController,
+                    decoration: InputDecoration(
+                      hintText: "Area",
+                      hintStyle: customText.kTextStyle(
+                          16, FontWeight.w400, ColorConstants.kIconsGrey),
+                      // prefixIcon: const Icon(Icons.phone_android, color: ColorConstants.kIconsGrey, size: 35,),
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.width * 0.05,
+                  ),
+                  TextField(
                     maxLength: 100,
                     buildCounter: (BuildContext context,
                         {int? currentLength, int? maxLength, bool? isFocused}) {
@@ -732,12 +783,53 @@ class _AddBusinessState extends State<AddBusiness> {
                     textCapitalization: TextCapitalization.sentences,
                     controller: businessAddressController,
                     decoration: InputDecoration(
-                      hintText: "Business Address",
+                      hintText: "Address Line 1",
                       hintStyle: customText.kTextStyle(
                           16, FontWeight.w400, ColorConstants.kIconsGrey),
                       // prefixIcon: const Icon(Icons.location_on, color: ColorConstants.kIconsGrey, size: 35,),
                     ),
                   ),
+                  SizedBox(
+                    height: size.width * 0.05,
+                  ),
+                  TextField(
+                    maxLength: 100,
+                    buildCounter: (BuildContext context,
+                        {int? currentLength, int? maxLength, bool? isFocused}) {
+                      return null;
+                    },
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    textCapitalization: TextCapitalization.sentences,
+                    controller: addressTwoController,
+                    decoration: InputDecoration(
+                      hintText: "Address Line 2",
+                      hintStyle: customText.kTextStyle(
+                          16, FontWeight.w400, ColorConstants.kIconsGrey),
+                      // prefixIcon: const Icon(Icons.location_on, color: ColorConstants.kIconsGrey, size: 35,),
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.width * 0.05,
+                  ),
+                  TextField(
+                    maxLength: 100,
+                    buildCounter: (BuildContext context,
+                        {int? currentLength, int? maxLength, bool? isFocused}) {
+                      return null;
+                    },
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    textCapitalization: TextCapitalization.sentences,
+                    controller: addressThreeController,
+                    decoration: InputDecoration(
+                      hintText: "Address Line 3",
+                      hintStyle: customText.kTextStyle(
+                          16, FontWeight.w400, ColorConstants.kIconsGrey),
+                      // prefixIcon: const Icon(Icons.location_on, color: ColorConstants.kIconsGrey, size: 35,),
+                    ),
+                  ),
+
                   SizedBox(
                     height: size.width * 0.05,
                   ),

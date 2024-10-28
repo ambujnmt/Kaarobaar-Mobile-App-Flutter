@@ -358,6 +358,20 @@ class API {
     return jsonDecode(response.body);
   }
 
+  // sub category list api integration
+  subCategoryList(String catId) async {
+    var url = '$baseUrl/app/subcategory_list';
+
+    Map<String, dynamic> body = {
+      "category_id": catId,
+      "token": loginController.accessToken,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+    debugPrint(" sub  category api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
   // state list
 
   stateList() async {
@@ -399,7 +413,10 @@ class API {
       String? businessDescription,
       String? stateId,
       String? cityId,
+      String? area,
       String? businessAddress,
+      String? addressTwo,
+      String? addressThree,
       String? image) async {
     var url = '$baseUrl/user/add_business';
 
@@ -419,8 +436,11 @@ class API {
     request.fields["website"] = websiteURL!;
     request.fields["state_id"] = stateId!;
     request.fields["city_id"] = cityId!;
+    request.fields["area"] = area!;
     request.fields["zipcode"] = postalCode!;
     request.fields["address"] = businessAddress!;
+    request.fields["address_2"] = addressTwo!;
+    request.fields["address_3"] = addressThree!;
     request.fields["business_description"] = businessDescription!;
     request.fields["token"] = loginController.accessToken;
 
@@ -490,7 +510,10 @@ class API {
       String? businessDescription,
       String? stateId,
       String? cityId,
+      String? area,
       String? businessAddress,
+      String? addressTwo,
+      String? addressThree,
       String? image,
       String? businessId) async {
     var url = '$baseUrl/user/update_business';
@@ -512,8 +535,11 @@ class API {
     request.fields["website"] = websiteURL!;
     request.fields["state_id"] = stateId!;
     request.fields["city_id"] = cityId!;
+    request.fields["area"] = area!;
     request.fields["zipcode"] = postalCode!;
     request.fields["address"] = businessAddress!;
+    request.fields["address_2"] = addressTwo!;
+    request.fields["address_3"] = addressThree!;
     request.fields["business_description"] = businessDescription!;
     request.fields["business_id"] = businessId.toString();
 

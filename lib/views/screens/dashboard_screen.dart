@@ -591,10 +591,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             height: size.height * 0.02,
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                height: size.height * 0.2,
+                // height: size.height * 0.2,
                 width: size.width * 0.4,
                 padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
                 child: Center(
@@ -610,26 +611,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   //   color: Colors.yellow
                   // ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                              height: size.width * 0.08,
-                              child: Image.asset("assets/images/map.png")),
-                          SizedBox(
-                              width: size.width * 0.45,
-                              child: customText.kText(
-                                  "Office 24 Brentham Old Power Station, Western Avenue "
-                                  "LONDON - W5 1HS United Kingdom (GB)",
-                                  13,
-                                  FontWeight.w500,
-                                  Colors.black,
-                                  maxLines: 4,
-                                  TextAlign.start))
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     SizedBox(
+                      //         height: size.width * 0.08,
+                      //         child: Image.asset("assets/images/map.png")),
+                      //     SizedBox(
+                      //         width: size.width * 0.45,
+                      //         child: customText.kText(
+                      //             "Office 24 Brentham Old Power Station, Western Avenue "
+                      //             "LONDON - W5 1HS United Kingdom (GB)",
+                      //             13,
+                      //             FontWeight.w500,
+                      //             Colors.black,
+                      //             maxLines: 4,
+                      //             TextAlign.start))
+                      //   ],
+                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -638,11 +639,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Image.asset("assets/images/call.png")),
                           SizedBox(
                             width: size.width * 0.45,
-                            child: customText.kText("07970999007", 13,
+                            child: customText.kText("07983951795", 13,
                                 FontWeight.w500, Colors.black, TextAlign.start),
                           )
                         ],
                       ),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -660,9 +662,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   )),
             ],
           ),
-          SizedBox(
-            height: size.height * 0.02,
-          ),
+          // SizedBox(
+          //   height: size.height * 0.02,
+          // ),
         ],
       ),
     ));
