@@ -417,7 +417,8 @@ class API {
       String? businessAddress,
       String? addressTwo,
       String? addressThree,
-      String? image) async {
+      String? image,
+      String? subCategoryId) async {
     var url = '$baseUrl/user/add_business';
 
     var request = http.MultipartRequest(
@@ -443,6 +444,7 @@ class API {
     request.fields["address_3"] = addressThree!;
     request.fields["business_description"] = businessDescription!;
     request.fields["token"] = loginController.accessToken;
+    request.fields["subcategory_id"] = subCategoryId.toString();
 
     var streamedResponse = await request.send();
 
@@ -515,7 +517,8 @@ class API {
       String? addressTwo,
       String? addressThree,
       String? image,
-      String? businessId) async {
+      String? businessId,
+      String? subCategoryId) async {
     var url = '$baseUrl/user/update_business';
 
     var request = http.MultipartRequest(
@@ -542,6 +545,7 @@ class API {
     request.fields["address_3"] = addressThree!;
     request.fields["business_description"] = businessDescription!;
     request.fields["business_id"] = businessId.toString();
+    request.fields["subcategory_id"] = subCategoryId.toString();
 
     var streamedResponse = await request.send();
 

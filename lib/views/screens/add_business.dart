@@ -24,7 +24,7 @@ class _AddBusinessState extends State<AddBusiness> {
   dynamic size;
   bool isApiCalling = false;
   final customText = CustomText(), helper = Helper();
-  bool isApiLoading = false;
+  bool isApiLoading = false, subCategoryCalling = false;
   List<dynamic> getBusinessDetailData = [];
   String imageURL = "";
 
@@ -37,10 +37,10 @@ class _AddBusinessState extends State<AddBusiness> {
   TextEditingController businessDescriptionController = TextEditingController();
   TextEditingController businessAddressController = TextEditingController();
   TextEditingController businessKeywordController = TextEditingController();
-
   TextEditingController areaController = TextEditingController();
   TextEditingController addressTwoController = TextEditingController();
   TextEditingController addressThreeController = TextEditingController();
+  TextEditingController subCategoryController = TextEditingController();
 
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
@@ -114,6 +114,7 @@ class _AddBusinessState extends State<AddBusiness> {
                               addressTwoController.text,
                               addressThreeController.text,
                               _image?.path.toString(),
+                              selectedSubCategoryId,
                             );
                           } else {
                             print(
@@ -135,6 +136,7 @@ class _AddBusinessState extends State<AddBusiness> {
                               addressThreeController.text,
                               _image?.path.toString(),
                               sideDrawerController.myBusinessId,
+                              selectedSubCategoryId
                             );
                             if (response['status'] == 1) {
                               sideDrawerController.myBusinessId = "";
@@ -247,8 +249,8 @@ class _AddBusinessState extends State<AddBusiness> {
     }
   }
 
-  String? selectedCategory;
-  String? selectedCategoryId;
+  String? selectedCategory, selectedSubCategory;
+  String? selectedCategoryId, selectedSubCategoryId;
   String? selectedState;
   String? selectedStateId;
   String? selectedCity;
@@ -258,10 +260,10 @@ class _AddBusinessState extends State<AddBusiness> {
   XFile? _image;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController categoryDropdownController =
-      TextEditingController();
+  final TextEditingController categoryDropdownController = TextEditingController();
   final TextEditingController stateDropdownController = TextEditingController();
   final TextEditingController cityDropdownController = TextEditingController();
+  final TextEditingController subCategoryDropDownController = TextEditingController();
 
   SuggestionsBoxController categorySuggestionBoxController =
       SuggestionsBoxController();
@@ -269,6 +271,7 @@ class _AddBusinessState extends State<AddBusiness> {
       SuggestionsBoxController();
   SuggestionsBoxController citySuggestionBoxController =
       SuggestionsBoxController();
+  SuggestionsBoxController subCategorySuggestionBoxController = SuggestionsBoxController();
 
   bool imageSelected = false;
 
@@ -298,11 +301,37 @@ class _AddBusinessState extends State<AddBusiness> {
         .toList();
     categoryMatches.addAll(categoryList);
 
-    for (int i = 0; i < getCategoryItems.length; i++) {
-      if (getCategoryItems[i]['category_name'] == selectedCategory) {
-        selectedCategoryId = getCategoryItems[i]['id'].toString();
-      }
-    }
+    // for (int i = 0; i < getCategoryItems.length; i++) {
+    //   if (getCategoryItems[i]['category_name'] == selectedCategory) {
+    //     selectedCategoryId = getCategoryItems[i]['id'].toString();
+    //     setState(() {});
+    //   }
+    // }
+
+    log("selected category Id :- $selectedCategoryId");
+
+    categoryMatches
+        .retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
+    return categoryMatches;
+  }
+
+  List<String> getSubCategorySuggestions(String query) {
+
+    log("sub category query :- $getSubCategoryItem");
+
+    List<String> categoryMatches = <String>[];
+    final List<String> categoryList = getSubCategoryItem
+        .map((element) => element['subcategory_name'].toString())
+        .toList();
+    log("sub category list :- $categoryList");
+    categoryMatches.addAll(categoryList);
+
+    // for (int i = 0; i < getCategoryItems.length; i++) {
+    //   if (getCategoryItems[i]['category_name'] == selectedCategory) {
+    //     selectedCategoryId = getCategoryItems[i]['id'].toString();
+    //     setState(() {});
+    //   }
+    // }
 
     categoryMatches
         .retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
@@ -357,7 +386,6 @@ class _AddBusinessState extends State<AddBusiness> {
   List<dynamic> getSubCategoryItem = [];
 
   // category list api integration
-
   getCategoryList() async {
     setState(() {
       isApiCalling = true;
@@ -375,22 +403,24 @@ class _AddBusinessState extends State<AddBusiness> {
 
   // sub category api itegration
   getSubCategoryList() async {
+
+    log("selected Category Id :- $selectedCategoryId");
+
     setState(() {
-      isApiCalling = true;
+      subCategoryCalling = true;
     });
     final response = await api.subCategoryList(selectedCategoryId.toString());
     setState(() {
       getSubCategoryItem = response['result'];
     });
     setState(() {
-      isApiCalling = false;
+      subCategoryCalling = false;
     });
 
     print('get sub category response list ----$getSubCategoryItem');
   }
 
   // state list api integration
-
   getStateList() async {
     setState(() {
       isApiCalling = true;
@@ -522,12 +552,20 @@ class _AddBusinessState extends State<AddBusiness> {
                     transitionBuilder: (context, suggestionsBox, controller) {
                       return suggestionsBox;
                     },
-                    onSuggestionSelected: (String suggestion) {
+                    onSuggestionSelected: (String suggestion) async {
                       categoryDropdownController.text = suggestion;
-                      print('selected cat ID --- ${selectedCategoryId}');
 
-                      print(
-                          'category controller------${categoryDropdownController.text}---id ${selectedCategoryId}');
+                      for (int i = 0; i < getCategoryItems.length; i++) {
+                        if (getCategoryItems[i]['category_name'] == suggestion) {
+                          selectedCategoryId = getCategoryItems[i]['id'].toString();
+                        }
+                      }
+
+                      selectedSubCategoryId = null;
+                      selectedSubCategory = null;
+                      subCategoryDropDownController.clear();
+                      await getSubCategoryList();
+
                     },
                     suggestionsBoxController: categorySuggestionBoxController,
                     validator: (value) =>
@@ -537,6 +575,70 @@ class _AddBusinessState extends State<AddBusiness> {
                     },
                     displayAllSuggestionWhenTap: true,
                   ),
+                  SizedBox(
+                    height: size.width * 0.05,
+                  ),
+
+                  subCategoryCalling
+                  ? SizedBox(
+                      height: size.width * 0.12,
+                      width: size.width,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    )
+                  : DropDownSearchFormField(
+                    textFieldConfiguration: TextFieldConfiguration(
+                      decoration: InputDecoration(
+                        enabledBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromRGBO(112, 112, 112, 1),
+                          ),
+                        ),
+                        border: const UnderlineInputBorder(
+                          borderSide: BorderSide(),
+                        ),
+                        hintText: 'Select Sub Category',
+                        hintStyle: customText.kTextStyle(
+                            16, FontWeight.w400, ColorConstants.kIconsGrey),
+                      ),
+                      controller: subCategoryDropDownController,
+                    ),
+                    suggestionsCallback: (pattern) {
+                      return getSubCategorySuggestions(pattern);
+                    },
+                    itemBuilder: (context, String suggestion) {
+                      return ListTile(
+                        title: Text(suggestion),
+                      );
+                    },
+                    itemSeparatorBuilder: (context, index) {
+                      return const Divider();
+                    },
+                    transitionBuilder: (context, suggestionsBox, controller) {
+                      return suggestionsBox;
+                    },
+                    onSuggestionSelected: (String suggestion) {
+                      subCategoryDropDownController.text = suggestion;
+
+                      for (int i = 0; i < getSubCategoryItem.length; i++) {
+                        if (getSubCategoryItem[i]['category_name'] == suggestion) {
+                          selectedSubCategoryId = getSubCategoryItem[i]['id'].toString();
+                        }
+                      }
+
+                      log("selected subCategoryId :- $selectedSubCategoryId");
+
+                    },
+                    suggestionsBoxController: subCategorySuggestionBoxController,
+                    validator: (value) =>
+                    value!.isEmpty ? 'Please select a sub category' : null,
+                    onSaved: (value) {
+                      selectedSubCategory = value;
+                    },
+                    displayAllSuggestionWhenTap: true,
+                  ),
+
                   SizedBox(
                     height: size.width * 0.05,
                   ),
