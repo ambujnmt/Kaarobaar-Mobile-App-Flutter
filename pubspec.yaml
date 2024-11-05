@@ -46,6 +46,8 @@ dependencies:
   flutter_widget_from_html: ^0.15.2
   drop_down_search_field: ^1.0.4
   url_launcher: ^6.3.0
+  path_provider: ^2.1.5
+  dio: ^5.7.0
 
 
 dev_dependencies:

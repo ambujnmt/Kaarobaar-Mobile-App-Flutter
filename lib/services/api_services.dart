@@ -418,6 +418,10 @@ class API {
       String? addressTwo,
       String? addressThree,
       String? image,
+      String? image2,
+      String? image3,
+      String? image4,
+      String? image5,
       String? subCategoryId) async {
     var url = '$baseUrl/user/add_business';
 
@@ -425,8 +429,28 @@ class API {
       "POST",
       Uri.parse(url),
     );
-    request.files
-        .add(await http.MultipartFile.fromPath("featured_image", image!));
+    // request.files
+    //     .add(await http.MultipartFile.fromPath("featured_image", image!));
+    if (image != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image", image));
+    }
+    if (image2 != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_2", image2));
+    }
+    if (image3 != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_3", image3));
+    }
+    if (image4 != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_4", image4));
+    }
+    if (image5 != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_5", image5));
+    }
 
     request.fields["user_id"] = loginController.userId;
     request.fields["category_id"] = categoryId!;
@@ -517,6 +541,10 @@ class API {
       String? addressTwo,
       String? addressThree,
       String? image,
+      String? image2,
+      String? image3,
+      String? image4,
+      String? image5,
       String? businessId,
       String? subCategoryId) async {
     var url = '$baseUrl/user/update_business';
@@ -525,8 +553,28 @@ class API {
       "POST",
       Uri.parse(url),
     );
-    request.files
-        .add(await http.MultipartFile.fromPath("featured_image", image!));
+    // request.files
+    //     .add(await http.MultipartFile.fromPath("featured_image", image!));
+    if (image != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image", image));
+    }
+    if (image2 != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_2", image2));
+    }
+    if (image3 != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_3", image3));
+    }
+    if (image4 != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_4", image4));
+    }
+    if (image5 != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_5", image5));
+    }
     request.fields["token"] = loginController.accessToken;
     request.fields["user_id"] = loginController.userId;
 

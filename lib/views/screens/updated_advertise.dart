@@ -73,7 +73,7 @@ class _UpdatedAdvertiseState extends State<UpdatedAdvertise> {
         helper.errorDialog(context, "Please enter valid email");
       }
     } else {
-      helper.errorDialog(context, "Please enter name");
+      helper.errorDialog(context, "Please enter your name");
     }
   }
 

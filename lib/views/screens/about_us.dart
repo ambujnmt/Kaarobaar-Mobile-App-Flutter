@@ -74,6 +74,7 @@ class _AboutUsState extends State<AboutUs> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Container(
         height: size.height,
@@ -110,8 +111,11 @@ class _AboutUsState extends State<AboutUs> {
                     )
                   : Wrap(
                       children: [
-                        customText.kText("${aboutUsData["title"]}", 20,
-                            FontWeight.w700, Colors.black, TextAlign.center),
+                        Container(
+                          child: customText.kText("${aboutUsData["title"]}", 20,
+                              FontWeight.w700, Colors.black, TextAlign.center,
+                              maxLines: 4),
+                        ),
                         aboutUsData["about_image"].toString() == ""
                             ? Container(
                                 height: size.height * 0.2,

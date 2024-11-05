@@ -93,11 +93,10 @@ class _LoginScreenState extends State<LoginScreen> {
           print('else 1 ----200');
         }
       } else {
-        helper.errorDialog(
-            context, "Password should be atleast 6 characters and valid");
+        helper.errorDialog(context, "Please enter password");
       }
     } else {
-      helper.errorDialog(context, "Please input valid email address");
+      helper.errorDialog(context, "Please enter email id");
     }
   }
 

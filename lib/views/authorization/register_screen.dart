@@ -51,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   register() async {
     if (nameController.text.isNotEmpty) {
       if (EmailValidator.validate(emailController.text)) {
-        if (passwordController.text.length >= 6 &&
+        if (passwordController.text.length >= 8 &&
             (!passwordController.text.contains(" "))) {
           if (passwordController.text == confirmPasswordController.text) {
             setState(() {
@@ -84,13 +84,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           }
         } else {
           helper.errorDialog(
-              context, "Password should be atleast 6 characters and valid");
+              context, "Password should be atleast 8 characters");
         }
       } else {
         helper.errorDialog(context, "Please enter a valid email address");
       }
     } else {
-      helper.errorDialog(context, "Please enter name");
+      helper.errorDialog(context, "Please enter your name");
     }
   }
 

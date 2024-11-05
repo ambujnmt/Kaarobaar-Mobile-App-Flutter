@@ -120,24 +120,27 @@ class _CommunityDetailTwoState extends State<CommunityDetailTwo> {
                                   ],
                                 ),
                                 const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    customText.kText(
-                                        "Title:",
-                                        15,
-                                        FontWeight.w700,
-                                        Colors.black,
-                                        TextAlign.center),
-                                    const SizedBox(width: 10),
-                                    customText.kText(
-                                        "${detailTwoListData[0]['business_title']}",
-                                        15,
-                                        FontWeight.w400,
-                                        Colors.black,
-                                        TextAlign.center),
-                                  ],
+                                RichText(
+                                  text: TextSpan(
+                                    text: '',
+                                    style: DefaultTextStyle.of(context).style,
+                                    children: <TextSpan>[
+                                      const TextSpan(
+                                        text: 'Title: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15,
+                                            fontFamily: "Raleway"),
+                                      ),
+                                      TextSpan(
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15,
+                                              fontFamily: "Raleway"),
+                                          text:
+                                              "${detailTwoListData[0]['business_title']}"),
+                                    ],
+                                  ),
                                 ),
                                 const SizedBox(height: 10),
                                 Row(
@@ -180,24 +183,27 @@ class _CommunityDetailTwoState extends State<CommunityDetailTwo> {
                                   ],
                                 ),
                                 const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    customText.kText(
-                                        "Address:",
-                                        15,
-                                        FontWeight.w700,
-                                        Colors.black,
-                                        TextAlign.center),
-                                    const SizedBox(width: 10),
-                                    customText.kText(
-                                        "${detailTwoListData[0]['address']}",
-                                        15,
-                                        FontWeight.w400,
-                                        Colors.black,
-                                        TextAlign.center),
-                                  ],
+                                RichText(
+                                  text: TextSpan(
+                                    text: '',
+                                    style: DefaultTextStyle.of(context).style,
+                                    children: <TextSpan>[
+                                      const TextSpan(
+                                        text: 'Address: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15,
+                                            fontFamily: "Raleway"),
+                                      ),
+                                      TextSpan(
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15,
+                                              fontFamily: "Raleway"),
+                                          text:
+                                              "${detailTwoListData[0]['address']}"),
+                                    ],
+                                  ),
                                 ),
                                 const SizedBox(height: 10),
                                 Row(
@@ -280,22 +286,26 @@ class _CommunityDetailTwoState extends State<CommunityDetailTwo> {
                                   ],
                                 ),
                                 const SizedBox(height: 10),
-                                customText.kText(
-                                    "Description:",
-                                    15,
-                                    FontWeight.w700,
-                                    Colors.black,
-                                    TextAlign.center),
-                                const SizedBox(height: 10),
-                                Container(
-                                  width: width,
-                                  child: Text(
-                                    "${detailTwoListData[0]['business_description']}",
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black,
-                                        fontFamily: "Raleway"),
+                                RichText(
+                                  text: TextSpan(
+                                    text: '',
+                                    style: DefaultTextStyle.of(context).style,
+                                    children: <TextSpan>[
+                                      const TextSpan(
+                                        text: 'Description: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15,
+                                            fontFamily: "Raleway"),
+                                      ),
+                                      TextSpan(
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15,
+                                              fontFamily: "Raleway"),
+                                          text:
+                                              "${detailTwoListData[0]['business_description']}"),
+                                    ],
                                   ),
                                 )
                               ],
