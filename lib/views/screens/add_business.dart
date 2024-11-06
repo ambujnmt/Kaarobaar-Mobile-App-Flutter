@@ -560,6 +560,7 @@ class _AddBusinessState extends State<AddBusiness> {
       getBusinessDetail();
     } else {
       sideDrawerController.fromEditBusinessForm = "";
+      _imageFiles = [];
     }
     print('my business id is---- ${sideDrawerController.myBusinessId}');
     print("from edit ${sideDrawerController.fromEditBusiness}");
