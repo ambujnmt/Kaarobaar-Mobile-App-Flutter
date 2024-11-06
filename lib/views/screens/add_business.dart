@@ -29,7 +29,7 @@ class _AddBusinessState extends State<AddBusiness> {
   final customText = CustomText(), helper = Helper();
   bool isApiLoading = false, subCategoryCalling = false;
   List<dynamic> getBusinessDetailData = [];
-  String imageURL = "";
+  String imageURL = ""; // image url
 
   TextEditingController businessNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
