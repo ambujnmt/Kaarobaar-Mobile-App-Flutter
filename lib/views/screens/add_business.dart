@@ -24,7 +24,6 @@ class AddBusiness extends StatefulWidget {
 }
 
 class _AddBusinessState extends State<AddBusiness> {
-
   // String imageURL = ""; // image url
   // List<File> _imageFiles = List<File>.filled(5, File(''), growable: false);
   // XFile? _image;
@@ -32,16 +31,31 @@ class _AddBusinessState extends State<AddBusiness> {
   dynamic size;
   final customText = CustomText(), helper = Helper(), api = API();
   final ImagePicker _picker = ImagePicker();
-  bool isApiLoading = false, subCategoryCalling = false, showSecondImgBox = false,
-      showThirdImgBox = false, showFourthImgBox = false, showFifthImgBox = false,
-      isApiCalling = false, imageSelected = false, isImageDownloading = false;
-  List<dynamic> getBusinessDetailData = [], getCategoryItems = [], getStateItems = [],
-      getCityItems = [], getSubCategoryItem = [];
+  bool isApiLoading = false,
+      subCategoryCalling = false,
+      showSecondImgBox = false,
+      cityCalling = false,
+      showThirdImgBox = false,
+      showFourthImgBox = false,
+      showFifthImgBox = false,
+      isApiCalling = false,
+      imageSelected = false,
+      isImageDownloading = false;
+  List<dynamic> getBusinessDetailData = [],
+      getCategoryItems = [],
+      getStateItems = [],
+      getCityItems = [],
+      getSubCategoryItem = [];
   List downloadedImages = [], networkImage = [];
 
   String? image1, image2, image3, image4, image5;
-  String? selectedCategory, selectedSubCategory, selectedCategoryId,
-      selectedSubCategoryId, selectedState, selectedStateId, selectedCity,
+  String? selectedCategory,
+      selectedSubCategory,
+      selectedCategoryId,
+      selectedSubCategoryId,
+      selectedState,
+      selectedStateId,
+      selectedCity,
       selectedCityId;
 
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
@@ -66,10 +80,14 @@ class _AddBusinessState extends State<AddBusiness> {
   TextEditingController cityDropdownController = TextEditingController();
   TextEditingController subCategoryDropDownController = TextEditingController();
 
-  SuggestionsBoxController categorySuggestionBoxController = SuggestionsBoxController();
-  SuggestionsBoxController stateSuggestionBoxController = SuggestionsBoxController();
-  SuggestionsBoxController citySuggestionBoxController = SuggestionsBoxController();
-  SuggestionsBoxController subCategorySuggestionBoxController = SuggestionsBoxController();
+  SuggestionsBoxController categorySuggestionBoxController =
+      SuggestionsBoxController();
+  SuggestionsBoxController stateSuggestionBoxController =
+      SuggestionsBoxController();
+  SuggestionsBoxController citySuggestionBoxController =
+      SuggestionsBoxController();
+  SuggestionsBoxController subCategorySuggestionBoxController =
+      SuggestionsBoxController();
 
   addBusiness() async {
     for (int i = 0; i < getCategoryItems.length; i++) {
@@ -99,7 +117,6 @@ class _AddBusinessState extends State<AddBusiness> {
     print('selected city id---- $selectedCityId');
     print('selected category id---- $selectedCategoryId');
 
-
     if (businessNameController.text.isNotEmpty &&
         (!businessNameController.text.startsWith(" "))) {
       if (categoryDropdownController.text.isNotEmpty &&
@@ -119,7 +136,6 @@ class _AddBusinessState extends State<AddBusiness> {
                       if (businessAddressController.text.isNotEmpty &&
                           (!businessAddressController.text.startsWith(" "))) {
                         if (imageSelected) {
-
                           setState(() {
                             isApiCalling = true;
                           });
@@ -149,10 +165,9 @@ class _AddBusinessState extends State<AddBusiness> {
                               image5,
                               selectedSubCategoryId,
                             );
-                          }
-                          else {
-
-                            print('inside the edit function --- ${sideDrawerController.myBusinessId}');
+                          } else {
+                            print(
+                                'inside the edit function --- ${sideDrawerController.myBusinessId}');
                             log("update time images :- $image1, $image2, $image3, $image4, $image5");
 
                             response = await api.updateBusinessDetails(
@@ -260,44 +275,56 @@ class _AddBusinessState extends State<AddBusiness> {
     });
     if (response['status'] == 1) {
       print('status 1');
-      businessNameController.text = getBusinessDetailData[0]['business_title'] ?? " ";
-      categoryDropdownController.text = getBusinessDetailData[0]['category_name'] ?? " ";
-      businessKeywordController.text = getBusinessDetailData[0]['keywords'] ?? " ";
+      businessNameController.text =
+          getBusinessDetailData[0]['business_title'] ?? " ";
+      categoryDropdownController.text =
+          getBusinessDetailData[0]['category_name'] ?? " ";
+      businessKeywordController.text =
+          getBusinessDetailData[0]['keywords'] ?? " ";
       emailController.text = getBusinessDetailData[0]['email'] ?? " ";
       phoneController.text = getBusinessDetailData[0]['mobile'] ?? " ";
       postalCodeController.text = getBusinessDetailData[0]['zipcode'] ?? " ";
       websiteURL.text = getBusinessDetailData[0]['website'] ?? " ";
-      businessDescriptionController.text = getBusinessDetailData[0]['business_description'] ?? " ";
-      stateDropdownController.text = getBusinessDetailData[0]['state_name'] ?? " ";
-      cityDropdownController.text = getBusinessDetailData[0]['city_name'] ?? " ";
-      businessAddressController.text = getBusinessDetailData[0]['address'] ?? " ";
+      businessDescriptionController.text =
+          getBusinessDetailData[0]['business_description'] ?? " ";
+      stateDropdownController.text =
+          getBusinessDetailData[0]['state_name'] ?? " ";
+      cityDropdownController.text =
+          getBusinessDetailData[0]['city_name'] ?? " ";
+      businessAddressController.text =
+          getBusinessDetailData[0]['address'] ?? " ";
       // imageURL = getBusinessDetailData[0]['featured_image'] ?? "";
       selectedStateId = getBusinessDetailData[0]['state_id'] ?? "";
       selectedCityId = getBusinessDetailData[0]['city_id'] ?? "";
       areaController.text = getBusinessDetailData[0]['area'] ?? "";
       addressTwoController.text = getBusinessDetailData[0]['address_2'] ?? "";
       addressThreeController.text = getBusinessDetailData[0]['address_3'] ?? "";
-      subCategoryDropDownController.text = getBusinessDetailData[0]['subcategory_name'];
+      subCategoryDropDownController.text =
+          getBusinessDetailData[0]['subcategory_name'];
       image1 = getBusinessDetailData[0]["featured_image"];
       showSecondImgBox = true;
       imageSelected = true;
       networkImage.add(image1);
-      if(getBusinessDetailData[0]["featured_image_2"] != null && getBusinessDetailData[0]["featured_image_2"] != "") {
+      if (getBusinessDetailData[0]["featured_image_2"] != null &&
+          getBusinessDetailData[0]["featured_image_2"] != "") {
         image2 = getBusinessDetailData[0]["featured_image_2"];
         showThirdImgBox = true;
         networkImage.add(image2);
       }
-      if(getBusinessDetailData[0]["featured_image_3"] != null && getBusinessDetailData[0]["featured_image_3"] != "") {
+      if (getBusinessDetailData[0]["featured_image_3"] != null &&
+          getBusinessDetailData[0]["featured_image_3"] != "") {
         image3 = getBusinessDetailData[0]["featured_image_3"];
         showFourthImgBox = true;
         networkImage.add(image3);
       }
-      if(getBusinessDetailData[0]["featured_image_4"] != null && getBusinessDetailData[0]["featured_image_4"] != "") {
+      if (getBusinessDetailData[0]["featured_image_4"] != null &&
+          getBusinessDetailData[0]["featured_image_4"] != "") {
         image4 = getBusinessDetailData[0]["featured_image_4"];
         showFifthImgBox = true;
         networkImage.add(image4);
       }
-      if(getBusinessDetailData[0]["featured_image_5"] != null && getBusinessDetailData[0]["featured_image_5"] != "") {
+      if (getBusinessDetailData[0]["featured_image_5"] != null &&
+          getBusinessDetailData[0]["featured_image_5"] != "") {
         image5 = getBusinessDetailData[0]["featured_image_5"];
         networkImage.add(image5);
       }
@@ -366,7 +393,6 @@ class _AddBusinessState extends State<AddBusiness> {
   }
 
   downloadAllImage() async {
-
     // log("downloadedImages list :- $networkImage, ${networkImage.length}");
     //
     // List temp = networkImage[0].toString().split("-");
@@ -374,9 +400,9 @@ class _AddBusinessState extends State<AddBusiness> {
 
     late var appDocDir;
 
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       appDocDir = await getExternalStorageDirectory();
-    } else if(Platform.isIOS) {
+    } else if (Platform.isIOS) {
       appDocDir = await getApplicationDocumentsDirectory();
     }
 
@@ -384,7 +410,7 @@ class _AddBusinessState extends State<AddBusiness> {
       isImageDownloading = true;
     });
 
-    for(int i = 0; i < networkImage.length; i++) {
+    for (int i = 0; i < networkImage.length; i++) {
       List temp = networkImage[i].toString().split(".");
       String fileExtension = temp.last;
 
@@ -394,28 +420,27 @@ class _AddBusinessState extends State<AddBusiness> {
       log("save path :- $savePath");
 
       await Dio().download(fileUrl, savePath,
-        onReceiveProgress: (count, total) {
-          log("${(count / total * 100).toStringAsFixed(0)}%");
-        });
+          onReceiveProgress: (count, total) {
+        log("${(count / total * 100).toStringAsFixed(0)}%");
+      });
 
       // downloadedImages.add("${appDocDir!.path}/$fileName");
-      if(i == 0) {
+      if (i == 0) {
         image1 = "${appDocDir!.path}/image$i.$fileExtension";
         log("image path 1 :- $image1");
-      } else if(i == 1) {
+      } else if (i == 1) {
         image2 = "${appDocDir!.path}/image$i.$fileExtension";
         log("image path 2 :- $image2");
-      } else if(i == 2) {
+      } else if (i == 2) {
         image3 = "${appDocDir!.path}/image$i.$fileExtension";
         log("image path 3 :- $image3");
-      } else if(i == 3) {
+      } else if (i == 3) {
         image4 = "${appDocDir!.path}/image$i.$fileExtension";
         log("image path 4 :- $image4");
-      } else if(i == 4) {
+      } else if (i == 4) {
         image5 = "${appDocDir!.path}/image$i.$fileExtension";
         log("image path 5 :- $image5");
       }
-
     }
 
     setState(() {
@@ -424,40 +449,39 @@ class _AddBusinessState extends State<AddBusiness> {
   }
 
   Future getImageFromGallery(int from) async {
-
     XFile? image;
 
-     if(from == 1) {
-       image = await _picker.pickImage(source: ImageSource.gallery);
-       if(image?.path != null) {
-         image1 = image!.path;
-         imageSelected = true;
-       }
-     } else if(from == 2) {
-       image = await _picker.pickImage(source: ImageSource.gallery);
-       if(image?.path != null) {
-         image2 = image!.path;
-       }
-     } else if(from == 3) {
-       image = await _picker.pickImage(source: ImageSource.gallery);
-       if(image?.path != null) {
-         image3 = image!.path;
-       }
-     } else if(from == 4) {
-       image = await _picker.pickImage(source: ImageSource.gallery);
-       if(image?.path != null) {
-         image4 = image!.path;
-       }
-     } else if(from == 5) {
-       image = await _picker.pickImage(source: ImageSource.gallery);
-       if(image?.path != null) {
-         image5 = image!.path;
-       }
-     }
+    if (from == 1) {
+      image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image?.path != null) {
+        image1 = image!.path;
+        imageSelected = true;
+      }
+    } else if (from == 2) {
+      image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image?.path != null) {
+        image2 = image!.path;
+      }
+    } else if (from == 3) {
+      image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image?.path != null) {
+        image3 = image!.path;
+      }
+    } else if (from == 4) {
+      image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image?.path != null) {
+        image4 = image!.path;
+      }
+    } else if (from == 5) {
+      image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image?.path != null) {
+        image5 = image!.path;
+      }
+    }
 
-     log("images list :- $image1, $image2, $image3, $image4, $image5");
+    log("images list :- $image1, $image2, $image3, $image4, $image5");
 
-     setState(() {});
+    setState(() {});
 
     // if (_imageFiles.length < 5) {
     //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -479,33 +503,32 @@ class _AddBusinessState extends State<AddBusiness> {
   }
 
   Future getImageFromCamera(int from) async {
-
     XFile? image;
 
-    if(from == 1) {
+    if (from == 1) {
       image = await _picker.pickImage(source: ImageSource.camera);
-      if(image?.path != null) {
+      if (image?.path != null) {
         image1 = image!.path;
         imageSelected = true;
       }
-    } else if(from == 2) {
+    } else if (from == 2) {
       image = await _picker.pickImage(source: ImageSource.camera);
-      if(image?.path != null) {
+      if (image?.path != null) {
         image2 = image!.path;
       }
-    } else if(from == 3) {
+    } else if (from == 3) {
       image = await _picker.pickImage(source: ImageSource.camera);
-      if(image?.path != null) {
+      if (image?.path != null) {
         image3 = image!.path;
       }
-    } else if(from == 4) {
+    } else if (from == 4) {
       image = await _picker.pickImage(source: ImageSource.camera);
-      if(image?.path != null) {
+      if (image?.path != null) {
         image4 = image!.path;
       }
-    } else if(from == 5) {
+    } else if (from == 5) {
       image = await _picker.pickImage(source: ImageSource.camera);
-      if(image?.path != null) {
+      if (image?.path != null) {
         image5 = image!.path;
       }
     }
@@ -667,6 +690,7 @@ class _AddBusinessState extends State<AddBusiness> {
 
     setState(() {
       isApiCalling = true;
+      cityCalling = true;
     });
     final response = await api.cityList(selectedStateId.toString()); //3805
     setState(() {
@@ -674,6 +698,7 @@ class _AddBusinessState extends State<AddBusiness> {
     });
     setState(() {
       isApiCalling = false;
+      cityCalling = false;
     });
 
     print('get city response list ----$getCityItems');
@@ -848,12 +873,16 @@ class _AddBusinessState extends State<AddBusiness> {
                           onSuggestionSelected: (String suggestion) {
                             subCategoryDropDownController.text = suggestion;
 
-                            for (int i = 0; i < getSubCategoryItem.length; i++) {
+                            for (int i = 0;
+                                i < getSubCategoryItem.length;
+                                i++) {
                               log("suggestion value :- $suggestion");
                               log("getSubCategoryItem[i]['subcategory_name'] :- ${getSubCategoryItem[i]['subcategory_name']}");
-                              if (getSubCategoryItem[i]['subcategory_name'] == suggestion) {
+                              if (getSubCategoryItem[i]['subcategory_name'] ==
+                                  suggestion) {
                                 log("category name matched");
-                                selectedSubCategoryId = getSubCategoryItem[i]['id'].toString();
+                                selectedSubCategoryId =
+                                    getSubCategoryItem[i]['id'].toString();
                               }
                             }
 
@@ -1025,47 +1054,55 @@ class _AddBusinessState extends State<AddBusiness> {
                     height: size.width * 0.05,
                   ),
                   // city dropdown
-                  DropDownSearchFormField(
-                    textFieldConfiguration: TextFieldConfiguration(
-                      decoration: InputDecoration(
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color.fromRGBO(112, 112, 112, 1),
+                  cityCalling
+                      ? SizedBox(
+                          height: size.width * 0.12,
+                          width: size.width,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ))
+                      : DropDownSearchFormField(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            decoration: InputDecoration(
+                              enabledBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromRGBO(112, 112, 112, 1),
+                                ),
+                              ),
+                              border: const UnderlineInputBorder(
+                                borderSide: BorderSide(),
+                              ),
+                              hintText: 'Select City',
+                              hintStyle: customText.kTextStyle(16,
+                                  FontWeight.w400, ColorConstants.kIconsGrey),
+                            ),
+                            controller: cityDropdownController,
                           ),
+                          suggestionsCallback: (pattern) {
+                            return getCitySuggestions(pattern);
+                          },
+                          itemBuilder: (context, String suggestion) {
+                            print('item builder');
+                            return ListTile(
+                              title: Text(suggestion),
+                            );
+                          },
+                          itemSeparatorBuilder: (context, index) {
+                            return const Divider();
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          onSuggestionSelected: (String suggestion) {
+                            cityDropdownController.text = suggestion;
+                          },
+                          suggestionsBoxController: citySuggestionBoxController,
+                          validator: (value) =>
+                              value!.isEmpty ? 'Please select a city' : null,
+                          onSaved: (value) => selectedCity = value,
+                          displayAllSuggestionWhenTap: true,
                         ),
-                        border: const UnderlineInputBorder(
-                          borderSide: BorderSide(),
-                        ),
-                        hintText: 'Select City',
-                        hintStyle: customText.kTextStyle(
-                            16, FontWeight.w400, ColorConstants.kIconsGrey),
-                      ),
-                      controller: cityDropdownController,
-                    ),
-                    suggestionsCallback: (pattern) {
-                      return getCitySuggestions(pattern);
-                    },
-                    itemBuilder: (context, String suggestion) {
-                      print('item builder');
-                      return ListTile(
-                        title: Text(suggestion),
-                      );
-                    },
-                    itemSeparatorBuilder: (context, index) {
-                      return const Divider();
-                    },
-                    transitionBuilder: (context, suggestionsBox, controller) {
-                      return suggestionsBox;
-                    },
-                    onSuggestionSelected: (String suggestion) {
-                      cityDropdownController.text = suggestion;
-                    },
-                    suggestionsBoxController: citySuggestionBoxController,
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please select a city' : null,
-                    onSaved: (value) => selectedCity = value,
-                    displayAllSuggestionWhenTap: true,
-                  ),
                   SizedBox(
                     height: size.width * 0.05,
                   ),
@@ -1177,237 +1214,227 @@ class _AddBusinessState extends State<AddBusiness> {
                     child: Row(
                       children: [
                         image1 == null
-                        ? GestureDetector(
-                            child: Container(
-                              height: h * .200,
-                              width: w * .400,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                width: 1, color: Colors.grey)
+                            ? GestureDetector(
+                                child: Container(
+                                  height: h * .200,
+                                  width: w * .400,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                          width: 1, color: Colors.grey)),
+                                  child: const Center(
+                                    child: Icon(Icons.add),
+                                  ),
+                                ),
+                                onTap: () {
+                                  showImageSelection(1);
+                                  showSecondImgBox = true;
+                                },
+                              )
+                            : GestureDetector(
+                                child: Container(
+                                    height: h * .200,
+                                    width: w * .400,
+                                    margin: const EdgeInsets.only(right: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                          width: 1, color: Colors.grey),
+                                      image: DecorationImage(
+                                          image: image1!
+                                                  .contains("uploads/business")
+                                              ? NetworkImage(image1!)
+                                                  as ImageProvider
+                                              : FileImage(File(image1!)),
+                                          fit: BoxFit.cover),
+                                    )),
+                                onTap: () {
+                                  showImageSelection(1);
+                                },
                               ),
-                              child: const Center(
-                                child: Icon(Icons.add),
-                              ),
-                            ),
-                            onTap: () {
-                              showImageSelection(1);
-                              showSecondImgBox = true;
-                            },
-                          )
-                        : GestureDetector(
-                          child: Container(
-                              height: h * .200,
-                              width: w * .400,
-                              margin: const EdgeInsets.only(right: 10),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      width: 1, color: Colors.grey),
-                                image: DecorationImage(
-                                  image: image1!.contains("uploads/business")
-                                    ? NetworkImage(image1!) as ImageProvider
-                                    : FileImage(File(image1!)),
-                                  fit: BoxFit.cover
-                              ),
-                            )
-                          ),
-                          onTap: () {
-                            showImageSelection(1);
-                          },
-                        ),
-
                         image2 == null
-                        ? Visibility(
-                            visible: showSecondImgBox,
-                            child: GestureDetector(
-                              child: Container(
-                                height: h * .200,
-                                width: w * .400,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    width: 1, color: Colors.grey)
-                                 ),
-                                child: const Center(
-                                  child: Icon(Icons.add),
+                            ? Visibility(
+                                visible: showSecondImgBox,
+                                child: GestureDetector(
+                                  child: Container(
+                                    height: h * .200,
+                                    width: w * .400,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            width: 1, color: Colors.grey)),
+                                    child: const Center(
+                                      child: Icon(Icons.add),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    showImageSelection(2);
+                                    showThirdImgBox = true;
+                                  },
+                                ),
+                              )
+                            : Visibility(
+                                visible: showSecondImgBox,
+                                child: GestureDetector(
+                                  child: Container(
+                                      height: h * .200,
+                                      width: w * .400,
+                                      margin: const EdgeInsets.only(right: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            width: 1, color: Colors.grey),
+                                        image: DecorationImage(
+                                            image: image2!.contains(
+                                                    "uploads/business")
+                                                ? NetworkImage(image2!)
+                                                    as ImageProvider
+                                                : FileImage(File(image2!)),
+                                            fit: BoxFit.cover),
+                                      )),
+                                  onTap: () {
+                                    showImageSelection(2);
+                                  },
                                 ),
                               ),
-                            onTap: () {
-                              showImageSelection(2);
-                              showThirdImgBox = true;
-                              },
-                            ),
-                          )
-                        : Visibility(
-                            visible: showSecondImgBox,
-                            child: GestureDetector(
-                              child: Container(
-                                height: h * .200,
-                                width: w * .400,
-                                margin: const EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    width: 1, color: Colors.grey),
-                                  image: DecorationImage(
-                                    image: image2!.contains("uploads/business")
-                                        ? NetworkImage(image2!) as ImageProvider
-                                        : FileImage(File(image2!)),
-                                    fit: BoxFit.cover
-                                  ),
-                                )
-                              ),
-                              onTap: () {
-                                showImageSelection(2);
-                              },
-                            ),
-                          ),
-
                         image3 == null
                             ? Visibility(
-                          visible: showThirdImgBox,
-                          child: GestureDetector(
-                            child: Container(
-                              height: h * .200,
-                              width: w * .400,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      width: 1, color: Colors.grey)
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.add),
-                              ),
-                            ),
-                            onTap: () {
-                              showImageSelection(3);
-                              showFourthImgBox = true;
-                            },
-                          ),
-                        )
-                            : Visibility(
-                          visible: showThirdImgBox,
-                          child: GestureDetector(
-                            child: Container(
-                                height: h * .200,
-                                width: w * .400,
-                                margin: const EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      width: 1, color: Colors.grey),
-                                  image: DecorationImage(
-                                    image: image3!.contains("uploads/business")
-                                        ? NetworkImage(image3!) as ImageProvider
-                                        : FileImage(File(image3!)),
-                                    // image: FileImage(File(image3!)),
-                                    fit: BoxFit.cover
+                                visible: showThirdImgBox,
+                                child: GestureDetector(
+                                  child: Container(
+                                    height: h * .200,
+                                    width: w * .400,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            width: 1, color: Colors.grey)),
+                                    child: const Center(
+                                      child: Icon(Icons.add),
+                                    ),
                                   ),
-                                )
-                            ),
-                            onTap: () {
-                              showImageSelection(3);
-                            },
-                          ),
-                        ),
-
+                                  onTap: () {
+                                    showImageSelection(3);
+                                    showFourthImgBox = true;
+                                  },
+                                ),
+                              )
+                            : Visibility(
+                                visible: showThirdImgBox,
+                                child: GestureDetector(
+                                  child: Container(
+                                      height: h * .200,
+                                      width: w * .400,
+                                      margin: const EdgeInsets.only(right: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            width: 1, color: Colors.grey),
+                                        image: DecorationImage(
+                                            image: image3!.contains(
+                                                    "uploads/business")
+                                                ? NetworkImage(image3!)
+                                                    as ImageProvider
+                                                : FileImage(File(image3!)),
+                                            // image: FileImage(File(image3!)),
+                                            fit: BoxFit.cover),
+                                      )),
+                                  onTap: () {
+                                    showImageSelection(3);
+                                  },
+                                ),
+                              ),
                         image4 == null
                             ? Visibility(
-                          visible: showFourthImgBox,
-                          child: GestureDetector(
-                            child: Container(
-                              height: h * .200,
-                              width: w * .400,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      width: 1, color: Colors.grey)
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.add),
-                              ),
-                            ),
-                            onTap: () {
-                              showImageSelection(4);
-                              showFifthImgBox = true;
-                            },
-                          ),
-                        )
-                            : Visibility(
-                          visible: showFourthImgBox,
-                          child: GestureDetector(
-                            child: Container(
-                                height: h * .200,
-                                width: w * .400,
-                                margin: const EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      width: 1, color: Colors.grey),
-                                  image: DecorationImage(
-                                    // image: FileImage(File(image4!)),
-                                    image: image4!.contains("uploads/business")
-                                        ? NetworkImage(image4!) as ImageProvider
-                                        : FileImage(File(image4!)),
-                                    fit: BoxFit.cover
+                                visible: showFourthImgBox,
+                                child: GestureDetector(
+                                  child: Container(
+                                    height: h * .200,
+                                    width: w * .400,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            width: 1, color: Colors.grey)),
+                                    child: const Center(
+                                      child: Icon(Icons.add),
+                                    ),
                                   ),
-                                )
-                            ),
-                            onTap: () {
-                              showImageSelection(4);
-                            },
-                          ),
-                        ),
-
+                                  onTap: () {
+                                    showImageSelection(4);
+                                    showFifthImgBox = true;
+                                  },
+                                ),
+                              )
+                            : Visibility(
+                                visible: showFourthImgBox,
+                                child: GestureDetector(
+                                  child: Container(
+                                      height: h * .200,
+                                      width: w * .400,
+                                      margin: const EdgeInsets.only(right: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            width: 1, color: Colors.grey),
+                                        image: DecorationImage(
+                                            // image: FileImage(File(image4!)),
+                                            image: image4!.contains(
+                                                    "uploads/business")
+                                                ? NetworkImage(image4!)
+                                                    as ImageProvider
+                                                : FileImage(File(image4!)),
+                                            fit: BoxFit.cover),
+                                      )),
+                                  onTap: () {
+                                    showImageSelection(4);
+                                  },
+                                ),
+                              ),
                         image5 == null
                             ? Visibility(
-                          visible: showFifthImgBox,
-                          child: GestureDetector(
-                            child: Container(
-                              height: h * .200,
-                              width: w * .400,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      width: 1, color: Colors.grey)
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.add),
-                              ),
-                            ),
-                            onTap: () {
-                              showImageSelection(5);
-                              showFifthImgBox = true;
-                            },
-                          ),
-                        )
-                            : Visibility(
-                          visible: showFifthImgBox,
-                          child: GestureDetector(
-                            child: Container(
-                                height: h * .200,
-                                width: w * .400,
-                                margin: const EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      width: 1, color: Colors.grey),
-                                  image: DecorationImage(
-                                    // image: FileImage(File(image5!)),
-                                    image: image5!.contains("uploads/business")
-                                        ? NetworkImage(image5!) as ImageProvider
-                                        : FileImage(File(image5!)),
-                                    fit: BoxFit.cover
+                                visible: showFifthImgBox,
+                                child: GestureDetector(
+                                  child: Container(
+                                    height: h * .200,
+                                    width: w * .400,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            width: 1, color: Colors.grey)),
+                                    child: const Center(
+                                      child: Icon(Icons.add),
+                                    ),
                                   ),
-                                )
-                            ),
-                            onTap: () {
-                              showImageSelection(5);
-                            },
-                          ),
-                        ),
-
+                                  onTap: () {
+                                    showImageSelection(5);
+                                    showFifthImgBox = true;
+                                  },
+                                ),
+                              )
+                            : Visibility(
+                                visible: showFifthImgBox,
+                                child: GestureDetector(
+                                  child: Container(
+                                      height: h * .200,
+                                      width: w * .400,
+                                      margin: const EdgeInsets.only(right: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            width: 1, color: Colors.grey),
+                                        image: DecorationImage(
+                                            // image: FileImage(File(image5!)),
+                                            image: image5!.contains(
+                                                    "uploads/business")
+                                                ? NetworkImage(image5!)
+                                                    as ImageProvider
+                                                : FileImage(File(image5!)),
+                                            fit: BoxFit.cover),
+                                      )),
+                                  onTap: () {
+                                    showImageSelection(5);
+                                  },
+                                ),
+                              ),
                       ],
                     ),
                   ),

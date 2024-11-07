@@ -313,6 +313,9 @@ class _AddEventState extends State<AddEvent> {
                 ),
               ),
               onTap: () async {
+                // setState(() {
+                //   eventTime = "";
+                // });
                 if (currentDate != "") {
                   TimeOfDay initialTime = TimeOfDay.now();
                   TimeOfDay? pickedTime = await showTimePicker(
@@ -321,27 +324,40 @@ class _AddEventState extends State<AddEvent> {
                   );
 
                   if (pickedTime != null) {
+                    print('Line 1 ');
                     if (tempPickedDate == currentDate) {
+                      print('Line 2 ');
+
                       if (pickedTime.hour > DateTime.now().hour) {
+                        print('Line 3 ');
                         eventTime = pickedTime.format(context);
+                        print('Line 4 ');
                       } else if (pickedTime.hour == DateTime.now().hour) {
+                        print('Line 5 ');
                         if (pickedTime.minute > DateTime.now().minute) {
+                          print('Line 6 ');
                           eventTime = pickedTime.format(context);
+                          print('Line 7 ');
                         } else {
+                          print('future time 1');
                           helper.errorDialog(
                               context, "Please select future time");
                         }
                       }
                     } else {
                       eventTime = pickedTime.format(context);
+
+                      print('future time 2');
                     }
 
                     setState(() {});
                   } else {
                     helper.errorDialog(context, "Time is not selected");
+                    print('future time 3');
                   }
                 } else {
                   helper.errorDialog(context, "Select event date first");
+                  print('future time 4');
                 }
                 print('event time: $eventTime');
               },

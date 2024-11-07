@@ -434,19 +434,24 @@ class API {
     // request.files
     //     .add(await http.MultipartFile.fromPath("featured_image", image!));
     if (image1 != null) {
-      request.files.add(await http.MultipartFile.fromPath("featured_image", image1));
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image", image1));
     }
     if (image2 != null) {
-      request.files.add(await http.MultipartFile.fromPath("featured_image_2", image2));
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_2", image2));
     }
     if (image3 != null) {
-      request.files.add(await http.MultipartFile.fromPath("featured_image_3", image3));
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_3", image3));
     }
     if (image4 != null) {
-      request.files.add(await http.MultipartFile.fromPath("featured_image_4", image4));
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_4", image4));
     }
     if (image5 != null) {
-      request.files.add(await http.MultipartFile.fromPath("featured_image_5", image5));
+      request.files
+          .add(await http.MultipartFile.fromPath("featured_image_5", image5));
     }
 
     request.fields["user_id"] = loginController.userId;
@@ -965,5 +970,58 @@ class API {
     http.Response response = await http.post(Uri.parse(url), body: body);
     debugPrint("search result :- ${response.body}");
     return jsonDecode(response.body);
+  }
+
+  // update profile details
+
+  updateProfileDetails({
+    String? firstName,
+    String? lastName,
+    String? contactNumber,
+    String? postalCode,
+    String? stateId,
+    String? cityId,
+    String? area,
+    String? address,
+    String? addressTwo,
+    String? addressThree,
+    String? image,
+    String? updateUserName,
+  }) async {
+    var url = '$baseUrl/user/update_profile';
+
+    var request = http.MultipartRequest(
+      "POST",
+      Uri.parse(url),
+    );
+
+    if (image != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath("profile_img", image));
+    }
+
+    request.fields["token"] = loginController.accessToken;
+    request.fields["user_id"] = loginController.userId;
+
+    request.fields["first_name"] = firstName ?? "";
+    request.fields["last_name"] = lastName ?? "";
+    request.fields["mobile"] = contactNumber ?? "";
+    request.fields["state_id"] = stateId ?? "";
+    request.fields["city_id"] = cityId ?? "";
+    request.fields["area"] = area ?? "";
+    request.fields["zipcode"] = postalCode ?? "";
+    request.fields["address"] = address ?? "";
+    request.fields["address_2"] = addressTwo ?? "";
+    request.fields["address_3"] = addressThree ?? "";
+    request.fields["username"] = updateUserName ?? "";
+
+    var streamedResponse = await request.send();
+
+    var response = await http.Response.fromStream(streamedResponse);
+    final responseData = json.decode(response.body);
+
+    log("edit business response in api :- $responseData");
+
+    return responseData;
   }
 }
