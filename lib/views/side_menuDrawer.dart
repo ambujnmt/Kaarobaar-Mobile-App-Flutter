@@ -254,9 +254,10 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(right: size.width * .3),
+                      margin: EdgeInsets.only(right: size.width * .5),
                       width: double.infinity,
                       child: ExpansionTile(
+                        // trailing: null,
                         trailing: const Icon(
                           Icons.keyboard_arrow_down,
                           color: Colors.black,
@@ -352,6 +353,23 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                               scaffoldKey.currentState!.closeEndDrawer();
                             },
                           ),
+                          GestureDetector(
+                            child: SizedBox(
+                              height: size.height * 0.05,
+                              child: customText.kText(
+                                  "Add Events",
+                                  22,
+                                  FontWeight.w700,
+                                  Colors.black,
+                                  TextAlign.start),
+                            ),
+                            onTap: () {
+                              sideDrawerController.pageIndex.value = 17;
+                              sideDrawerController.pageController
+                                  .jumpToPage(17);
+                              scaffoldKey.currentState!.closeEndDrawer();
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -427,18 +445,18 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                         scaffoldKey.currentState!.closeEndDrawer();
                       },
                     ),
-                    GestureDetector(
-                      child: SizedBox(
-                        height: size.height * 0.05,
-                        child: customText.kText("Add Events", 22,
-                            FontWeight.w700, Colors.black, TextAlign.start),
-                      ),
-                      onTap: () {
-                        sideDrawerController.pageIndex.value = 17;
-                        sideDrawerController.pageController.jumpToPage(17);
-                        scaffoldKey.currentState!.closeEndDrawer();
-                      },
-                    ),
+                    // GestureDetector(
+                    //   child: SizedBox(
+                    //     height: size.height * 0.05,
+                    //     child: customText.kText("Add Events", 22,
+                    //         FontWeight.w700, Colors.black, TextAlign.start),
+                    //   ),
+                    //   onTap: () {
+                    //     sideDrawerController.pageIndex.value = 17;
+                    //     sideDrawerController.pageController.jumpToPage(17);
+                    //     scaffoldKey.currentState!.closeEndDrawer();
+                    //   },
+                    // ),
                     GestureDetector(
                       child: SizedBox(
                         height: size.height * 0.05,
