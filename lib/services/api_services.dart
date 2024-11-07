@@ -417,7 +417,7 @@ class API {
       String? businessAddress,
       String? addressTwo,
       String? addressThree,
-      String? image,
+      String? image1,
       String? image2,
       String? image3,
       String? image4,
@@ -425,31 +425,28 @@ class API {
       String? subCategoryId) async {
     var url = '$baseUrl/user/add_business';
 
+    log('subcategory id :- $subCategoryId, $image1, $image2, $image3, $image4, $image5');
+
     var request = http.MultipartRequest(
       "POST",
       Uri.parse(url),
     );
     // request.files
     //     .add(await http.MultipartFile.fromPath("featured_image", image!));
-    if (image != null) {
-      request.files
-          .add(await http.MultipartFile.fromPath("featured_image", image));
+    if (image1 != null) {
+      request.files.add(await http.MultipartFile.fromPath("featured_image", image1));
     }
     if (image2 != null) {
-      request.files
-          .add(await http.MultipartFile.fromPath("featured_image_2", image2));
+      request.files.add(await http.MultipartFile.fromPath("featured_image_2", image2));
     }
     if (image3 != null) {
-      request.files
-          .add(await http.MultipartFile.fromPath("featured_image_3", image3));
+      request.files.add(await http.MultipartFile.fromPath("featured_image_3", image3));
     }
     if (image4 != null) {
-      request.files
-          .add(await http.MultipartFile.fromPath("featured_image_4", image4));
+      request.files.add(await http.MultipartFile.fromPath("featured_image_4", image4));
     }
     if (image5 != null) {
-      request.files
-          .add(await http.MultipartFile.fromPath("featured_image_5", image5));
+      request.files.add(await http.MultipartFile.fromPath("featured_image_5", image5));
     }
 
     request.fields["user_id"] = loginController.userId;

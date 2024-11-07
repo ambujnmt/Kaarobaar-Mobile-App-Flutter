@@ -24,12 +24,29 @@ class AddBusiness extends StatefulWidget {
 }
 
 class _AddBusinessState extends State<AddBusiness> {
+
+  // String imageURL = ""; // image url
+  // List<File> _imageFiles = List<File>.filled(5, File(''), growable: false);
+  // XFile? _image;
+
   dynamic size;
-  bool isApiCalling = false;
-  final customText = CustomText(), helper = Helper();
-  bool isApiLoading = false, subCategoryCalling = false;
-  List<dynamic> getBusinessDetailData = [];
-  String imageURL = ""; // image url
+  final customText = CustomText(), helper = Helper(), api = API();
+  final ImagePicker _picker = ImagePicker();
+  bool isApiLoading = false, subCategoryCalling = false, showSecondImgBox = false,
+      showThirdImgBox = false, showFourthImgBox = false, showFifthImgBox = false,
+      isApiCalling = false, imageSelected = false, isImageDownloading = false;
+  List<dynamic> getBusinessDetailData = [], getCategoryItems = [], getStateItems = [],
+      getCityItems = [], getSubCategoryItem = [];
+  List downloadedImages = [], networkImage = [];
+
+  String? image1, image2, image3, image4, image5;
+  String? selectedCategory, selectedSubCategory, selectedCategoryId,
+      selectedSubCategoryId, selectedState, selectedStateId, selectedCity,
+      selectedCityId;
+
+  SideDrawerController sideDrawerController = Get.put(SideDrawerController());
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController businessNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -44,8 +61,15 @@ class _AddBusinessState extends State<AddBusiness> {
   TextEditingController addressTwoController = TextEditingController();
   TextEditingController addressThreeController = TextEditingController();
   TextEditingController subCategoryController = TextEditingController();
+  TextEditingController categoryDropdownController = TextEditingController();
+  TextEditingController stateDropdownController = TextEditingController();
+  TextEditingController cityDropdownController = TextEditingController();
+  TextEditingController subCategoryDropDownController = TextEditingController();
 
-  SideDrawerController sideDrawerController = Get.put(SideDrawerController());
+  SuggestionsBoxController categorySuggestionBoxController = SuggestionsBoxController();
+  SuggestionsBoxController stateSuggestionBoxController = SuggestionsBoxController();
+  SuggestionsBoxController citySuggestionBoxController = SuggestionsBoxController();
+  SuggestionsBoxController subCategorySuggestionBoxController = SuggestionsBoxController();
 
   addBusiness() async {
     for (int i = 0; i < getCategoryItems.length; i++) {
@@ -75,6 +99,7 @@ class _AddBusinessState extends State<AddBusiness> {
     print('selected city id---- $selectedCityId');
     print('selected category id---- $selectedCategoryId');
 
+
     if (businessNameController.text.isNotEmpty &&
         (!businessNameController.text.startsWith(" "))) {
       if (categoryDropdownController.text.isNotEmpty &&
@@ -94,6 +119,7 @@ class _AddBusinessState extends State<AddBusiness> {
                       if (businessAddressController.text.isNotEmpty &&
                           (!businessAddressController.text.startsWith(" "))) {
                         if (imageSelected) {
+
                           setState(() {
                             isApiCalling = true;
                           });
@@ -116,23 +142,19 @@ class _AddBusinessState extends State<AddBusiness> {
                               businessAddressController.text,
                               addressTwoController.text,
                               addressThreeController.text,
-                              // _image?.path.toString(),
-                              _imageFiles[0].path.toString(),
-                              _imageFiles[1].path.toString(),
-                              _imageFiles[2].path.toString(),
-                              _imageFiles[3].path.toString(),
-                              _imageFiles[4].path.toString(),
+                              image1,
+                              image2,
+                              image3,
+                              image4,
+                              image5,
                               selectedSubCategoryId,
                             );
-                            print("image 1 ${_imageFiles[0].toString()}");
-                            print("image 2 ${_imageFiles[1].toString()}");
-                            print("image 3 ${_imageFiles[2].toString()}");
-                            print("image 4 ${_imageFiles[3].toString()}");
-                            print("image 5 ${_imageFiles[4].toString()}");
-                            print('add sub cat: ${selectedSubCategoryId}');
-                          } else {
-                            print(
-                                'inside the edit function --- ${sideDrawerController.myBusinessId}');
+                          }
+                          else {
+
+                            print('inside the edit function --- ${sideDrawerController.myBusinessId}');
+                            log("update time images :- $image1, $image2, $image3, $image4, $image5");
+
                             response = await api.updateBusinessDetails(
                                 businessNameController.text,
                                 selectedCategoryId,
@@ -148,12 +170,11 @@ class _AddBusinessState extends State<AddBusiness> {
                                 businessAddressController.text,
                                 addressTwoController.text,
                                 addressThreeController.text,
-                                // _image?.path.toString(),
-                                _imageFiles[0].path.toString(),
-                                _imageFiles[1].path.toString(),
-                                _imageFiles[2].path.toString(),
-                                _imageFiles[3].path.toString(),
-                                _imageFiles[4].path.toString(),
+                                image1,
+                                image2,
+                                image3,
+                                image4,
+                                image5,
                                 sideDrawerController.myBusinessId,
                                 selectedSubCategoryId);
                             if (response['status'] == 1) {
@@ -232,162 +253,278 @@ class _AddBusinessState extends State<AddBusiness> {
       getBusinessDetailData = response['result'];
     });
 
+    log("getBusiness Details Data :- $getBusinessDetailData");
+
     setState(() {
       isApiLoading = false;
     });
     if (response['status'] == 1) {
       print('status 1');
-      businessNameController.text =
-          getBusinessDetailData[0]['business_title'] ?? " ";
-      categoryDropdownController.text =
-          getBusinessDetailData[0]['category_name'] ?? " ";
-      businessKeywordController.text =
-          getBusinessDetailData[0]['keywords'] ?? " ";
+      businessNameController.text = getBusinessDetailData[0]['business_title'] ?? " ";
+      categoryDropdownController.text = getBusinessDetailData[0]['category_name'] ?? " ";
+      businessKeywordController.text = getBusinessDetailData[0]['keywords'] ?? " ";
       emailController.text = getBusinessDetailData[0]['email'] ?? " ";
       phoneController.text = getBusinessDetailData[0]['mobile'] ?? " ";
       postalCodeController.text = getBusinessDetailData[0]['zipcode'] ?? " ";
       websiteURL.text = getBusinessDetailData[0]['website'] ?? " ";
-      businessDescriptionController.text =
-          getBusinessDetailData[0]['business_description'] ?? " ";
-      stateDropdownController.text =
-          getBusinessDetailData[0]['state_name'] ?? " ";
-      cityDropdownController.text =
-          getBusinessDetailData[0]['city_name'] ?? " ";
-      businessAddressController.text =
-          getBusinessDetailData[0]['address'] ?? " ";
-      imageURL = getBusinessDetailData[0]['featured_image'] ?? "";
+      businessDescriptionController.text = getBusinessDetailData[0]['business_description'] ?? " ";
+      stateDropdownController.text = getBusinessDetailData[0]['state_name'] ?? " ";
+      cityDropdownController.text = getBusinessDetailData[0]['city_name'] ?? " ";
+      businessAddressController.text = getBusinessDetailData[0]['address'] ?? " ";
+      // imageURL = getBusinessDetailData[0]['featured_image'] ?? "";
       selectedStateId = getBusinessDetailData[0]['state_id'] ?? "";
       selectedCityId = getBusinessDetailData[0]['city_id'] ?? "";
       areaController.text = getBusinessDetailData[0]['area'] ?? "";
       addressTwoController.text = getBusinessDetailData[0]['address_2'] ?? "";
       addressThreeController.text = getBusinessDetailData[0]['address_3'] ?? "";
-      // subCategoryDropDownController.text =
-      //     getBusinessDetailData[0]['subcategory_name'];
-      final dio = Dio();
-      final directory = await getApplicationDocumentsDirectory();
-
-      if (getBusinessDetailData[0]['featured_image'] != "") {
-        print('get img 1 above');
-        _imageFiles[0] = File(getBusinessDetailData[0]['featured_image']);
-
-        print("get img 1 ${_imageFiles[0]!.path.toString()}");
-      }
-      if (getBusinessDetailData[0]['featured_image_2'] != "") {
-        _imageFiles[1] = File(getBusinessDetailData[0]['featured_image_2']);
-
-        print("get img 2 ${_imageFiles[1]!.path.toString()}");
-      }
-      if (getBusinessDetailData[0]['featured_image_3'] != "") {
-        _imageFiles[2] = File(getBusinessDetailData[0]['featured_image_3']);
-
-        print("get img 3 ${_imageFiles[2]!.path.toString()}");
-      }
-      if (getBusinessDetailData[0]['featured_image_4'] != "") {
-        _imageFiles[3] = File(getBusinessDetailData[0]['featured_image_4']);
-
-        print("get img 4 ${_imageFiles[3]!.path.toString()}");
-      }
-      if (getBusinessDetailData[0]['featured_image_5'] != "") {
-        _imageFiles[4] = File(getBusinessDetailData[0]['featured_image_5']);
-
-        print("get img 5 ${_imageFiles[4]!.path.toString()}");
-      }
-
-      print("total list length: ${_imageFiles.length}");
-
-      // Download image locally for getting the path
-
-      Future<void> downloadImages(_imageFiles) async {
-        final dio = Dio();
-        final directory = await getApplicationDocumentsDirectory();
-
-        for (int i = 0; i < _imageFiles.length; i++) {
-          try {
-            final fileName = "image_$i.jpg";
-            final filePath =
-                "${directory.path}/$fileName"; // Get the path as a String
-
-            // Download the image to the specified file path
-            await dio.download(_imageFiles[i].toString(), filePath);
-            print("Downloaded $fileName at $filePath");
-          } catch (e) {
-            print("Failed to download image at ${_imageFiles[i]}: $e");
-          }
-        }
-      }
-
-      downloadImages(_imageFiles);
-
-      print("sub cat text: ${subCategoryDropDownController}");
-
-      print('image url---- $imageURL');
+      subCategoryDropDownController.text = getBusinessDetailData[0]['subcategory_name'];
+      image1 = getBusinessDetailData[0]["featured_image"];
+      showSecondImgBox = true;
       imageSelected = true;
+      networkImage.add(image1);
+      if(getBusinessDetailData[0]["featured_image_2"] != null && getBusinessDetailData[0]["featured_image_2"] != "") {
+        image2 = getBusinessDetailData[0]["featured_image_2"];
+        showThirdImgBox = true;
+        networkImage.add(image2);
+      }
+      if(getBusinessDetailData[0]["featured_image_3"] != null && getBusinessDetailData[0]["featured_image_3"] != "") {
+        image3 = getBusinessDetailData[0]["featured_image_3"];
+        showFourthImgBox = true;
+        networkImage.add(image3);
+      }
+      if(getBusinessDetailData[0]["featured_image_4"] != null && getBusinessDetailData[0]["featured_image_4"] != "") {
+        image4 = getBusinessDetailData[0]["featured_image_4"];
+        showFifthImgBox = true;
+        networkImage.add(image4);
+      }
+      if(getBusinessDetailData[0]["featured_image_5"] != null && getBusinessDetailData[0]["featured_image_5"] != "") {
+        image5 = getBusinessDetailData[0]["featured_image_5"];
+        networkImage.add(image5);
+      }
+
+      downloadAllImage();
+      // final dio = Dio();
+      // final directory = await getApplicationDocumentsDirectory();
+      //
+      // if (getBusinessDetailData[0]['featured_image'] != "") {
+      //   print('get img 1 above');
+      //   _imageFiles[0] = File(getBusinessDetailData[0]['featured_image']);
+      //
+      //   print("get img 1 ${_imageFiles[0]!.path.toString()}");
+      // }
+      // if (getBusinessDetailData[0]['featured_image_2'] != "") {
+      //   _imageFiles[1] = File(getBusinessDetailData[0]['featured_image_2']);
+      //
+      //   print("get img 2 ${_imageFiles[1]!.path.toString()}");
+      // }
+      // if (getBusinessDetailData[0]['featured_image_3'] != "") {
+      //   _imageFiles[2] = File(getBusinessDetailData[0]['featured_image_3']);
+      //
+      //   print("get img 3 ${_imageFiles[2]!.path.toString()}");
+      // }
+      // if (getBusinessDetailData[0]['featured_image_4'] != "") {
+      //   _imageFiles[3] = File(getBusinessDetailData[0]['featured_image_4']);
+      //
+      //   print("get img 4 ${_imageFiles[3]!.path.toString()}");
+      // }
+      // if (getBusinessDetailData[0]['featured_image_5'] != "") {
+      //   _imageFiles[4] = File(getBusinessDetailData[0]['featured_image_5']);
+      //
+      //   print("get img 5 ${_imageFiles[4]!.path.toString()}");
+      // }
+      //
+      // print("total list length: ${_imageFiles.length}");
+      //
+      // // Download image locally for getting the path
+      //
+      // Future<void> downloadImages(_imageFiles) async {
+      //   final dio = Dio();
+      //   final directory = await getApplicationDocumentsDirectory();
+      //
+      //   for (int i = 0; i < _imageFiles.length; i++) {
+      //     try {
+      //       final fileName = "image_$i.jpg";
+      //       final filePath =
+      //           "${directory.path}/$fileName"; // Get the path as a String
+      //
+      //       // Download the image to the specified file path
+      //       await dio.download(_imageFiles[i].toString(), filePath);
+      //       print("Downloaded $fileName at $filePath");
+      //     } catch (e) {
+      //       print("Failed to download image at ${_imageFiles[i]}: $e");
+      //     }
+      //   }
+      // }
+      //
+      // downloadImages(_imageFiles);
+      //
+      // print("sub cat text: ${subCategoryDropDownController}");
+      //
+      // print('image url---- $imageURL');
+      // imageSelected = true;
     }
   }
 
-  String? selectedCategory, selectedSubCategory;
-  String? selectedCategoryId, selectedSubCategoryId;
-  String? selectedState;
-  String? selectedStateId;
-  String? selectedCity;
-  String? selectedCityId;
+  downloadAllImage() async {
 
-  final ImagePicker _picker = ImagePicker();
-  // List<File> _imageFiles = []; // To store selected images
-  List<File> _imageFiles = List<File>.filled(5, File(''), growable: false);
-  XFile? _image;
+    // log("downloadedImages list :- $networkImage, ${networkImage.length}");
+    //
+    // List temp = networkImage[0].toString().split("-");
+    // log("temp List filename :- ${temp.last}");
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController categoryDropdownController =
-      TextEditingController();
-  final TextEditingController stateDropdownController = TextEditingController();
-  final TextEditingController cityDropdownController = TextEditingController();
-  final TextEditingController subCategoryDropDownController =
-      TextEditingController();
+    late var appDocDir;
 
-  SuggestionsBoxController categorySuggestionBoxController =
-      SuggestionsBoxController();
-  SuggestionsBoxController stateSuggestionBoxController =
-      SuggestionsBoxController();
-  SuggestionsBoxController citySuggestionBoxController =
-      SuggestionsBoxController();
-  SuggestionsBoxController subCategorySuggestionBoxController =
-      SuggestionsBoxController();
-
-  bool imageSelected = false;
-
-  Future getImageFromGallery() async {
-    if (_imageFiles.length < 5) {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
-      setState(() {
-        _image = image;
-        imageSelected = true;
-        _imageFiles.add(File(_image!.path)); // Add picked image to list
-      });
-      // print('image path from gallery 1--- ${_image?.path}');
-      print('image path from gallery 1--- ${_imageFiles[0].path.toString()}');
-      print('image path from gallery 2--- ${_imageFiles[1].path.toString()}');
-      print('image path from gallery 3--- ${_imageFiles[2].path.toString()}');
-      print('image path from gallery 4--- ${_imageFiles[3].path.toString()}');
-      print('image path from gallery 5--- ${_imageFiles[4].path.toString()}');
-    } else {
-      helper.errorDialog(context, "Maximum 5 Images are allowed");
+    if(Platform.isAndroid){
+      appDocDir = await getExternalStorageDirectory();
+    } else if(Platform.isIOS) {
+      appDocDir = await getApplicationDocumentsDirectory();
     }
+
+    setState(() {
+      isImageDownloading = true;
+    });
+
+    for(int i = 0; i < networkImage.length; i++) {
+      List temp = networkImage[i].toString().split(".");
+      String fileExtension = temp.last;
+
+      String fileUrl = networkImage[i];
+      String savePath = "${appDocDir!.path}/image$i.$fileExtension";
+
+      log("save path :- $savePath");
+
+      await Dio().download(fileUrl, savePath,
+        onReceiveProgress: (count, total) {
+          log("${(count / total * 100).toStringAsFixed(0)}%");
+        });
+
+      // downloadedImages.add("${appDocDir!.path}/$fileName");
+      if(i == 0) {
+        image1 = "${appDocDir!.path}/image$i.$fileExtension";
+        log("image path 1 :- $image1");
+      } else if(i == 1) {
+        image2 = "${appDocDir!.path}/image$i.$fileExtension";
+        log("image path 2 :- $image2");
+      } else if(i == 2) {
+        image3 = "${appDocDir!.path}/image$i.$fileExtension";
+        log("image path 3 :- $image3");
+      } else if(i == 3) {
+        image4 = "${appDocDir!.path}/image$i.$fileExtension";
+        log("image path 4 :- $image4");
+      } else if(i == 4) {
+        image5 = "${appDocDir!.path}/image$i.$fileExtension";
+        log("image path 5 :- $image5");
+      }
+
+    }
+
+    setState(() {
+      isImageDownloading = false;
+    });
   }
 
-  Future getImageFromCamera() async {
-    if (_imageFiles.length < 5) {
-      final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+  Future getImageFromGallery(int from) async {
 
-      setState(() {
-        _image = image;
+    XFile? image;
+
+     if(from == 1) {
+       image = await _picker.pickImage(source: ImageSource.gallery);
+       if(image?.path != null) {
+         image1 = image!.path;
+         imageSelected = true;
+       }
+     } else if(from == 2) {
+       image = await _picker.pickImage(source: ImageSource.gallery);
+       if(image?.path != null) {
+         image2 = image!.path;
+       }
+     } else if(from == 3) {
+       image = await _picker.pickImage(source: ImageSource.gallery);
+       if(image?.path != null) {
+         image3 = image!.path;
+       }
+     } else if(from == 4) {
+       image = await _picker.pickImage(source: ImageSource.gallery);
+       if(image?.path != null) {
+         image4 = image!.path;
+       }
+     } else if(from == 5) {
+       image = await _picker.pickImage(source: ImageSource.gallery);
+       if(image?.path != null) {
+         image5 = image!.path;
+       }
+     }
+
+     log("images list :- $image1, $image2, $image3, $image4, $image5");
+
+     setState(() {});
+
+    // if (_imageFiles.length < 5) {
+    //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    //
+    //   setState(() {
+    //     _image = image;
+    //     imageSelected = true;
+    //     _imageFiles.add(File(_image!.path)); // Add picked image to list
+    //   });
+    //   // print('image path from gallery 1--- ${_image?.path}');
+    //   print('image path from gallery 1--- ${_imageFiles[0].path.toString()}');
+    //   print('image path from gallery 2--- ${_imageFiles[1].path.toString()}');
+    //   print('image path from gallery 3--- ${_imageFiles[2].path.toString()}');
+    //   print('image path from gallery 4--- ${_imageFiles[3].path.toString()}');
+    //   print('image path from gallery 5--- ${_imageFiles[4].path.toString()}');
+    // } else {
+    //   helper.errorDialog(context, "Maximum 5 Images are allowed");
+    // }
+  }
+
+  Future getImageFromCamera(int from) async {
+
+    XFile? image;
+
+    if(from == 1) {
+      image = await _picker.pickImage(source: ImageSource.camera);
+      if(image?.path != null) {
+        image1 = image!.path;
         imageSelected = true;
-        _imageFiles.add(File(_image!.path)); // Add picked image to list
-      });
-    } else {
-      helper.errorDialog(context, "Maximum 5 images are allowed");
+      }
+    } else if(from == 2) {
+      image = await _picker.pickImage(source: ImageSource.camera);
+      if(image?.path != null) {
+        image2 = image!.path;
+      }
+    } else if(from == 3) {
+      image = await _picker.pickImage(source: ImageSource.camera);
+      if(image?.path != null) {
+        image3 = image!.path;
+      }
+    } else if(from == 4) {
+      image = await _picker.pickImage(source: ImageSource.camera);
+      if(image?.path != null) {
+        image4 = image!.path;
+      }
+    } else if(from == 5) {
+      image = await _picker.pickImage(source: ImageSource.camera);
+      if(image?.path != null) {
+        image5 = image!.path;
+      }
     }
+
+    log("images list :- $image1, $image2, $image3, $image4, $image5");
+
+    setState(() {});
+
+    // if (_imageFiles.length < 5) {
+    //   final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    //
+    //   setState(() {
+    //     _image = image;
+    //     imageSelected = true;
+    //     _imageFiles.add(File(_image!.path)); // Add picked image to list
+    //   });
+    // } else {
+    //   helper.errorDialog(context, "Maximum 5 images are allowed");
+    // }
   }
 
   List<String> getCategorySuggestions(String query) {
@@ -474,12 +611,6 @@ class _AddBusinessState extends State<AddBusiness> {
     return cityMatches;
   }
 
-  final api = API();
-  List<dynamic> getCategoryItems = [];
-  List<dynamic> getStateItems = [];
-  List<dynamic> getCityItems = [];
-  List<dynamic> getSubCategoryItem = [];
-
   // category list api integration
   getCategoryList() async {
     setState(() {
@@ -560,7 +691,7 @@ class _AddBusinessState extends State<AddBusiness> {
       getBusinessDetail();
     } else {
       sideDrawerController.fromEditBusinessForm = "";
-      _imageFiles = [];
+      // _imageFiles = [];
     }
     print('my business id is---- ${sideDrawerController.myBusinessId}');
     print("from edit ${sideDrawerController.fromEditBusiness}");
@@ -717,13 +848,12 @@ class _AddBusinessState extends State<AddBusiness> {
                           onSuggestionSelected: (String suggestion) {
                             subCategoryDropDownController.text = suggestion;
 
-                            for (int i = 0;
-                                i < getSubCategoryItem.length;
-                                i++) {
-                              if (getSubCategoryItem[i]['category_name'] ==
-                                  suggestion) {
-                                selectedSubCategoryId =
-                                    getSubCategoryItem[i]['id'].toString();
+                            for (int i = 0; i < getSubCategoryItem.length; i++) {
+                              log("suggestion value :- $suggestion");
+                              log("getSubCategoryItem[i]['subcategory_name'] :- ${getSubCategoryItem[i]['subcategory_name']}");
+                              if (getSubCategoryItem[i]['subcategory_name'] == suggestion) {
+                                log("category name matched");
+                                selectedSubCategoryId = getSubCategoryItem[i]['id'].toString();
                               }
                             }
 
@@ -1042,148 +1172,320 @@ class _AddBusinessState extends State<AddBusiness> {
                         FontWeight.w400, Colors.black, TextAlign.start),
                   ),
 
-                  GestureDetector(
-                    onTap: () {
-                      if (imageURL != "") {
-                        setState(() {
-                          imageURL = "";
-                        });
-                      }
-                      // show modal bottom sheet
-
-                      showImageSelection();
-                    },
-                    // child: imageURL == " "
-                    //     ? Container(
-                    //         height: h * .200,
-                    //         width: w * .400,
-                    //         decoration: BoxDecoration(
-                    //           color: Colors.grey,
-                    //           borderRadius: BorderRadius.circular(8),
-                    //           image: DecorationImage(
-                    //             fit: BoxFit.fill,
-                    //             image: FileImage(
-                    //               File(_image?.path ?? ''),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         child: Center(
-                    //           child: _image == null
-                    //               ? const Icon(
-                    //                   size: 34,
-                    //                   Icons.add,
-                    //                   color: Colors.black,
-                    //                 )
-                    //               : Container(),
-                    //         ),
-                    //       )
-                    //     : Container(
-                    //         height: h * .200,
-                    //         width: w * .400,
-                    //         decoration: BoxDecoration(
-                    //           color: Colors.grey,
-                    //           borderRadius: BorderRadius.circular(8),
-                    //           image: DecorationImage(
-                    //             fit: BoxFit.fill,
-                    //             image: NetworkImage(
-                    //               imageURL,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         child: Center(
-                    //           child: imageURL == " "
-                    //               ? const Icon(
-                    //                   size: 34,
-                    //                   Icons.add,
-                    //                   color: Colors.black,
-                    //                 )
-                    //               : Container(),
-                    //         ),
-                    //       ),
-                    // child: Container(
-                    //   height: h * .200,
-                    //   width: w * .400,
-                    //   decoration: BoxDecoration(
-                    //       color: Colors.grey,
-                    //       borderRadius: BorderRadius.circular(8),
-                    //       image: DecorationImage(
-                    //           fit: BoxFit.fill,
-                    //           image: imageURL != ""
-                    //               ? NetworkImage(imageURL)
-                    //               : Image.file(File(_image?.path ?? ""))
-                    //                   .image)),
-                    // child: imageURL != ""
-                    //     ? const Center(
-                    //         child: Icon(
-                    //         size: 34,
-                    //         Icons.add,
-                    //         color: Colors.black,
-                    //       ))
-                    //     : const SizedBox(),
-                    // ),
-                    child: Column(
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
                       children: [
-                        Container(
-                          // color: Colors.red,
-                          height: 200,
-                          width: double.infinity,
-                          child: _imageFiles.isEmpty
-                              ? Container(
-                                  height: h * .200,
-                                  width: w * .400,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                          width: 1, color: Colors.grey)),
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.add,
-                                      size: 32,
-                                    ),
+                        image1 == null
+                        ? GestureDetector(
+                            child: Container(
+                              height: h * .200,
+                              width: w * .400,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                width: 1, color: Colors.grey)
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.add),
+                              ),
+                            ),
+                            onTap: () {
+                              showImageSelection(1);
+                              showSecondImgBox = true;
+                            },
+                          )
+                        : GestureDetector(
+                          child: Container(
+                              height: h * .200,
+                              width: w * .400,
+                              margin: const EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      width: 1, color: Colors.grey),
+                                image: DecorationImage(
+                                  image: image1!.contains("uploads/business")
+                                    ? NetworkImage(image1!) as ImageProvider
+                                    : FileImage(File(image1!)),
+                                  fit: BoxFit.cover
+                              ),
+                            )
+                          ),
+                          onTap: () {
+                            showImageSelection(1);
+                          },
+                        ),
+
+                        image2 == null
+                        ? Visibility(
+                            visible: showSecondImgBox,
+                            child: GestureDetector(
+                              child: Container(
+                                height: h * .200,
+                                width: w * .400,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    width: 1, color: Colors.grey)
+                                 ),
+                                child: const Center(
+                                  child: Icon(Icons.add),
+                                ),
+                              ),
+                            onTap: () {
+                              showImageSelection(2);
+                              showThirdImgBox = true;
+                              },
+                            ),
+                          )
+                        : Visibility(
+                            visible: showSecondImgBox,
+                            child: GestureDetector(
+                              child: Container(
+                                height: h * .200,
+                                width: w * .400,
+                                margin: const EdgeInsets.only(right: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    width: 1, color: Colors.grey),
+                                  image: DecorationImage(
+                                    image: image2!.contains("uploads/business")
+                                        ? NetworkImage(image2!) as ImageProvider
+                                        : FileImage(File(image2!)),
+                                    fit: BoxFit.cover
                                   ),
                                 )
-                              : ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: _imageFiles.length,
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      margin: const EdgeInsets.only(right: 10),
-                                      height: h * .200,
-                                      width: w * .400,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                          8,
-                                        ),
-                                      ),
-                                      child: _imageFiles.isEmpty
-                                          ? Image.file(
-                                              _imageFiles[index],
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Image.network(
-                                              fit: BoxFit.fill,
-                                              _imageFiles[index]
-                                                  .path
-                                                  .toString(),
-                                            ),
-                                    );
-                                  },
-                                ),
-                        ),
-                        SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            showImageSelection();
-                          }, // Trigger image picker on click
+                              ),
+                              onTap: () {
+                                showImageSelection(2);
+                              },
+                            ),
+                          ),
 
-                          child: Text("Add More images"),
+                        image3 == null
+                            ? Visibility(
+                          visible: showThirdImgBox,
+                          child: GestureDetector(
+                            child: Container(
+                              height: h * .200,
+                              width: w * .400,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      width: 1, color: Colors.grey)
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.add),
+                              ),
+                            ),
+                            onTap: () {
+                              showImageSelection(3);
+                              showFourthImgBox = true;
+                            },
+                          ),
+                        )
+                            : Visibility(
+                          visible: showThirdImgBox,
+                          child: GestureDetector(
+                            child: Container(
+                                height: h * .200,
+                                width: w * .400,
+                                margin: const EdgeInsets.only(right: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      width: 1, color: Colors.grey),
+                                  image: DecorationImage(
+                                    image: image3!.contains("uploads/business")
+                                        ? NetworkImage(image3!) as ImageProvider
+                                        : FileImage(File(image3!)),
+                                    // image: FileImage(File(image3!)),
+                                    fit: BoxFit.cover
+                                  ),
+                                )
+                            ),
+                            onTap: () {
+                              showImageSelection(3);
+                            },
+                          ),
                         ),
+
+                        image4 == null
+                            ? Visibility(
+                          visible: showFourthImgBox,
+                          child: GestureDetector(
+                            child: Container(
+                              height: h * .200,
+                              width: w * .400,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      width: 1, color: Colors.grey)
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.add),
+                              ),
+                            ),
+                            onTap: () {
+                              showImageSelection(4);
+                              showFifthImgBox = true;
+                            },
+                          ),
+                        )
+                            : Visibility(
+                          visible: showFourthImgBox,
+                          child: GestureDetector(
+                            child: Container(
+                                height: h * .200,
+                                width: w * .400,
+                                margin: const EdgeInsets.only(right: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      width: 1, color: Colors.grey),
+                                  image: DecorationImage(
+                                    // image: FileImage(File(image4!)),
+                                    image: image4!.contains("uploads/business")
+                                        ? NetworkImage(image4!) as ImageProvider
+                                        : FileImage(File(image4!)),
+                                    fit: BoxFit.cover
+                                  ),
+                                )
+                            ),
+                            onTap: () {
+                              showImageSelection(4);
+                            },
+                          ),
+                        ),
+
+                        image5 == null
+                            ? Visibility(
+                          visible: showFifthImgBox,
+                          child: GestureDetector(
+                            child: Container(
+                              height: h * .200,
+                              width: w * .400,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      width: 1, color: Colors.grey)
+                              ),
+                              child: const Center(
+                                child: Icon(Icons.add),
+                              ),
+                            ),
+                            onTap: () {
+                              showImageSelection(5);
+                              showFifthImgBox = true;
+                            },
+                          ),
+                        )
+                            : Visibility(
+                          visible: showFifthImgBox,
+                          child: GestureDetector(
+                            child: Container(
+                                height: h * .200,
+                                width: w * .400,
+                                margin: const EdgeInsets.only(right: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      width: 1, color: Colors.grey),
+                                  image: DecorationImage(
+                                    // image: FileImage(File(image5!)),
+                                    image: image5!.contains("uploads/business")
+                                        ? NetworkImage(image5!) as ImageProvider
+                                        : FileImage(File(image5!)),
+                                    fit: BoxFit.cover
+                                  ),
+                                )
+                            ),
+                            onTap: () {
+                              showImageSelection(5);
+                            },
+                          ),
+                        ),
+
                       ],
                     ),
                   ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     if (imageURL != "") {
+                  //       setState(() {
+                  //         imageURL = "";
+                  //       });
+                  //     }
+                  //     // show modal bottom sheet
+                  //
+                  //     showImageSelection();
+                  //   },
+                  //
+                  //   child: Column(
+                  //     children: [
+                  //       Container(
+                  //         // color: Colors.red,
+                  //         height: 200,
+                  //         width: double.infinity,
+                  //         child: _imageFiles.isEmpty
+                  //             ? Container(
+                  //                 height: h * .200,
+                  //                 width: w * .400,
+                  //                 decoration: BoxDecoration(
+                  //                     borderRadius: BorderRadius.circular(12),
+                  //                     border: Border.all(
+                  //                         width: 1, color: Colors.grey)),
+                  //                 child: const Center(
+                  //                   child: Icon(
+                  //                     Icons.add,
+                  //                     size: 32,
+                  //                   ),
+                  //                 ),
+                  //               )
+                  //             : ListView.builder(
+                  //                 scrollDirection: Axis.horizontal,
+                  //                 itemCount: _imageFiles.length,
+                  //                 itemBuilder: (context, index) {
+                  //                   return Container(
+                  //                     margin: const EdgeInsets.only(right: 10),
+                  //                     height: h * .200,
+                  //                     width: w * .400,
+                  //                     decoration: BoxDecoration(
+                  //                       border: Border.all(
+                  //                         color: Colors.grey,
+                  //                       ),
+                  //                       borderRadius: BorderRadius.circular(
+                  //                         8,
+                  //                       ),
+                  //                     ),
+                  //                     child: _imageFiles.isEmpty
+                  //                         ? Image.file(
+                  //                             _imageFiles[index],
+                  //                             fit: BoxFit.cover,
+                  //                           )
+                  //                         : Image.network(
+                  //                             fit: BoxFit.fill,
+                  //                             _imageFiles[index]
+                  //                                 .path
+                  //                                 .toString(),
+                  //                           ),
+                  //                   );
+                  //                 },
+                  //               ),
+                  //       ),
+                  //       SizedBox(height: 10),
+                  //       ElevatedButton(
+                  //         onPressed: () {
+                  //           showImageSelection();
+                  //         }, // Trigger image picker on click
+                  //
+                  //         child: Text("Add More images"),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
                   SizedBox(
                     height: size.width * 0.15,
@@ -1233,7 +1535,7 @@ class _AddBusinessState extends State<AddBusiness> {
             )));
   }
 
-  showImageSelection() {
+  showImageSelection(int from) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -1246,7 +1548,7 @@ class _AddBusinessState extends State<AddBusiness> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      getImageFromGallery();
+                      getImageFromGallery(from);
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -1269,7 +1571,7 @@ class _AddBusinessState extends State<AddBusiness> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      getImageFromCamera();
+                      getImageFromCamera(from);
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -1295,3 +1597,24 @@ class _AddBusinessState extends State<AddBusiness> {
         });
   }
 }
+
+
+
+// if(image1!.contains("uploads/business")) {
+//       image1 = downloadedImages[0];
+//     }
+//     if(image2!.contains("uploads/business")) {
+//       image2 = downloadedImages[1];
+//     }
+//     if(image3!.contains("uploads/business")) {
+//       image3 = downloadedImages[2];
+//     }
+//     if(image4!.contains("uploads/business")) {
+//       image4 = downloadedImages[3];
+//     }
+//     if(image5!.contains("uploads/business")) {
+//       image5 = downloadedImages[4];
+//     }
+
+
+
