@@ -32,7 +32,8 @@ class _UpdatedAdvertiseState extends State<UpdatedAdvertise> {
     if (nameController.text.isNotEmpty &&
         (!nameController.text.startsWith(" "))) {
       if (EmailValidator.validate(emailController.text)) {
-        if (phoneNoController.text.length == 10) {
+        if (phoneNoController.text.length >= 10 &&
+            phoneNoController.text.length <= 12) {
           if (msgController.text.isNotEmpty &&
               (!msgController.text.startsWith(" "))) {
             if (addressController.text.isNotEmpty &&
@@ -162,7 +163,7 @@ class _UpdatedAdvertiseState extends State<UpdatedAdvertise> {
                 ),
               ),
               child: TextField(
-                maxLength: 10,
+                maxLength: 12,
                 buildCounter: (BuildContext context,
                     {int? currentLength, int? maxLength, bool? isFocused}) {
                   return null;

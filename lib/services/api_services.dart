@@ -551,6 +551,8 @@ class API {
       String? subCategoryId) async {
     var url = '$baseUrl/user/update_business';
 
+    print("business  keywords: $businessKeyword");
+
     var request = http.MultipartRequest(
       "POST",
       Uri.parse(url),
@@ -601,7 +603,7 @@ class API {
 
     var response = await http.Response.fromStream(streamedResponse);
     final responseData = json.decode(response.body);
-
+    print("selelcted sub category id: ${subCategoryId}");
     log("edit business response in api :- $responseData");
     print("business id in update--- $businessId"); // 29
 

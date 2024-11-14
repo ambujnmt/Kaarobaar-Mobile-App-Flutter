@@ -233,9 +233,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   width: size.width,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: popularCommunitiesList.length >= 4
-                        ? 4
-                        : popularCommunitiesList.length,
+                    // itemCount: popularCommunitiesList.length >= 4
+                    //     ? 4
+                    //     : popularCommunitiesList.length,
+                    itemCount: popularCommunitiesList.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {

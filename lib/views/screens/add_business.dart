@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:advanced_chips_input/advanced_chips_input.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
@@ -27,6 +28,10 @@ class _AddBusinessState extends State<AddBusiness> {
   // String imageURL = ""; // image url
   // List<File> _imageFiles = List<File>.filled(5, File(''), growable: false);
   // XFile? _image;
+
+  TextEditingController tagController = TextEditingController();
+  List<String> valuesList = [];
+  String result = "";
 
   dynamic size;
   final customText = CustomText(), helper = Helper(), api = API();
@@ -57,6 +62,7 @@ class _AddBusinessState extends State<AddBusiness> {
       selectedStateId,
       selectedCity,
       selectedCityId;
+  String tagValues = "";
 
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
@@ -121,10 +127,10 @@ class _AddBusinessState extends State<AddBusiness> {
         (!businessNameController.text.startsWith(" "))) {
       if (categoryDropdownController.text.isNotEmpty &&
           !categoryDropdownController.text.startsWith(" ")) {
-        if (businessKeywordController.text.isNotEmpty &&
-            !businessKeywordController.text.startsWith(" ")) {
+        if (result.isNotEmpty) {
           if (EmailValidator.validate(emailController.text)) {
-            if (phoneController.text.length == 10) {
+            if (phoneController.text.length >= 10 &&
+                phoneController.text.length <= 12) {
               if (businessDescriptionController.text.isNotEmpty &&
                   (!businessDescriptionController.text.startsWith(" "))) {
                 if (stateDropdownController.text.isNotEmpty &&
@@ -146,7 +152,8 @@ class _AddBusinessState extends State<AddBusiness> {
                             response = await api.addBusiness(
                               businessNameController.text,
                               selectedCategoryId,
-                              businessKeywordController.text,
+                              // businessKeywordController.text,
+                              result,
                               emailController.text,
                               phoneController.text,
                               postalCodeController.text,
@@ -165,6 +172,9 @@ class _AddBusinessState extends State<AddBusiness> {
                               image5,
                               selectedSubCategoryId,
                             );
+                            if (response['status'] == 1) {
+                              _showAlertDialog(context);
+                            }
                           } else {
                             print(
                                 'inside the edit function --- ${sideDrawerController.myBusinessId}');
@@ -173,7 +183,8 @@ class _AddBusinessState extends State<AddBusiness> {
                             response = await api.updateBusinessDetails(
                                 businessNameController.text,
                                 selectedCategoryId,
-                                businessKeywordController.text,
+                                // businessKeywordController.text,
+                                result,
                                 emailController.text,
                                 phoneController.text,
                                 postalCodeController.text,
@@ -194,6 +205,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                 selectedSubCategoryId);
                             if (response['status'] == 1) {
                               sideDrawerController.myBusinessId = "";
+                              _showAlertDialog(context);
                             }
                           }
 
@@ -239,8 +251,7 @@ class _AddBusinessState extends State<AddBusiness> {
                     context, "Please enter business description");
               }
             } else {
-              helper.errorDialog(
-                  context, "Please enter valid 10 digit phone number");
+              helper.errorDialog(context, "Please enter valid phone number");
             }
           } else {
             helper.errorDialog(context, "Please enter valid email address");
@@ -279,8 +290,9 @@ class _AddBusinessState extends State<AddBusiness> {
           getBusinessDetailData[0]['business_title'] ?? " ";
       categoryDropdownController.text =
           getBusinessDetailData[0]['category_name'] ?? " ";
-      businessKeywordController.text =
-          getBusinessDetailData[0]['keywords'] ?? " ";
+      // businessKeywordController.text =
+      //     getBusinessDetailData[0]['keywords'] ?? " ";
+      result = getBusinessDetailData[0]['keywords'] ?? " ";
       emailController.text = getBusinessDetailData[0]['email'] ?? " ";
       phoneController.text = getBusinessDetailData[0]['mobile'] ?? " ";
       postalCodeController.text = getBusinessDetailData[0]['zipcode'] ?? " ";
@@ -296,6 +308,7 @@ class _AddBusinessState extends State<AddBusiness> {
       // imageURL = getBusinessDetailData[0]['featured_image'] ?? "";
       selectedStateId = getBusinessDetailData[0]['state_id'] ?? "";
       selectedCityId = getBusinessDetailData[0]['city_id'] ?? "";
+      selectedSubCategoryId = getBusinessDetailData[0]['subcategory_id'] ?? "";
       areaController.text = getBusinessDetailData[0]['area'] ?? "";
       addressTwoController.text = getBusinessDetailData[0]['address_2'] ?? "";
       addressThreeController.text = getBusinessDetailData[0]['address_3'] ?? "";
@@ -328,6 +341,9 @@ class _AddBusinessState extends State<AddBusiness> {
         image5 = getBusinessDetailData[0]["featured_image_5"];
         networkImage.add(image5);
       }
+
+      valuesList = result.split(',').map((item) => item.trim()).toList();
+      print('values List: ${valuesList}');
 
       downloadAllImage();
       // final dio = Dio();
@@ -704,6 +720,64 @@ class _AddBusinessState extends State<AddBusiness> {
     print('get city response list ----$getCityItems');
   }
 
+  // Function to show an alert dialog
+  void _showAlertDialog(BuildContext context) {
+    final double h = MediaQuery.of(context).size.height;
+    final double w = MediaQuery.of(context).size.width;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: const Text(''),
+          content: Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: const Text(
+              'Admin approval is pending. Once it is approved will be visible to all',
+              style: TextStyle(
+                fontFamily: 'Raleway',
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Container(
+                height: h * .030,
+                width: w * .2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  gradient: const RadialGradient(
+                    center: Alignment(0.19, -0.9),
+                    colors: [
+                      ColorConstants.kGradientDarkGreen,
+                      ColorConstants.kGradientLightGreen
+                    ],
+                    radius: 4.0,
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                      fontFamily: 'Raleway',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -902,17 +976,149 @@ class _AddBusinessState extends State<AddBusiness> {
                   SizedBox(
                     height: size.width * 0.05,
                   ),
-                  TextField(
-                    keyboardType: TextInputType.emailAddress,
+                  // TextField(
+                  //   keyboardType: TextInputType.emailAddress,
+                  //   textInputAction: TextInputAction.next,
+                  //   controller: businessKeywordController,
+                  //   decoration: InputDecoration(
+                  //     hintText: "Business Keywords",
+                  //     hintStyle: customText.kTextStyle(
+                  //         16, FontWeight.w400, ColorConstants.kIconsGrey),
+                  //     // prefixIcon: const Icon(Icons.email, color: ColorConstants.kIconsGrey, size: 35,),
+                  //   ),
+                  // ),
+                  // chips
+                  TextFormField(
                     textInputAction: TextInputAction.next,
-                    controller: businessKeywordController,
+                    controller: tagController,
                     decoration: InputDecoration(
-                      hintText: "Business Keywords",
-                      hintStyle: customText.kTextStyle(
-                          16, FontWeight.w400, ColorConstants.kIconsGrey),
-                      // prefixIcon: const Icon(Icons.email, color: ColorConstants.kIconsGrey, size: 35,),
+                        hintText: "Business Keywords",
+                        hintStyle: customText.kTextStyle(
+                            16, FontWeight.w400, ColorConstants.kIconsGrey)),
+                    onFieldSubmitted: (value) {
+                      print('on field submitted');
+                      valuesList.add(tagController.text);
+                      setState(() {
+                        tagController.text = "";
+                      });
+                      print("list values -- ${valuesList}");
+                      result = valuesList.join(" ,");
+                      print('result -- ${result}');
+                    },
+                  ),
+                  Visibility(
+                    visible: valuesList.isNotEmpty,
+                    child: Container(
+                      child: Wrap(
+                        direction: Axis.horizontal,
+
+                        spacing: 8.0, // gap between adjacent chips
+                        runSpacing: 4.0, // gap between lines
+                        children: List.generate(
+                            valuesList.length,
+                            (index) => valuesList[index].isNotEmpty
+                                ? Container(
+                                    padding: EdgeInsets.all(5),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "${valuesList[index]}",
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            // fontFamily: "Raleway",
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              valuesList[index] = "";
+                                              valuesList = result
+                                                  .split(',')
+                                                  .map((item) => item.trim())
+                                                  .toList(); // convert string to list
+                                              valuesList.removeAt(index);
+                                              //
+                                              result = valuesList.join(
+                                                  " ,"); // convert list to string
+                                              print('result -- ${result}');
+                                            });
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.all(2),
+                                            decoration: const BoxDecoration(
+                                              color: Colors.black,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: const Icon(
+                                              Icons.clear,
+                                              color: Colors.white,
+                                              size: 18,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox(
+                                    height: 0,
+                                  )),
+                      ),
                     ),
                   ),
+
+                  // Container(
+                  //   child: AdvancedChipsInput(
+                  //     paddingInsideWidgetContainer: EdgeInsets.all(0),
+                  //     textFormFieldStyle: TextFormFieldStyle(
+                  //       decoration: InputDecoration(
+                  //         hintText: "Business Keywords",
+                  //         hintStyle: customText.kTextStyle(
+                  //             16, FontWeight.w400, ColorConstants.kIconsGrey),
+                  //         enabledBorder: UnderlineInputBorder(
+                  //             borderSide:
+                  //                 BorderSide(color: Colors.grey.shade800)),
+                  //         focusedBorder: UnderlineInputBorder(
+                  //             borderSide:
+                  //                 BorderSide(color: Colors.grey.shade800)),
+                  //       ),
+                  //     ),
+                  //     controller: tagController,
+                  //     deleteIcon: Container(
+                  //       margin: const EdgeInsets.only(left: 10),
+                  //       decoration: const BoxDecoration(
+                  //           color: Colors.black, shape: BoxShape.circle),
+                  //       child: const Center(
+                  //         child: Icon(
+                  //           Icons.clear,
+                  //           color: Colors.white,
+                  //           size: 22,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     separatorCharacter: ' ',
+                  //     placeChipsSectionAbove: true,
+                  //     chipContainerDecoration: BoxDecoration(
+                  //       color: Colors.grey.shade400,
+                  //       borderRadius:
+                  //           const BorderRadius.all(Radius.circular(12)),
+                  //     ),
+                  //     chipTextStyle: const TextStyle(color: Colors.black),
+                  //     validateInput: true,
+                  //     onChipDeleted: (chipText, index) {
+                  //       print('Deleted chip: $chipText at index $index');
+                  //     },
+
+                  //     onSubmitted: (value) {
+                  //       print('on submitted');
+                  //       print('values are --- $value');
+                  //       tagValues = value;
+                  //     },
+                  //   ),
+                  // ),
+
                   SizedBox(
                     height: size.width * 0.05,
                   ),
@@ -935,7 +1141,7 @@ class _AddBusinessState extends State<AddBusiness> {
                         {int? currentLength, int? maxLength, bool? isFocused}) {
                       return null;
                     },
-                    maxLength: 10,
+                    maxLength: 12,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     controller: phoneController,
@@ -1554,7 +1760,10 @@ class _AddBusinessState extends State<AddBusiness> {
                       ),
                     ),
                     onTap: () {
+                      print("result: $result");
                       addBusiness();
+                      print(
+                          "selected sub category id: ${selectedSubCategoryId}");
                     },
                   )
                 ],
@@ -1625,8 +1834,6 @@ class _AddBusinessState extends State<AddBusiness> {
   }
 }
 
-
-
 // if(image1!.contains("uploads/business")) {
 //       image1 = downloadedImages[0];
 //     }
@@ -1642,6 +1849,3 @@ class _AddBusinessState extends State<AddBusiness> {
 //     if(image5!.contains("uploads/business")) {
 //       image5 = downloadedImages[4];
 //     }
-
-
-

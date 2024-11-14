@@ -102,7 +102,8 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
             if (qualificationController.text.isNotEmpty &&
                 (!qualificationController.text.startsWith(" "))) {
               if (EmailValidator.validate(emailController.text)) {
-                if (mobileController.text.length == 10) {
+                if (mobileController.text.length >= 10 &&
+                    mobileController.text.length <= 12) {
                   if (salaryController.text.isNotEmpty &&
                       (!salaryController.text.startsWith(" "))) {
                     if (vacancyControlller.text.isNotEmpty &&
@@ -169,7 +170,7 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
                     helper.errorDialog(context, "Please enter salary");
                   }
                 } else {
-                  helper.errorDialog(context, "Please enter mobile");
+                  helper.errorDialog(context, "Please enter valid mobile");
                 }
               } else {
                 helper.errorDialog(context, "Please enter email");
@@ -375,7 +376,7 @@ class _AddEditMyJobState extends State<AddEditMyJob> {
                 height: size.width * 0.05,
               ),
               TextField(
-                maxLength: 10,
+                maxLength: 12,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.words,

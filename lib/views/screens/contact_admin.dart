@@ -32,7 +32,8 @@ class _ContactAdminState extends State<ContactAdmin> {
     if (nameController.text.isNotEmpty &&
         (!nameController.text.startsWith(" "))) {
       if (EmailValidator.validate(emailController.text)) {
-        if (phoneNoController.text.length == 10) {
+        if (phoneNoController.text.length >= 10 &&
+            phoneNoController.text.length <= 12) {
           if (msgController.text.isNotEmpty &&
               (!msgController.text.startsWith(" "))) {
             if (addressController.text.isNotEmpty &&
@@ -67,7 +68,7 @@ class _ContactAdminState extends State<ContactAdmin> {
             helper.errorDialog(context, "Please enter description");
           }
         } else {
-          helper.errorDialog(context, "Please enter contact number");
+          helper.errorDialog(context, "Please enter valid contact number");
         }
       } else {
         helper.errorDialog(context, "Please enter valid email");
@@ -162,7 +163,7 @@ class _ContactAdminState extends State<ContactAdmin> {
                 ),
               ),
               child: TextField(
-                maxLength: 10,
+                maxLength: 12,
                 buildCounter: (BuildContext context,
                     {int? currentLength, int? maxLength, bool? isFocused}) {
                   return null;

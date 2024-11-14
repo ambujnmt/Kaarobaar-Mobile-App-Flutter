@@ -58,11 +58,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               isApiCalling = true;
             });
 
-            final response = await api.register(
-                nameController.text,
-                emailController.text,
-                passwordController.text,
-                _selectedValue.toString());
+            final response = await api.register(nameController.text,
+                emailController.text, passwordController.text, "1"
+                // _selectedValue.toString(),
+                );
 
             setState(() {
               isApiCalling = false;
@@ -258,74 +257,74 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(
                       height: size.width * 0.03,
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 10),
-                      child: customText.kText(
-                          maxLines: 2,
-                          "Are you registering as a business or the individuals ?",
-                          18,
-                          FontWeight.w400,
-                          Colors.black,
-                          TextAlign.left),
-                    ),
+                    // Container(
+                    //   margin: const EdgeInsets.only(left: 10),
+                    //   child: customText.kText(
+                    //       maxLines: 2,
+                    //       "Are you registering as a business or the individuals ?",
+                    //       18,
+                    //       FontWeight.w400,
+                    //       Colors.black,
+                    //       TextAlign.left),
+                    // ),
 
                     // Radio
-                    Container(
-                      height: 50,
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: RadioListTile(
-                                activeColor: ColorConstants.kGradientDarkGreen,
-                                contentPadding: EdgeInsets.all(0),
-                                title: customText.kText(
-                                    "Individual",
-                                    16,
-                                    FontWeight.w400,
-                                    Colors.black,
-                                    TextAlign.left),
-                                value: 1,
-                                groupValue: _selectedValue,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedValue = value!;
-                                  });
-                                  print('selected value-----${_selectedValue}');
-                                },
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: RadioListTile(
-                                contentPadding: EdgeInsets.only(left: 0),
-                                activeColor: ColorConstants.kGradientDarkGreen,
-                                title: customText.kText(
-                                    "Business",
-                                    16,
-                                    FontWeight.w400,
-                                    Colors.black,
-                                    TextAlign.left),
-                                value: 2,
-                                groupValue: _selectedValue,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedValue = value!;
-                                  });
-                                  print('selected value-----${_selectedValue}');
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Container(
+                    //   height: 50,
+                    //   width: double.infinity,
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Expanded(
+                    //         flex: 1,
+                    //         child: Container(
+                    //           child: RadioListTile(
+                    //             activeColor: ColorConstants.kGradientDarkGreen,
+                    //             contentPadding: EdgeInsets.all(0),
+                    //             title: customText.kText(
+                    //                 "Individual",
+                    //                 16,
+                    //                 FontWeight.w400,
+                    //                 Colors.black,
+                    //                 TextAlign.left),
+                    //             value: 1,
+                    //             groupValue: _selectedValue,
+                    //             onChanged: (value) {
+                    //               setState(() {
+                    //                 _selectedValue = value!;
+                    //               });
+                    //               print('selected value-----${_selectedValue}');
+                    //             },
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       Expanded(
+                    //         flex: 1,
+                    //         child: Container(
+                    //           child: RadioListTile(
+                    //             contentPadding: EdgeInsets.only(left: 0),
+                    //             activeColor: ColorConstants.kGradientDarkGreen,
+                    //             title: customText.kText(
+                    //                 "Business",
+                    //                 16,
+                    //                 FontWeight.w400,
+                    //                 Colors.black,
+                    //                 TextAlign.left),
+                    //             value: 2,
+                    //             groupValue: _selectedValue,
+                    //             onChanged: (value) {
+                    //               setState(() {
+                    //                 _selectedValue = value!;
+                    //               });
+                    //               print('selected value-----${_selectedValue}');
+                    //             },
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
 
                     SizedBox(
                       // height: size.width * 0.25,

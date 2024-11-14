@@ -409,18 +409,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     //     scaffoldKey.currentState!.closeEndDrawer();
                     //   },
                     // ),
-                    GestureDetector(
-                      child: Container(
-                        height: size.height * 0.05,
-                        child: customText.kText("Jobs", 22, FontWeight.w700,
-                            Colors.black, TextAlign.start),
-                      ),
-                      onTap: () {
-                        sideDrawerController.pageIndex.value = 24;
-                        sideDrawerController.pageController.jumpToPage(24);
-                        scaffoldKey.currentState!.closeEndDrawer();
-                      },
-                    ),
+
                     // GestureDetector(
                     //   child: SizedBox(
                     //     height: size.height * 0.05,
@@ -442,6 +431,42 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       onTap: () {
                         sideDrawerController.pageIndex.value = 15;
                         sideDrawerController.pageController.jumpToPage(15);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
+                    ),
+                    GestureDetector(
+                      child: Container(
+                        height: size.height * 0.05,
+                        child: customText.kText("Jobs", 22, FontWeight.w700,
+                            Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 24;
+                        sideDrawerController.pageController.jumpToPage(24);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
+                    ),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("About Us", 22, FontWeight.w700,
+                            Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 6;
+                        sideDrawerController.pageController.jumpToPage(6);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
+                    ),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Blogs", 22, FontWeight.w700,
+                            Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 8;
+                        sideDrawerController.pageController.jumpToPage(8);
                         scaffoldKey.currentState!.closeEndDrawer();
                       },
                     ),
@@ -481,18 +506,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     //     scaffoldKey.currentState!.closeEndDrawer();
                     //   },
                     // ),
-                    GestureDetector(
-                      child: SizedBox(
-                        height: size.height * 0.05,
-                        child: customText.kText("About Us", 22, FontWeight.w700,
-                            Colors.black, TextAlign.start),
-                      ),
-                      onTap: () {
-                        sideDrawerController.pageIndex.value = 6;
-                        sideDrawerController.pageController.jumpToPage(6);
-                        scaffoldKey.currentState!.closeEndDrawer();
-                      },
-                    ),
+
                     GestureDetector(
                       child: SizedBox(
                         height: size.height * 0.05,
@@ -505,18 +519,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                         scaffoldKey.currentState!.closeEndDrawer();
                       },
                     ),
-                    GestureDetector(
-                      child: SizedBox(
-                        height: size.height * 0.05,
-                        child: customText.kText("Blogs", 22, FontWeight.w700,
-                            Colors.black, TextAlign.start),
-                      ),
-                      onTap: () {
-                        sideDrawerController.pageIndex.value = 8;
-                        sideDrawerController.pageController.jumpToPage(8);
-                        scaffoldKey.currentState!.closeEndDrawer();
-                      },
-                    ),
+
                     GestureDetector(
                       child: SizedBox(
                         height: size.height * 0.05,
