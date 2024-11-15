@@ -21,7 +21,16 @@ class API {
   }
 
   // user registration api
-  register(String name, String email, String password, String userType) async {
+  register(
+    String name,
+    String email,
+    String password,
+    String userType,
+    String phoneNumber,
+    String state,
+    String city,
+    String area,
+  ) async {
     var url = "$baseUrl/auth/userRegistration";
 
     Map<String, dynamic> body = {
@@ -30,7 +39,11 @@ class API {
       "email": email,
       "password": password,
       "confirm_password": password,
-      "user_type": userType
+      "user_type": userType,
+      "mobile": phoneNumber,
+      "state_id": state,
+      "city_id": city,
+      "area": area,
     };
 
     http.Response response = await http.post(Uri.parse(url), body: body);

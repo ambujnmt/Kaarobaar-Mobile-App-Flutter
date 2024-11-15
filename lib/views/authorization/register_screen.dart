@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:drop_down_search_field/drop_down_search_field.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -26,21 +27,113 @@ class _RegisterScreenState extends State<RegisterScreen> {
       box = GetStorage();
   double systemBarSpace = 0;
   bool hidePass = true, hideConfirmPass = true, isApiCalling = false;
+  bool cityCalling = false;
+
+  List<dynamic> getStateItems = [];
+  List<dynamic> getCityItems = [];
+
+  String? selectedState, selectedStateId, selectedCity, selectedCityId;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController stateDropdownController = TextEditingController();
+  TextEditingController cityDropdownController = TextEditingController();
+  TextEditingController areaController = TextEditingController();
 
   LoginController loginController = Get.put(LoginController());
+  SuggestionsBoxController stateSuggestionBoxController =
+      SuggestionsBoxController();
+  SuggestionsBoxController citySuggestionBoxController =
+      SuggestionsBoxController();
 
   // Create a variable to store the selected value
   int _selectedValue = 1;
   String selected = "";
 
+  // state list api integration
+  getStateList() async {
+    setState(() {
+      isApiCalling = true;
+    });
+    final response = await api.stateList();
+    setState(() {
+      getStateItems = response['result'];
+    });
+    setState(() {
+      isApiCalling = false;
+    });
+
+    print('get state response list ----$getStateItems');
+  }
+
+  // city list api integration
+  getCityList(String stateId) async {
+    print("selected state Id :- $selectedStateId, $stateId}");
+
+    setState(() {
+      // isApiCalling = true;
+      cityCalling = true;
+    });
+    final response = await api.cityList(selectedStateId.toString()); //3805
+    setState(() {
+      getCityItems = response['result'];
+    });
+    setState(() {
+      // isApiCalling = false;
+      cityCalling = false;
+    });
+
+    print('get city response list ----$getCityItems');
+  }
+
+  List<String> getStateSuggestions(String query) {
+    print("get state suggestions");
+
+    List<String> stateMatches = <String>[];
+    final List<String> stateList =
+        getStateItems.map((element) => element['name'].toString()).toList();
+    stateMatches.addAll(stateList);
+
+    for (int i = 0; i < getStateItems.length; i++) {
+      if (getStateItems[i]['name'] == selectedState) {
+        setState(() {
+          selectedStateId = getStateItems[i]['id'].toString();
+        });
+      }
+    }
+
+    print("selectedState Id :-$selectedStateId");
+    stateMatches
+        .retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
+    return stateMatches;
+  }
+
+  List<String> getCitySuggestions(String query) {
+    List<String> cityMatches = <String>[];
+    final List<String> cityList =
+        getCityItems.map((element) => element['name'].toString()).toList();
+    cityMatches.addAll(cityList);
+
+    for (int i = 0; i < getCityItems.length; i++) {
+      if (getCityItems[i]['name'] == selectedCity) {
+        setState(() {
+          selectedCityId = getCityItems[i]['id'].toString();
+        });
+      }
+    }
+
+    cityMatches
+        .retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
+    return cityMatches;
+  }
+
   @override
   void initState() {
     super.initState();
+    getStateList();
     if (Platform.isAndroid) {
       systemBarSpace = 1.5;
     } else if (Platform.isIOS) {
@@ -49,33 +142,68 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   register() async {
+    for (int i = 0; i < getCityItems.length; i++) {
+      if (getCityItems[i]['name'] == cityDropdownController.text) {
+        setState(() {
+          selectedCityId = getCityItems[i]['id'].toString();
+        });
+      }
+    }
     if (nameController.text.isNotEmpty) {
       if (EmailValidator.validate(emailController.text)) {
         if (passwordController.text.length >= 8 &&
             (!passwordController.text.contains(" "))) {
           if (passwordController.text == confirmPasswordController.text) {
-            setState(() {
-              isApiCalling = true;
-            });
+            if (phoneController.text.length >= 10 &&
+                phoneController.text.length <= 12) {
+              if (stateDropdownController.text.isNotEmpty &&
+                  !stateDropdownController.text.startsWith(" ")) {
+                if (cityDropdownController.text.isNotEmpty &&
+                    !cityDropdownController.text.startsWith(" ")) {
+                  if (areaController.text.isNotEmpty &&
+                      !areaController.text.startsWith(" ")) {
+                    setState(() {
+                      isApiCalling = true;
+                    });
 
-            final response = await api.register(nameController.text,
-                emailController.text, passwordController.text, "1"
-                // _selectedValue.toString(),
-                );
+                    final response = await api.register(
+                        nameController.text,
+                        emailController.text,
+                        passwordController.text,
+                        "1",
+                        phoneController.text,
+                        selectedStateId.toString(),
+                        selectedCityId.toString(),
+                        areaController.text
+                        // _selectedValue.toString(),
+                        );
 
-            setState(() {
-              isApiCalling = false;
-            });
+                    setState(() {
+                      isApiCalling = false;
+                    });
 
-            if (response["status"] == 1) {
-              helper.successDialog(context, response["message"]);
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => OTPScreen(
-                          email: emailController.text, from: "register")));
+                    if (response["status"] == 1) {
+                      helper.successDialog(context, response["message"]);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OTPScreen(
+                                  email: emailController.text,
+                                  from: "register")));
+                    } else {
+                      helper.errorDialog(context, response["message"]);
+                    }
+                  } else {
+                    helper.errorDialog(context, "Please enter area");
+                  }
+                } else {
+                  helper.errorDialog(context, "Please select city");
+                }
+              } else {
+                helper.errorDialog(context, "Please select county");
+              }
             } else {
-              helper.errorDialog(context, response["message"]);
+              helper.errorDialog(context, "Please enter valid phone number");
             }
           } else {
             helper.errorDialog(
@@ -203,12 +331,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             child: hidePass
                                 ? const Icon(
                                     Icons.visibility_off_outlined,
-                                    size: 35,
+                                    size: 28,
                                     color: ColorConstants.kIconsGrey,
                                   )
                                 : const Icon(
                                     Icons.visibility_outlined,
-                                    size: 35,
+                                    size: 28,
                                     color: ColorConstants.kIconsGrey,
                                   ),
                             onTap: () {
@@ -239,12 +367,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             child: hideConfirmPass
                                 ? const Icon(
                                     Icons.visibility_off_outlined,
-                                    size: 35,
+                                    size: 28,
                                     color: ColorConstants.kIconsGrey,
                                   )
                                 : const Icon(
                                     Icons.visibility_outlined,
-                                    size: 35,
+                                    size: 28,
                                     color: ColorConstants.kIconsGrey,
                                   ),
                             onTap: () {
@@ -252,6 +380,183 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 hideConfirmPass = !hideConfirmPass;
                               });
                             },
+                          )),
+                    ),
+                    SizedBox(
+                      height: size.width * 0.03,
+                    ),
+                    TextField(
+                      buildCounter: (BuildContext context,
+                          {int? currentLength,
+                          int? maxLength,
+                          bool? isFocused}) {
+                        return null;
+                      },
+                      maxLength: 12,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      controller: phoneController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                        hintText: "Contact Number",
+                        hintStyle: customText.kTextStyle(
+                            16, FontWeight.w400, ColorConstants.kIconsGrey),
+                        prefixIcon: const Icon(
+                          Icons.phone,
+                          color: ColorConstants.kIconsGrey,
+                          size: 35,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.width * 0.03,
+                    ),
+                    DropDownSearchFormField(
+                      textFieldConfiguration: TextFieldConfiguration(
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(
+                            Icons.home,
+                            color: ColorConstants.kIconsGrey,
+                            size: 35,
+                          ),
+                          enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromRGBO(112, 112, 112, 1),
+                            ),
+                          ),
+                          border: const UnderlineInputBorder(
+                            borderSide: BorderSide(),
+                          ),
+                          hintText: 'Select County',
+                          hintStyle: customText.kTextStyle(
+                              16, FontWeight.w400, ColorConstants.kIconsGrey),
+                        ),
+                        controller: stateDropdownController,
+                      ),
+                      suggestionsCallback: (pattern) {
+                        return getStateSuggestions(pattern);
+                      },
+                      itemBuilder: (context, String suggestion) {
+                        return ListTile(
+                          title: Text(suggestion),
+                        );
+                      },
+                      itemSeparatorBuilder: (context, index) {
+                        return const Divider();
+                      },
+                      transitionBuilder: (context, suggestionsBox, controller) {
+                        print("transition builder of state");
+                        return suggestionsBox;
+                      },
+                      onSuggestionSelected: (String suggestion) {
+                        stateDropdownController.text = suggestion;
+                        print(
+                            "stateController :- ${stateDropdownController.text}");
+
+                        for (int i = 0; i < getStateItems.length; i++) {
+                          if (getStateItems[i]['name'] ==
+                              stateDropdownController.text) {
+                            setState(() {
+                              selectedStateId =
+                                  getStateItems[i]['id'].toString();
+                            });
+                          }
+                        }
+
+                        print("selected State Id :- $selectedStateId");
+
+                        getCityList(selectedStateId!);
+                      },
+                      suggestionsBoxController: stateSuggestionBoxController,
+                      validator: (value) =>
+                          value!.isEmpty ? 'Please select a state' : null,
+                      onSaved: (value) {
+                        selectedState = value;
+                      },
+                      displayAllSuggestionWhenTap: true,
+                    ),
+                    SizedBox(
+                      height: size.width * 0.03,
+                    ),
+                    // city dropdown
+                    cityCalling
+                        ? SizedBox(
+                            height: size.width * 0.12,
+                            width: size.width,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ))
+                        : DropDownSearchFormField(
+                            textFieldConfiguration: TextFieldConfiguration(
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(
+                                  Icons.location_city,
+                                  color: ColorConstants.kIconsGrey,
+                                  size: 35,
+                                ),
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromRGBO(112, 112, 112, 1),
+                                  ),
+                                ),
+                                border: const UnderlineInputBorder(
+                                  borderSide: BorderSide(),
+                                ),
+                                hintText: 'Select City',
+                                hintStyle: customText.kTextStyle(16,
+                                    FontWeight.w400, ColorConstants.kIconsGrey),
+                              ),
+                              controller: cityDropdownController,
+                            ),
+                            suggestionsCallback: (pattern) {
+                              return getCitySuggestions(pattern);
+                            },
+                            itemBuilder: (context, String suggestion) {
+                              print('item builder');
+                              return ListTile(
+                                title: Text(suggestion),
+                              );
+                            },
+                            itemSeparatorBuilder: (context, index) {
+                              return const Divider();
+                            },
+                            transitionBuilder:
+                                (context, suggestionsBox, controller) {
+                              return suggestionsBox;
+                            },
+                            onSuggestionSelected: (String suggestion) {
+                              cityDropdownController.text = suggestion;
+                            },
+                            suggestionsBoxController:
+                                citySuggestionBoxController,
+                            validator: (value) =>
+                                value!.isEmpty ? 'Please select a city' : null,
+                            onSaved: (value) => selectedCity = value,
+                            displayAllSuggestionWhenTap: true,
+                          ),
+                    SizedBox(
+                      height: size.width * 0.03,
+                    ),
+                    TextField(
+                      buildCounter: (BuildContext context,
+                          {int? currentLength,
+                          int? maxLength,
+                          bool? isFocused}) {
+                        return null;
+                      },
+                      maxLength: 40,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      controller: areaController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                          hintText: "Area",
+                          hintStyle: customText.kTextStyle(
+                              16, FontWeight.w400, ColorConstants.kIconsGrey),
+                          prefixIcon: const Icon(
+                            Icons.location_on,
+                            color: ColorConstants.kIconsGrey,
+                            size: 35,
                           )),
                     ),
                     SizedBox(
@@ -361,7 +666,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       onTap: () {
                         FocusScope.of(context).unfocus();
+
                         register();
+                        print("selected state id: ${selectedStateId}");
+                        print("selected city id: ${selectedCityId}");
                         setState(() {
                           // if (_selectedValue == 1) {
                           //   selected = "business";

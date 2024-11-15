@@ -215,8 +215,8 @@ class _AddEventState extends State<AddEvent> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-              child: customText.kText("Add Event Details", 30, FontWeight.w700,
-                  Colors.black, TextAlign.start),
+              child: customText.kText("Add Event Details Pradeep", 30,
+                  FontWeight.w700, Colors.black, TextAlign.start),
             ),
             Container(
               height: size.height * 0.06,

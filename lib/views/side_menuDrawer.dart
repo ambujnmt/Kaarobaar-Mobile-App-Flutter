@@ -461,6 +461,18 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     GestureDetector(
                       child: SizedBox(
                         height: size.height * 0.05,
+                        child: customText.kText("Special Offers", 22,
+                            FontWeight.w700, Colors.black, TextAlign.start),
+                      ),
+                      onTap: () {
+                        sideDrawerController.pageIndex.value = 7;
+                        sideDrawerController.pageController.jumpToPage(7);
+                        scaffoldKey.currentState!.closeEndDrawer();
+                      },
+                    ),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
                         child: customText.kText("Blogs", 22, FontWeight.w700,
                             Colors.black, TextAlign.start),
                       ),
@@ -510,20 +522,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     GestureDetector(
                       child: SizedBox(
                         height: size.height * 0.05,
-                        child: customText.kText("Special Offers", 22,
-                            FontWeight.w700, Colors.black, TextAlign.start),
-                      ),
-                      onTap: () {
-                        sideDrawerController.pageIndex.value = 7;
-                        sideDrawerController.pageController.jumpToPage(7);
-                        scaffoldKey.currentState!.closeEndDrawer();
-                      },
-                    ),
-
-                    GestureDetector(
-                      child: SizedBox(
-                        height: size.height * 0.05,
-                        child: customText.kText("FAQ", 22, FontWeight.w700,
+                        child: customText.kText("FAQs", 22, FontWeight.w700,
                             Colors.black, TextAlign.start),
                       ),
                       onTap: () {
