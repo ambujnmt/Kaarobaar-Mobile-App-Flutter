@@ -9,6 +9,7 @@ import 'package:kaarobaar/controllers/side_drawerController.dart';
 class API {
   String baseUrl = "https://mean-experts.com/kaarobaar/api";
   LoginController loginController = Get.put(LoginController());
+  SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
   // get access token api
   getAccessToken() async {
@@ -834,14 +835,16 @@ class API {
 
   // add events
   addEvent(
-    String? businessId,
-    String? eventName,
-    String? eventDate,
-    String? eventTime,
-    String? eventLocation,
-    String? image,
-    String? eventDescription,
-  ) async {
+      String? businessId,
+      String? eventName,
+      String? eventDate,
+      String? eventTime,
+      String? eventLocation,
+      String? image,
+      String? eventDescription,
+      String? state,
+      String? city,
+      String? area) async {
     var url = '$baseUrl/event/add_event';
 
     var request = http.MultipartRequest(
@@ -857,6 +860,9 @@ class API {
     request.fields["event_time"] = eventTime!;
     request.fields["event_location"] = eventLocation!;
     request.fields["event_description"] = eventDescription!;
+    request.fields["event_state_id"] = state!;
+    request.fields["event_city_id"] = city!;
+    request.fields["event_area"] = area!;
     request.fields["token"] = loginController.accessToken;
 
     var streamedResponse = await request.send();
@@ -944,6 +950,9 @@ class API {
     String? eventDescription,
     String? eventId,
     String? businessId,
+    String? state,
+    String? city,
+    String? area,
   ) async {
     var url = '$baseUrl/event/update_event';
 
@@ -959,8 +968,13 @@ class API {
     request.fields["event_time"] = eventTime!;
     request.fields["event_locaton"] = eventLocation!;
     request.fields["event_descitpion"] = eventDescription!;
-    request.fields["event_id"] = eventId.toString();
-    request.fields["business_id"] = businessId.toString();
+    request.fields["event_state_id"] = state!;
+    request.fields["event_city_id"] = city!;
+    request.fields["event_area"] = area!;
+    // request.fields["event_id"] = eventId.toString();
+    // request.fields["business_id"] = businessId.toString();
+    request.fields["event_id"] = sideDrawerController.myEventsId;
+    request.fields["business_id"] = sideDrawerController.eventBusinessId;
 
     var streamedResponse = await request.send();
 

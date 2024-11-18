@@ -246,51 +246,54 @@ class _ListByUserEventsState extends State<ListByUserEvents> {
                                   children: [
                                     Container(
                                       margin: const EdgeInsets.only(bottom: 5),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          customText.kText(
-                                              'Event title:  ',
-                                              18,
-                                              FontWeight.w700,
-                                              Colors.black,
-                                              TextAlign.start),
-                                          Container(
-                                            width: width * .5,
-                                            child: customText.kText(
-                                                '${myEventsListData[index]['event_title']}',
-                                                16,
-                                                FontWeight.w400,
-                                                Colors.black,
-                                                TextAlign.start),
-                                          ),
-                                        ],
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: '',
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: <TextSpan>[
+                                            const TextSpan(
+                                              text: 'Event title:  ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 18,
+                                                  fontFamily: "Raleway"),
+                                            ),
+                                            TextSpan(
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 16,
+                                                    fontFamily: "Raleway"),
+                                                text:
+                                                    "${myEventsListData[index]['event_title']}"),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     Container(
                                       margin: const EdgeInsets.only(bottom: 5),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          customText.kText(
-                                              'Event Location:  ',
-                                              18,
-                                              FontWeight.w700,
-                                              Colors.black,
-                                              TextAlign.start),
-                                          customText.kText(
-                                              '${myEventsListData[index]['event_location']}',
-                                              16,
-                                              FontWeight.w400,
-                                              Colors.black,
-                                              TextAlign.start)
-                                        ],
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: '',
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: <TextSpan>[
+                                            const TextSpan(
+                                              text: 'Event Location:  ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 18,
+                                                  fontFamily: "Raleway"),
+                                            ),
+                                            TextSpan(
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 16,
+                                                    fontFamily: "Raleway"),
+                                                text:
+                                                    "${myEventsListData[index]['event_location']}"),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     Container(
@@ -341,25 +344,28 @@ class _ListByUserEventsState extends State<ListByUserEvents> {
                                     ),
                                     Container(
                                       margin: const EdgeInsets.only(bottom: 5),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          customText.kText(
-                                              'Event Description:  ',
-                                              18,
-                                              FontWeight.w700,
-                                              Colors.black,
-                                              TextAlign.start),
-                                          customText.kText(
-                                              '${myEventsListData[index]['event_description']}',
-                                              16,
-                                              FontWeight.w400,
-                                              Colors.black,
-                                              TextAlign.start)
-                                        ],
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: '',
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: <TextSpan>[
+                                            const TextSpan(
+                                              text: 'Event Description:  ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 18,
+                                                  fontFamily: "Raleway"),
+                                            ),
+                                            TextSpan(
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 16,
+                                                    fontFamily: "Raleway"),
+                                                text:
+                                                    "${myEventsListData[index]['event_description']}"),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 20),
