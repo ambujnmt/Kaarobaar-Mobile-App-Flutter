@@ -238,7 +238,7 @@ class _MyBusinessState extends State<MyBusiness> {
                                   crossAxisSpacing: 5.0,
                                   mainAxisSpacing: 5.0,
                                   // childAspectRatio: 1 / 1.8,
-                                  childAspectRatio: 1 / 2.2,
+                                  childAspectRatio: 1 / 2.3,
                                 ),
                                 itemCount:
                                     businessController.businessList.length,
@@ -514,6 +514,47 @@ class _MyBusinessState extends State<MyBusiness> {
                                             child: Center(
                                               child: customText.kText(
                                                   "Post Event",
+                                                  15,
+                                                  FontWeight.w600,
+                                                  Colors.white,
+                                                  TextAlign.center),
+                                            ),
+                                          ),
+                                        ),
+
+                                        // post special offer
+                                        GestureDetector(
+                                          onTap: () {
+                                            sideDrawerController
+                                                .pageIndex.value = 35;
+                                            sideDrawerController
+                                                    .businessListingId =
+                                                businessController
+                                                    .businessList[index]["id"];
+                                            sideDrawerController.pageController
+                                                .jumpToPage(35);
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        size.width * 0.05),
+                                                gradient: const LinearGradient(
+                                                    begin: Alignment.centerLeft,
+                                                    end: Alignment.centerRight,
+                                                    colors: [
+                                                      ColorConstants
+                                                          .kGradientDarkGreen,
+                                                      ColorConstants
+                                                          .kGradientLightGreen
+                                                    ])),
+                                            child: Center(
+                                              child: customText.kText(
+                                                  "Post Offer",
                                                   15,
                                                   FontWeight.w600,
                                                   Colors.white,

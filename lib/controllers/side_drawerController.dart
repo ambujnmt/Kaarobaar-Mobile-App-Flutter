@@ -22,4 +22,6 @@ class SideDrawerController extends GetxController {
   String fromEditBusiness = "";
   String fromMyBusinessList = "";
   String fromEditBusinessForm = "";
+  String myOffersId = "";
+  String offerBusinessId = "";
 }

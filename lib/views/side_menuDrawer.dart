@@ -10,6 +10,7 @@ import 'package:kaarobaar/views/authorization/register_screen.dart';
 import 'package:kaarobaar/views/screens/about_us.dart';
 import 'package:kaarobaar/views/screens/add_business.dart';
 import 'package:kaarobaar/views/screens/add_edit_my_job.dart';
+import 'package:kaarobaar/views/screens/add_edit_special_offer.dart';
 import 'package:kaarobaar/views/screens/add_event.dart';
 import 'package:kaarobaar/views/screens/advertise_withUs.dart';
 import 'package:kaarobaar/views/screens/advertisement_details.dart';
@@ -28,6 +29,7 @@ import 'package:kaarobaar/views/screens/my_account.dart';
 import 'package:kaarobaar/views/screens/my_business.dart';
 import 'package:kaarobaar/views/screens/my_events.dart';
 import 'package:kaarobaar/views/screens/my_jobs.dart';
+import 'package:kaarobaar/views/screens/my_offers_screen.dart';
 import 'package:kaarobaar/views/screens/offers_detail.dart';
 import 'package:kaarobaar/views/screens/our_services_detail.dart';
 import 'package:kaarobaar/views/screens/popular_commuitites.dart';
@@ -367,6 +369,23 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                               sideDrawerController.pageIndex.value = 17;
                               sideDrawerController.pageController
                                   .jumpToPage(17);
+                              scaffoldKey.currentState!.closeEndDrawer();
+                            },
+                          ),
+                          GestureDetector(
+                            child: SizedBox(
+                              height: size.height * 0.05,
+                              child: customText.kText(
+                                  "My Offers",
+                                  22,
+                                  FontWeight.w700,
+                                  Colors.black,
+                                  TextAlign.start),
+                            ),
+                            onTap: () {
+                              sideDrawerController.pageIndex.value = 36;
+                              sideDrawerController.pageController
+                                  .jumpToPage(36);
                               scaffoldKey.currentState!.closeEndDrawer();
                             },
                           ),
@@ -942,6 +961,8 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       FeaturedScreen(), // page number 32
                       FeaturedListingDetail(),
                       ListByUserEvents(),
+                      AddEditSpecialOffer(), // page number 35
+                      MyOffersScreen(),
                     ],
                   )),
             )

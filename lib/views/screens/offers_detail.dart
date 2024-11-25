@@ -18,7 +18,7 @@ class _OffersDetailState extends State<OffersDetail> {
   final customText = CustomText(), api = API(), helper = Helper();
   bool isApiLoading = false;
   dynamic size;
-  List<dynamic> offersDetailList = [];
+  Map<String, dynamic> offersDetailList = {};
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
   offersListDetail() async {
@@ -41,6 +41,7 @@ class _OffersDetailState extends State<OffersDetail> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print(" offer id: ${sideDrawerController.offersId}");
     offersListDetail();
   }
 
@@ -60,13 +61,13 @@ class _OffersDetailState extends State<OffersDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     customText.kText(
-                      "${offersDetailList[0]["title"]}",
+                      "${offersDetailList["business_name"]}",
                       20,
                       FontWeight.w700,
                       Colors.black,
                       TextAlign.center,
                     ),
-                    offersDetailList[0]['image'] == ""
+                    offersDetailList['offer_image'] == ""
                         ? Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
@@ -87,19 +88,19 @@ class _OffersDetailState extends State<OffersDetail> {
                               color: Colors.grey,
                               borderRadius: BorderRadius.circular(12),
                               image: DecorationImage(
-                                image:
-                                    NetworkImage(offersDetailList[0]["image"]),
+                                image: NetworkImage(
+                                    offersDetailList["offer_image"]),
                                 fit: BoxFit.fill,
                               ),
                             ),
                           ),
                     HtmlWidget(
-                      offersDetailList[0]["short_content"],
+                      offersDetailList["offer_name"],
                       textStyle: customText.kTextStyle(
                           16, FontWeight.w500, Colors.black),
                     ),
                     HtmlWidget(
-                      offersDetailList[0]["description"],
+                      offersDetailList["offer_description"],
                       textStyle: customText.kTextStyle(
                           16, FontWeight.w500, Colors.black),
                     ),

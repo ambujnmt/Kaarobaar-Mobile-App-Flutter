@@ -308,7 +308,7 @@ class API {
 
   // offers list
   offersList() async {
-    var url = '$baseUrl/app/offers_list';
+    var url = '$baseUrl/offer/all_offer_list';
 
     Map<String, dynamic> body = {
       "token": loginController.accessToken,
@@ -321,7 +321,7 @@ class API {
 
   // offers detail
   offersDetail(String offerId) async {
-    var url = '$baseUrl/app/offer_details';
+    var url = '$baseUrl/offer/offer_details';
 
     Map<String, dynamic> body = {
       "token": loginController.accessToken,
@@ -875,6 +875,33 @@ class API {
     return responseData;
   }
 
+  // add offer
+  addOffer({
+    String? businessId,
+    String? offerName,
+    String? image,
+    String? offerDescription,
+  }) async {
+    var url = '$baseUrl/offer/add_offer';
+
+    var request = http.MultipartRequest(
+      "POST",
+      Uri.parse(url),
+    );
+    request.files.add(await http.MultipartFile.fromPath("offer_image", image!));
+    request.fields["token"] = loginController.accessToken;
+    request.fields["user_id"] = loginController.userId;
+    request.fields["business_id"] = sideDrawerController.businessListingId;
+    request.fields["offer_name"] = offerName!;
+    request.fields["offer_description"] = offerDescription!;
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+    final responseData = json.decode(response.body);
+    log("add offer api response :- $responseData");
+
+    return responseData;
+  }
+
   // event list api integration
   eventList() async {
     var eventUrl = '$baseUrl/event/all_event_list';
@@ -907,6 +934,22 @@ class API {
     return jsonDecode(response.body);
   }
 
+  // offers list by user api integration
+  offerListByUser() async {
+    var eventUrl = '$baseUrl/offer/offer_list_by_user';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+    };
+    http.Response response = await http.post(
+      Uri.parse(eventUrl),
+      body: body,
+    );
+    log(' offer list api response======${response.body}');
+    return jsonDecode(response.body);
+  }
+
   // delete my events
 
   deleteMyEvent(String eventId) async {
@@ -922,6 +965,24 @@ class API {
     http.Response response = await http.post(Uri.parse(url), body: body);
 
     debugPrint(" delete event api response :- ${response.body}");
+    return jsonDecode(response.body);
+  }
+
+  // delete my offers
+
+  deleteMyOffer(String offerId) async {
+    var url = '$baseUrl/offer/delete_offer';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+      "offer_id": offerId,
+    };
+    print('user id----- ${loginController.userId}');
+    print('offer id----- ${offerId}');
+    http.Response response = await http.post(Uri.parse(url), body: body);
+
+    debugPrint(" delete offer api response :- ${response.body}");
     return jsonDecode(response.body);
   }
 
@@ -982,6 +1043,42 @@ class API {
     final responseData = json.decode(response.body);
 
     log("edit business response in api :- $responseData");
+    print("business id in update--- $businessId"); // 29
+
+    return responseData;
+  }
+
+  // update offer details
+
+  updateOfferDetails(
+    String? offerName,
+    String? image,
+    String? offerDescription,
+    String? eventId,
+    String? businessId,
+  ) async {
+    var url = '$baseUrl/offer/update_offer';
+
+    var request = http.MultipartRequest(
+      "POST",
+      Uri.parse(url),
+    );
+    request.files.add(await http.MultipartFile.fromPath("event_image", image!));
+    request.fields["token"] = loginController.accessToken;
+    request.fields["user_id"] = loginController.userId;
+    request.fields["event_title"] = offerName!;
+
+    request.fields["event_descitpion"] = offerDescription!;
+
+    request.fields["event_id"] = sideDrawerController.myEventsId;
+    request.fields["business_id"] = sideDrawerController.eventBusinessId;
+
+    var streamedResponse = await request.send();
+
+    var response = await http.Response.fromStream(streamedResponse);
+    final responseData = json.decode(response.body);
+
+    log("edit special offer response in api :- $responseData");
     print("business id in update--- $businessId"); // 29
 
     return responseData;

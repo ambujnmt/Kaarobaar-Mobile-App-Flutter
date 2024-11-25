@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:kaarobaar/constants/color_constants.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
@@ -34,6 +35,13 @@ class _SpecialOffersState extends State<SpecialOffers> {
     setState(() {
       isApiLoading = false;
     });
+  }
+
+  String _truncateText(String text, {int maxLength = 100}) {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return '${text.substring(0, maxLength)}...';
   }
 
   @override
@@ -114,7 +122,8 @@ class _SpecialOffersState extends State<SpecialOffers> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  offersListData[index]['image'].toString() ==
+                                  offersListData[index]['offer_image']
+                                              .toString() ==
                                           ""
                                       ? Container(
                                           decoration: BoxDecoration(
@@ -138,7 +147,7 @@ class _SpecialOffersState extends State<SpecialOffers> {
                                             image: DecorationImage(
                                               fit: BoxFit.fill,
                                               image: NetworkImage(
-                                                  '${offersListData[index]['image']}'),
+                                                  '${offersListData[index]['offer_image']}'),
                                             ),
                                           ),
                                         ),
@@ -147,7 +156,7 @@ class _SpecialOffersState extends State<SpecialOffers> {
                                     height: size.width * 0.12,
                                     child: Text(
                                       // "Blog ${index + 1}",
-                                      "${offersListData[index]['title']}",
+                                      "${offersListData[index]['offer_name']}",
                                       style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w700,
@@ -158,20 +167,14 @@ class _SpecialOffersState extends State<SpecialOffers> {
                                       maxLines: 2,
                                     ),
                                   ),
-                                  SizedBox(
+                                  Container(
                                     width: size.width * 0.45,
                                     height: size.width * 0.2,
-                                    child: Text(
-                                      // "Blog ${index + 1}",
-                                      "${offersListData[index]['short_content']}",
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black,
-                                          fontFamily: "Raleway"),
-                                      textAlign: TextAlign.start,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 3,
+                                    child: HtmlWidget(
+                                      _truncateText(offersListData[index]
+                                          ['offer_description']),
+                                      textStyle: customText.kTextStyle(
+                                          14, FontWeight.w500, Colors.black),
                                     ),
                                   ),
                                   GestureDetector(
