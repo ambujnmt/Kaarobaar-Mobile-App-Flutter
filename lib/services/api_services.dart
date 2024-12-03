@@ -1054,7 +1054,7 @@ class API {
     String? offerName,
     String? image,
     String? offerDescription,
-    String? eventId,
+    String? offerId,
     String? businessId,
   ) async {
     var url = '$baseUrl/offer/update_offer';
@@ -1063,15 +1063,15 @@ class API {
       "POST",
       Uri.parse(url),
     );
-    request.files.add(await http.MultipartFile.fromPath("event_image", image!));
+    request.files.add(await http.MultipartFile.fromPath("offer_image", image!));
     request.fields["token"] = loginController.accessToken;
     request.fields["user_id"] = loginController.userId;
-    request.fields["event_title"] = offerName!;
+    request.fields["offer_name"] = offerName!;
 
-    request.fields["event_descitpion"] = offerDescription!;
+    request.fields["offer_description"] = offerDescription!;
 
-    request.fields["event_id"] = sideDrawerController.myEventsId;
-    request.fields["business_id"] = sideDrawerController.eventBusinessId;
+    request.fields["offer_id"] = offerId!;
+    request.fields["business_id"] = businessId!;
 
     var streamedResponse = await request.send();
 

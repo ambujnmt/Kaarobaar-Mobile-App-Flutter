@@ -23,30 +23,108 @@ class AddEditSpecialOffer extends StatefulWidget {
 }
 
 class _AddEditSpecialOfferState extends State<AddEditSpecialOffer> {
+
   dynamic size;
   final customText = CustomText(), helper = Helper();
   String eventDate = "",
       eventTime = "",
       tempPickedDate = "",
       currentDate = "",
-      eventImage = "";
-  bool cityCalling = false;
-  String? selectedStateId;
-  String? selectedCityId;
-  String? selectedState;
-  String? selectedCity;
-  String profileURL = "";
-  String? image1;
-  bool imageSelected = false;
-  bool isImageDownloading = false;
-  TextEditingController offerNameController = TextEditingController();
+      eventImage = "",
+      profileURL = "";
+  String? selectedStateId, selectedCityId, selectedState, selectedCity, image1;
+  bool imageSelected = false, isImageDownloading = false, cityCalling = false;
 
+  TextEditingController offerNameController = TextEditingController();
   TextEditingController offerDescriptionController = TextEditingController();
 
   bool isApiCalling = false;
   final api = API();
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
   Map<String, dynamic> getEventDetailData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    print('my business id: ${sideDrawerController.businessListingId}');
+    print("page value is ==== ${sideDrawerController.pageIndex.value}");
+    if (sideDrawerController.myOffersId.isNotEmpty) {
+      getOffersDetail();
+    }
+  }
+
+  getOffersDetail() async {
+
+    setState(() {
+      isApiCalling = true;
+    });
+
+    final response = await api.offersDetail(sideDrawerController.myOffersId);
+
+    setState(() {
+      isApiCalling = false;
+    });
+
+    if(response["status"] == 1) {
+      setOfferValues(response);
+    } else {
+      helper.errorDialog(context, response["message"]);
+    }
+
+  }
+
+  setOfferValues(Map<String, dynamic> data) {
+
+    log("response data :- $data");
+
+    // businessId: sideDrawerController.businessListingId,
+    // offerName: offerNameController.text,
+    // image: eventImage.toString(),
+    // offerDescription: offerDescriptionController.text,
+
+    sideDrawerController.businessListingId = data["result"]["business_id"];
+    offerNameController.text = data["result"]["offer_name"];
+    offerDescriptionController.text = data["result"]["offer_description"];
+    setState(() {});
+    downloadAllImage(data["result"]["offer_image"]);
+
+  }
+
+  downloadAllImage(String offerImage) async {
+    late var appDocDir;
+
+    if (Platform.isAndroid) {
+      appDocDir = await getExternalStorageDirectory();
+    } else if (Platform.isIOS) {
+      appDocDir = await getApplicationDocumentsDirectory();
+    }
+
+    setState(() {
+      isImageDownloading = true;
+    });
+
+    String offerImg = offerImage.split("offers/").last;
+    List temp = offerImg.split(".");
+    String fileExtension = temp.last;
+
+    String fileUrl = offerImage;
+    String savePath = "${appDocDir!.path}/${temp.first}.$fileExtension";
+
+    print("save path :- $savePath");
+
+    await Dio().download(fileUrl, savePath, onReceiveProgress: (count, total) {
+      print("${(count / total * 100).toStringAsFixed(0)}%");
+    });
+
+    // downloadedImages.add("${appDocDir!.path}/$fileName");
+
+    eventImage = "${appDocDir!.path}/${temp.first}.$fileExtension";
+    print("image path 1 :- $eventImage");
+
+    setState(() {
+      isImageDownloading = false;
+    });
+  }
 
   galleryCameraDialog() {
     return showDialog<void>(
@@ -86,12 +164,12 @@ class _AddEditSpecialOfferState extends State<AddEditSpecialOffer> {
 
     if (from == 1) {
       photo =
-          await picker.pickImage(source: ImageSource.gallery, imageQuality: 30);
+      await picker.pickImage(source: ImageSource.gallery, imageQuality: 30);
       eventImage = photo!.path;
       imageSelected = true;
     } else {
       photo =
-          await picker.pickImage(source: ImageSource.camera, imageQuality: 30);
+      await picker.pickImage(source: ImageSource.camera, imageQuality: 30);
       eventImage = photo!.path;
       imageSelected = true;
     }
@@ -121,34 +199,33 @@ class _AddEditSpecialOfferState extends State<AddEditSpecialOffer> {
           // if (sideDrawerController.myEventsId.isEmpty) {
           // if (sideDrawerController.businessListingId.isEmpty) {
           print('inside the add special offer function');
-          response = await api.addOffer(
-            // sideDrawerController.businessListingId,
-            // offerNameController.text,
-            // eventImage.toString(),
-            // offerDescriptionController.text,
-            businessId: sideDrawerController.businessListingId,
-            offerName: offerNameController.text,
-            image: eventImage.toString(),
-            offerDescription: offerDescriptionController.text,
-          );
-          // }
-          // else {
-          //   print('inside the edit special function');
 
-          //   print("business id: ${sideDrawerController.eventBusinessId}");
-          //   print("events id: ${sideDrawerController.myEventsId}");
-          //   response = await api.updateOfferDetails(
-          //     offerNameController.text,
-          //     eventImage.toString(),
-          //     offerDescriptionController.text,
-          //     sideDrawerController.myEventsId,
-          //     sideDrawerController.eventBusinessId,
-          //   );
+          if(sideDrawerController.myOffersId.isEmpty) {
+            response = await api.addOffer(
+              // sideDrawerController.businessListingId,
+              // offerNameController.text,
+              // eventImage.toString(),
+              // offerDescriptionController.text,
+              businessId: sideDrawerController.businessListingId,
+              offerName: offerNameController.text,
+              image: eventImage.toString(),
+              offerDescription: offerDescriptionController.text,
+            );
+          }
+          else {
 
-          //   if (response['status'] == 1) {
-          //     sideDrawerController.myEventsId = "";
-          //   }
-          // }
+            response = await api.updateOfferDetails(
+              offerNameController.text,
+              eventImage.toString(),
+              offerDescriptionController.text,
+              sideDrawerController.myOffersId,
+              sideDrawerController.businessListingId,
+            );
+
+            // if (response['status'] == 1) {
+            //   sideDrawerController.myEventsId = "";
+            // }
+          }
 
           setState(() {
             isApiCalling = false;
@@ -170,81 +247,6 @@ class _AddEditSpecialOfferState extends State<AddEditSpecialOffer> {
     } else {
       helper.errorDialog(context, "Please enter offer name");
     }
-  }
-
-  // getEventsDetail() async {
-  //   setState(() {
-  //     isApiCalling = true;
-  //   });
-
-  //   final response = await api.myEventDetail(sideDrawerController.myEventsId);
-
-  //   setState(() {
-  //     getEventDetailData = response['result'];
-  //   });
-
-  //   setState(() {
-  //     isApiCalling = false;
-  //   });
-  //   if (response['status'] == 1) {
-  //     print('status 1');
-  //     offerNameController.text = getEventDetailData['event_title'];
-  //     eventImage = getEventDetailData['event_image'];
-  //     offerDescriptionController.text = getEventDetailData['event_description'];
-  //     selectedStateId = getEventDetailData['event_state_id'];
-  //     selectedCityId = getEventDetailData['event_city_id'];
-  //     profileURL = getEventDetailData['event_image'];
-  //     // comment
-  //     downloadAllImage();
-  //   }
-  // }
-
-  downloadAllImage() async {
-    late var appDocDir;
-
-    if (Platform.isAndroid) {
-      appDocDir = await getExternalStorageDirectory();
-    } else if (Platform.isIOS) {
-      appDocDir = await getApplicationDocumentsDirectory();
-    }
-
-    setState(() {
-      isImageDownloading = true;
-    });
-
-    List temp = profileURL.toString().split(".");
-    String fileExtension = temp.last;
-
-    String fileUrl = profileURL;
-    String savePath = "${appDocDir!.path}/image.$fileExtension";
-
-    print("save path :- $savePath");
-
-    await Dio().download(fileUrl, savePath, onReceiveProgress: (count, total) {
-      print("${(count / total * 100).toStringAsFixed(0)}%");
-    });
-
-    // downloadedImages.add("${appDocDir!.path}/$fileName");
-
-    eventImage = "${appDocDir!.path}/image.$fileExtension";
-    print("image path 1 :- $eventImage");
-
-    setState(() {
-      isImageDownloading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    print('my business id: ${sideDrawerController.businessListingId}');
-    // print('my event id for edit:  ${sideDrawerController.myEventsId}');
-    if (sideDrawerController.myEventsId.isNotEmpty) {
-      // getEventsDetail();
-    }
-    print("page value is ==== ${sideDrawerController.pageIndex.value}");
   }
 
   @override
@@ -305,7 +307,11 @@ class _AddEditSpecialOfferState extends State<AddEditSpecialOffer> {
                               width: 1.0, color: ColorConstants.kIconsGrey),
                         ),
                       ),
-                      child: Align(
+                      child: isImageDownloading
+                      ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                      : Align(
                         alignment: Alignment.centerLeft,
                         child: customText.kText(
                             "Upload Offer Image",
@@ -428,3 +434,35 @@ class _AddEditSpecialOfferState extends State<AddEditSpecialOffer> {
     ));
   }
 }
+
+
+// print('my event id for edit:  ${sideDrawerController.myEventsId}');
+// if (sideDrawerController.myEventsId.isNotEmpty) {
+//   // getEventsDetail();
+// }
+// getEventsDetail() async {
+//   setState(() {
+//     isApiCalling = true;
+//   });
+
+//   final response = await api.myEventDetail(sideDrawerController.myEventsId);
+
+//   setState(() {
+//     getEventDetailData = response['result'];
+//   });
+
+//   setState(() {
+//     isApiCalling = false;
+//   });
+//   if (response['status'] == 1) {
+//     print('status 1');
+//     offerNameController.text = getEventDetailData['event_title'];
+//     eventImage = getEventDetailData['event_image'];
+//     offerDescriptionController.text = getEventDetailData['event_description'];
+//     selectedStateId = getEventDetailData['event_state_id'];
+//     selectedCityId = getEventDetailData['event_city_id'];
+//     profileURL = getEventDetailData['event_image'];
+//     // comment
+//     downloadAllImage();
+//   }
+// }

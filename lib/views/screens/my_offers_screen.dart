@@ -5,6 +5,7 @@ import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
 import 'package:kaarobaar/utils/helper.dart';
 import 'package:kaarobaar/utils/text.dart';
+import 'dart:developer';
 
 class MyOffersScreen extends StatefulWidget {
   const MyOffersScreen({super.key});
@@ -14,14 +15,42 @@ class MyOffersScreen extends StatefulWidget {
 }
 
 class _MyOffersScreenState extends State<MyOffersScreen> {
+
   final customText = CustomText(), helper = Helper();
   final api = API();
   bool isApiCalling = false;
   List<dynamic> myOfferListData = [];
-
+  int statusValue = 0;
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
-  // Function to show an alert dialog
+
+  @override
+  void initState() {
+    super.initState();
+    getMyEvents();
+    print("init status == ${statusValue}");
+    if (statusValue == 0) {
+      isApiCalling = false;
+    }
+  }
+
+  getMyEvents() async {
+    setState(() {
+      isApiCalling = true;
+    });
+    final response = await api.offerListByUser();
+    setState(() {
+      statusValue = response['status'];
+      print("status value: ${statusValue}");
+      myOfferListData = response['result'];
+    });
+    setState(() {
+      isApiCalling = false;
+    });
+
+    print(' get my job ----$myOfferListData');
+  }
+
   void _showAlertDialog(BuildContext context, Function() deleteItem) {
     final double h = MediaQuery.of(context).size.height;
     final double w = MediaQuery.of(context).size.width;
@@ -109,34 +138,6 @@ class _MyOffersScreenState extends State<MyOffersScreen> {
         );
       },
     );
-  }
-
-  int statusValue = 0;
-  getMyEvents() async {
-    setState(() {
-      isApiCalling = true;
-    });
-    final response = await api.offerListByUser();
-    setState(() {
-      statusValue = response['status'];
-      print("status value: ${statusValue}");
-      myOfferListData = response['result'];
-    });
-    setState(() {
-      isApiCalling = false;
-    });
-
-    print(' get my job ----$myOfferListData');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getMyEvents();
-    print("init status == ${statusValue}");
-    if (statusValue == 0) {
-      isApiCalling = false;
-    }
   }
 
   @override
@@ -388,17 +389,24 @@ class _MyOffersScreenState extends State<MyOffersScreen> {
                                             ),
                                           ),
                                           onTap: () {
+
+                                            log("myOfferListData[index] :- ${myOfferListData[index]}");
+
                                             // FocusScope.of(context).unfocus();
-                                            // sideDrawerController
-                                            //     .pageIndex.value = 35;
-                                            // sideDrawerController.myOffersId =
-                                            //     myOfferListData[index]["id"];
-                                            // sideDrawerController
-                                            //         .offerBusinessId =
-                                            //     myOfferListData[index]
-                                            //         ["business_id"];
-                                            // sideDrawerController.pageController
-                                            //     .jumpToPage(35);
+
+                                            sideDrawerController.myOffersId = myOfferListData[index]["id"];
+                                            sideDrawerController.pageIndex.value = 35;
+                                            sideDrawerController.pageController.jumpToPage(35);
+                                            // sideDrawerController.offerBusinessId = myOfferListData[index]["business_id"];
+
+
+                                            // token : eyJ0eXAiOiJKV1Q
+                                            // user_id : 1
+                                            // offer_id : 9
+                                            // business_id : 6
+                                            // offer_name : UKP - Offer
+                                            // offer_description : Lorem Ipsum is simply duy five centuries,
+                                            // offer_image : select image (jpg/jpeg/png)
                                           },
                                         ),
                                         GestureDetector(

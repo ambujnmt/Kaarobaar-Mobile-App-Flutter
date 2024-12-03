@@ -221,7 +221,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       width: size.width * 0.11,
                       child: Align(
                           alignment: Alignment.topCenter,
-                          child: Image.asset("assets/images/reply.png")),
+                          child: Image.asset("assets/images/reply.png", color: ColorConstants.kGradientLightGreen,)),
                     ),
                     onTap: () {
                       sideDrawerController.pageIndex.value = 0;
@@ -726,8 +726,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                                   // color: Colors.blue,
                                   child: Align(
                                       alignment: Alignment.topCenter,
-                                      child: Image.asset(
-                                          "assets/images/reply.png")),
+                                      child: Image.asset("assets/images/reply.png", color: ColorConstants.kGradientLightGreen,)),
                                 ),
                                 onTap: () {
                                   if (sideDrawerController.pageIndex.value ==
