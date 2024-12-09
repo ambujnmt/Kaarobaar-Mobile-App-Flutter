@@ -17,6 +17,23 @@ class CustomText {
     );
   }
 
+  kTextSelectable(String hint, double fontSize, FontWeight fontWeight,
+      Color color, TextAlign textAlign,
+      {int? maxLines}) {
+    return SelectableText(
+      maxLines: maxLines,
+      // overflow: TextOverflow.ellipsis,
+      hint,
+      style: TextStyle(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+        fontFamily: "Raleway",
+      ),
+      textAlign: textAlign,
+    );
+  }
+
   kTextStyle(
     double fontSize,
     FontWeight fontWeight,

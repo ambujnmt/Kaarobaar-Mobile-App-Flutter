@@ -279,7 +279,7 @@ class _PublicJobDetailsState extends State<PublicJobDetails> {
                                         FontWeight.w700,
                                         Colors.black,
                                         TextAlign.start),
-                                    customText.kText(
+                                    customText.kTextSelectable(
                                         '${publicJobDetail['job_email']}',
                                         16,
                                         FontWeight.w400,
@@ -300,7 +300,7 @@ class _PublicJobDetailsState extends State<PublicJobDetails> {
                                         FontWeight.w700,
                                         Colors.black,
                                         TextAlign.start),
-                                    customText.kText(
+                                    customText.kTextSelectable(
                                         '${publicJobDetail['job_mobile']}',
                                         16,
                                         FontWeight.w400,

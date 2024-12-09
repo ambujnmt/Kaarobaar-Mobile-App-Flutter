@@ -264,8 +264,8 @@ class _PopularCommunitiesDetailsState extends State<PopularCommunitiesDetails> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  customText.kText(
-                                                      "${communityByCategoryData[index]['category_name'].toString()}",
+                                                  customText.kTextSelectable(
+                                                      "${communityByCategoryData[index]['mobile'].toString()}", // category_name
                                                       14,
                                                       FontWeight.w700,
                                                       Colors.white,

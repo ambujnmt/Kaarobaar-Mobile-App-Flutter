@@ -221,7 +221,10 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                       width: size.width * 0.11,
                       child: Align(
                           alignment: Alignment.topCenter,
-                          child: Image.asset("assets/images/reply.png", color: ColorConstants.kGradientLightGreen,)),
+                          child: Image.asset(
+                            "assets/images/reply.png",
+                            color: ColorConstants.kGradientLightGreen,
+                          )),
                     ),
                     onTap: () {
                       sideDrawerController.pageIndex.value = 0;
@@ -565,8 +568,12 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     GestureDetector(
                       child: SizedBox(
                         height: size.height * 0.05,
-                        child: customText.kText("Terms & Conditions", 22,
-                            FontWeight.w700, Colors.black, TextAlign.start),
+                        child: customText.kText(
+                            "Terms & Conditions",
+                            20,
+                            FontWeight.w700,
+                            Colors.grey.shade700,
+                            TextAlign.start),
                       ),
                       onTap: () {
                         sideDrawerController.pageIndex.value = 11;
@@ -577,8 +584,12 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     GestureDetector(
                       child: SizedBox(
                         height: size.height * 0.05,
-                        child: customText.kText("Privacy Policy", 22,
-                            FontWeight.w700, Colors.black, TextAlign.start),
+                        child: customText.kText(
+                            "Privacy Policy",
+                            20,
+                            FontWeight.w700,
+                            Colors.grey.shade700,
+                            TextAlign.start),
                       ),
                       onTap: () {
                         sideDrawerController.pageIndex.value = 12;
@@ -589,8 +600,12 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     GestureDetector(
                       child: SizedBox(
                         height: size.height * 0.05,
-                        child: customText.kText("Contact Admin ", 22,
-                            FontWeight.w700, Colors.black, TextAlign.start),
+                        child: customText.kText(
+                            "Contact Admin ",
+                            20,
+                            FontWeight.w700,
+                            Colors.grey.shade700,
+                            TextAlign.start),
                       ),
                       onTap: () {
                         sideDrawerController.pageIndex.value = 13;
@@ -726,7 +741,11 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                                   // color: Colors.blue,
                                   child: Align(
                                       alignment: Alignment.topCenter,
-                                      child: Image.asset("assets/images/reply.png", color: ColorConstants.kGradientLightGreen,)),
+                                      child: Image.asset(
+                                        "assets/images/reply.png",
+                                        color:
+                                            ColorConstants.kGradientLightGreen,
+                                      )),
                                 ),
                                 onTap: () {
                                   if (sideDrawerController.pageIndex.value ==

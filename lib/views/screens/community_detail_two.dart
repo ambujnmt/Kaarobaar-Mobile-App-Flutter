@@ -154,7 +154,7 @@ class _CommunityDetailTwoState extends State<CommunityDetailTwo> {
                                         Colors.black,
                                         TextAlign.center),
                                     const SizedBox(width: 10),
-                                    customText.kText(
+                                    customText.kTextSelectable(
                                         "${detailTwoListData[0]['mobile']}",
                                         15,
                                         FontWeight.w400,
@@ -174,7 +174,7 @@ class _CommunityDetailTwoState extends State<CommunityDetailTwo> {
                                         Colors.black,
                                         TextAlign.center),
                                     const SizedBox(width: 10),
-                                    customText.kText(
+                                    customText.kTextSelectable(
                                         "${detailTwoListData[0]['email']}",
                                         15,
                                         FontWeight.w400,

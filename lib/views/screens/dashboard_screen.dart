@@ -554,13 +554,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                               const SizedBox(width: 10),
                               Container(
+                                width: size.width * .4,
                                 child: customText.kText(
-                                  "${featuredListingData[index]['address'].toString()}",
-                                  16,
-                                  FontWeight.w900,
-                                  Colors.black,
-                                  TextAlign.start,
-                                ),
+                                    "${featuredListingData[index]['address'].toString()}",
+                                    16,
+                                    FontWeight.w900,
+                                    Colors.black,
+                                    TextAlign.start,
+                                    maxLines: 1),
                               ),
                             ],
                           ),
@@ -640,9 +641,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Image.asset("assets/images/call.png")),
                           SizedBox(
                             width: size.width * 0.45,
-                            child: customText.kText("07983951795", 13,
+                            child: customText.kTextSelectable("07983951795", 13,
                                 FontWeight.w500, Colors.black, TextAlign.start),
-                          )
+                          ),
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -654,8 +655,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Image.asset("assets/images/email.png")),
                           SizedBox(
                             width: size.width * 0.45,
-                            child: customText.kText("Info@Kaarobaar.co.uk", 13,
-                                FontWeight.w500, Colors.black, TextAlign.start),
+                            child: customText.kTextSelectable(
+                                "Info@Kaarobaar.co.uk",
+                                13,
+                                FontWeight.w500,
+                                Colors.black,
+                                TextAlign.start),
                           )
                         ],
                       ),
