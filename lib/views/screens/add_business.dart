@@ -126,61 +126,36 @@ class _AddBusinessState extends State<AddBusiness> {
     if (businessNameController.text.isNotEmpty &&
         (!businessNameController.text.startsWith(" "))) {
       if (categoryDropdownController.text.isNotEmpty &&
-          !categoryDropdownController.text.startsWith(" ")) {
-        if (result.isNotEmpty) {
-          if (EmailValidator.validate(emailController.text)) {
-            if (phoneController.text.length >= 10 &&
-                phoneController.text.length <= 12) {
-              if (businessDescriptionController.text.isNotEmpty &&
-                  (!businessDescriptionController.text.startsWith(" "))) {
-                if (stateDropdownController.text.isNotEmpty &&
-                    !stateDropdownController.text.startsWith(" ")) {
-                  if (cityDropdownController.text.isNotEmpty &&
-                      !cityDropdownController.text.startsWith(" ")) {
-                    if (postalCodeController.text.isNotEmpty &&
-                        !postalCodeController.text.startsWith("pattern")) {
-                      if (businessAddressController.text.isNotEmpty &&
-                          (!businessAddressController.text.startsWith(" "))) {
-                        if (imageSelected) {
-                          setState(() {
-                            isApiCalling = true;
-                          });
-                          final response;
+          !categoryDropdownController.text.startsWith(" ") &&
+          selectedCategoryId != null) {
+        if (subCategoryDropDownController.text.isNotEmpty &&
+            !subCategoryDropDownController.text.startsWith(" ") &&
+            selectedSubCategoryId != null) {
+          if (result.isNotEmpty) {
+            if (EmailValidator.validate(emailController.text)) {
+              if (phoneController.text.length >= 10 &&
+                  phoneController.text.length <= 12) {
+                if (businessDescriptionController.text.isNotEmpty &&
+                    (!businessDescriptionController.text.startsWith(" "))) {
+                  if (stateDropdownController.text.isNotEmpty &&
+                      !stateDropdownController.text.startsWith(" ") &&
+                      selectedStateId != null) {
+                    if (cityDropdownController.text.isNotEmpty &&
+                        !cityDropdownController.text.startsWith(" ") &&
+                        selectedCityId != null) {
+                      if (postalCodeController.text.isNotEmpty &&
+                          !postalCodeController.text.startsWith("pattern")) {
+                        if (businessAddressController.text.isNotEmpty &&
+                            (!businessAddressController.text.startsWith(" "))) {
+                          if (imageSelected) {
+                            setState(() {
+                              isApiCalling = true;
+                            });
+                            final response;
 
-                          if (sideDrawerController.myBusinessId.isEmpty) {
-                            print('inside the add function');
-                            response = await api.addBusiness(
-                              businessNameController.text,
-                              selectedCategoryId,
-                              // businessKeywordController.text,
-                              result,
-                              emailController.text,
-                              phoneController.text,
-                              postalCodeController.text,
-                              websiteURL.text,
-                              businessDescriptionController.text,
-                              selectedStateId,
-                              selectedCityId,
-                              areaController.text,
-                              businessAddressController.text,
-                              addressTwoController.text,
-                              addressThreeController.text,
-                              image1,
-                              image2,
-                              image3,
-                              image4,
-                              image5,
-                              selectedSubCategoryId,
-                            );
-                            if (response['status'] == 1) {
-                              _showAlertDialog(context);
-                            }
-                          } else {
-                            print(
-                                'inside the edit function --- ${sideDrawerController.myBusinessId}');
-                            log("update time images :- $image1, $image2, $image3, $image4, $image5");
-
-                            response = await api.updateBusinessDetails(
+                            if (sideDrawerController.myBusinessId.isEmpty) {
+                              print('inside the add function');
+                              response = await api.addBusiness(
                                 businessNameController.text,
                                 selectedCategoryId,
                                 // businessKeywordController.text,
@@ -201,66 +176,106 @@ class _AddBusinessState extends State<AddBusiness> {
                                 image3,
                                 image4,
                                 image5,
-                                sideDrawerController.myBusinessId,
-                                selectedSubCategoryId);
-                            if (response['status'] == 1) {
-                              sideDrawerController.myBusinessId = "";
-                              _showAlertDialog(context);
-                            }
-                          }
-
-                          setState(() {
-                            isApiCalling = false;
-                          });
-
-                          if (response["status"] == 1) {
-                            helper.successDialog(context, response["message"]);
-                            print('Business Added successfully');
-                            if (sideDrawerController
-                                .fromEditBusinessForm.isEmpty) {
-                              sideDrawerController.pageIndex.value = 0;
-                              sideDrawerController.pageController.jumpToPage(0);
+                                selectedSubCategoryId,
+                              );
+                              if (response['status'] == 1) {
+                                _showAlertDialog(context);
+                              }
                             } else {
-                              sideDrawerController.pageIndex.value = 22;
-                              sideDrawerController.pageController
-                                  .jumpToPage(22);
+                              print(
+                                  'inside the edit function --- ${sideDrawerController.myBusinessId}');
+                              log("update time images :- $image1, $image2, $image3, $image4, $image5");
+
+                              response = await api.updateBusinessDetails(
+                                  businessNameController.text,
+                                  selectedCategoryId,
+                                  // businessKeywordController.text,
+                                  result,
+                                  emailController.text,
+                                  phoneController.text,
+                                  postalCodeController.text,
+                                  websiteURL.text,
+                                  businessDescriptionController.text,
+                                  selectedStateId,
+                                  selectedCityId,
+                                  areaController.text,
+                                  businessAddressController.text,
+                                  addressTwoController.text,
+                                  addressThreeController.text,
+                                  image1,
+                                  image2,
+                                  image3,
+                                  image4,
+                                  image5,
+                                  sideDrawerController.myBusinessId,
+                                  selectedSubCategoryId);
+                              if (response['status'] == 1) {
+                                sideDrawerController.myBusinessId = "";
+                                _showAlertDialog(context);
+                              }
                             }
+
+                            setState(() {
+                              isApiCalling = false;
+                            });
+
+                            if (response["status"] == 1) {
+                              helper.successDialog(
+                                  context, response["message"]);
+                              print('Business Added successfully');
+                              if (sideDrawerController
+                                  .fromEditBusinessForm.isEmpty) {
+                                sideDrawerController.pageIndex.value = 0;
+                                sideDrawerController.pageController
+                                    .jumpToPage(0);
+                              } else {
+                                sideDrawerController.pageIndex.value = 22;
+                                sideDrawerController.pageController
+                                    .jumpToPage(22);
+                              }
+                            } else {
+                              helper.errorDialog(context, response["message"]);
+                            }
+                            // else
                           } else {
-                            helper.errorDialog(context, response["message"]);
+                            helper.errorDialog(
+                                context, "Please upload business image");
                           }
-                          // else
                         } else {
                           helper.errorDialog(
-                              context, "Please upload business image");
+                              context, "Please enter address line 1");
                         }
                       } else {
-                        helper.errorDialog(
-                            context, "Please enter address line 1");
+                        helper.errorDialog(context, "Please enter postal code");
                       }
                     } else {
-                      helper.errorDialog(context, "Please enter postal code");
+                      helper.errorDialog(
+                          context, 'Please select city from dropdown');
                     }
                   } else {
-                    helper.errorDialog(context, 'Please select city');
+                    helper.errorDialog(
+                        context, 'Please select state from dropdown');
                   }
                 } else {
-                  helper.errorDialog(context, 'Please select state');
+                  helper.errorDialog(
+                      context, "Please enter business description");
                 }
               } else {
-                helper.errorDialog(
-                    context, "Please enter business description");
+                helper.errorDialog(context, "Please enter valid phone number");
               }
             } else {
-              helper.errorDialog(context, "Please enter valid phone number");
+              helper.errorDialog(context, "Please enter valid email address");
             }
           } else {
-            helper.errorDialog(context, "Please enter valid email address");
+            helper.errorDialog(context, 'Please enter business keywords');
           }
         } else {
-          helper.errorDialog(context, 'Please enter business keywords');
+          helper.errorDialog(
+              context, "Please select valid subcategory from dropdown");
         }
       } else {
-        helper.errorDialog(context, 'Please select category');
+        helper.errorDialog(
+            context, 'Please select valid category from dropdown');
       }
     } else {
       helper.errorDialog(context, "Please enter valid business name");
@@ -1188,7 +1203,7 @@ class _AddBusinessState extends State<AddBusiness> {
                     textCapitalization: TextCapitalization.none,
                     controller: businessDescriptionController,
                     decoration: InputDecoration(
-                      hintText: "Business desciption",
+                      hintText: "Business description",
                       hintStyle: customText.kTextStyle(
                           16, FontWeight.w400, ColorConstants.kIconsGrey),
                       // prefixIcon: const Icon(Icons.store, color: ColorConstants.kIconsGrey, size: 35,),
