@@ -7,7 +7,8 @@ import 'package:kaarobaar/controllers/login_controller.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
 
 class API {
-  String baseUrl = "https://mean-experts.com/kaarobaar/api";
+  // String baseUrl = "https://mean-experts.com/kaarobaar/api";
+  String baseUrl = "https://kaarobaar.co.uk/api";
   LoginController loginController = Get.put(LoginController());
   SideDrawerController sideDrawerController = Get.put(SideDrawerController());
 
@@ -1149,5 +1150,21 @@ class API {
     log("edit business response in api :- $responseData");
 
     return responseData;
+  }
+
+  // delete the user account
+  //search for business
+  deleteUserAccount() async {
+    var url = '$baseUrl/user/deActivateAccount';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+
+    debugPrint("delete account :- ${response.body}");
+    return jsonDecode(response.body);
   }
 }
