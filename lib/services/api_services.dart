@@ -24,7 +24,8 @@ class API {
 
   // user registration api
   register(
-    String name,
+    String firstName,
+    String lastName,
     String email,
     String password,
     String userType,
@@ -35,14 +36,17 @@ class API {
   ) async {
     var url = "$baseUrl/auth/userRegistration";
 
+    print("phone number, state, city & area :- $phoneNumber, $state, $city, $area");
+
     Map<String, dynamic> body = {
       "token": loginController.accessToken,
-      "username": name,
+      "first_name": firstName,
+      "last_name": lastName,
       "email": email,
       "password": password,
       "confirm_password": password,
       "user_type": userType,
-      "mobile": phoneNumber,
+      "mobile": phoneNumber ,
       "state_id": state,
       "city_id": city,
       "area": area,
@@ -1150,5 +1154,21 @@ class API {
     log("edit business response in api :- $responseData");
 
     return responseData;
+  }
+
+  // delete the user account
+  //search for business
+  deleteUserAccount() async {
+    var url = '$baseUrl/user/deActivateAccount';
+
+    Map<String, dynamic> body = {
+      "token": loginController.accessToken,
+      "user_id": loginController.userId,
+    };
+
+    http.Response response = await http.post(Uri.parse(url), body: body);
+
+    debugPrint("delete account :- ${response.body}");
+    return jsonDecode(response.body);
   }
 }

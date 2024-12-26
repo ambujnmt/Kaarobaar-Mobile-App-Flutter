@@ -35,6 +35,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? selectedState, selectedStateId, selectedCity, selectedCityId;
 
   TextEditingController nameController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
@@ -149,76 +151,85 @@ class _RegisterScreenState extends State<RegisterScreen> {
         });
       }
     }
-    if (nameController.text.isNotEmpty) {
-      if (EmailValidator.validate(emailController.text)) {
-        if (passwordController.text.length >= 8 &&
-            (!passwordController.text.contains(" "))) {
-          if (passwordController.text == confirmPasswordController.text) {
-            if (phoneController.text.length >= 10 &&
-                phoneController.text.length <= 12) {
-              if (stateDropdownController.text.isNotEmpty &&
-                  !stateDropdownController.text.startsWith(" ")) {
-                if (cityDropdownController.text.isNotEmpty &&
-                    !cityDropdownController.text.startsWith(" ")) {
-                  if (areaController.text.isNotEmpty &&
-                      !areaController.text.startsWith(" ")) {
-                    setState(() {
-                      isApiCalling = true;
-                    });
+    if (firstNameController.text.isNotEmpty && firstNameController.text.length >= 3) {
+      if(lastNameController.text.isNotEmpty && firstNameController.text.length >= 3) {
+        if (EmailValidator.validate(emailController.text)) {
+          if (passwordController.text.length >= 8 &&
+              (!passwordController.text.contains(" "))) {
+            if (passwordController.text == confirmPasswordController.text) {
+              // if (phoneController.text.length >= 10 &&
+              //     phoneController.text.length <= 12) {
+              //   if (stateDropdownController.text.isNotEmpty &&
+              //       !stateDropdownController.text.startsWith(" ")) {
+              //     if (cityDropdownController.text.isNotEmpty &&
+              //         !cityDropdownController.text.startsWith(" ")) {
+              //       if (areaController.text.isNotEmpty &&
+              //           !areaController.text.startsWith(" ")) {
+              //
+                        setState(() {
+                          isApiCalling = true;
+                        });
 
-                    final response = await api.register(
-                        nameController.text,
-                        emailController.text,
-                        passwordController.text,
-                        "1",
-                        phoneController.text,
-                        selectedStateId.toString(),
-                        selectedCityId.toString(),
-                        areaController.text
-                        // _selectedValue.toString(),
-                        );
+                        final response = await api.register(
+                            firstNameController.text,
+                            lastNameController.text,
+                            emailController.text,
+                            passwordController.text,
+                            "1",
+                            phoneController.text,
+                            selectedStateId.toString(),
+                            selectedCityId.toString(),
+                            areaController.text
+                            // _selectedValue.toString(),
+                            );
 
-                    setState(() {
-                      isApiCalling = false;
-                    });
+                        setState(() {
+                          isApiCalling = false;
+                        });
 
-                    if (response["status"] == 1) {
-                      helper.successDialog(context, response["message"]);
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => OTPScreen(
-                                  email: emailController.text,
-                                  from: "register")));
-                    } else {
-                      helper.errorDialog(context, response["message"]);
-                    }
-                  } else {
-                    helper.errorDialog(context, "Please enter area");
-                  }
-                } else {
-                  helper.errorDialog(context, "Please select city");
-                }
-              } else {
-                helper.errorDialog(context, "Please select county");
-              }
+                        if (response["status"] == 1) {
+                          helper.successDialog(context, response["message"]);
+                          Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (context) => OTPScreen(
+                              email: emailController.text, from: "register")),
+                          );
+                        } else {
+                          helper.errorDialog(context, response["message"]);
+                        }
+
+
+              //
+              //       } else {
+              //         helper.errorDialog(context, "Please enter area");
+              //       }
+              //     } else {
+              //       helper.errorDialog(context, "Please select city");
+              //     }
+              //   } else {
+              //     helper.errorDialog(context, "Please select county");
+              //   }
+              // } else {
+              //   helper.errorDialog(context, "Please enter valid phone number");
+              // }
             } else {
-              helper.errorDialog(context, "Please enter valid phone number");
+              helper.errorDialog(
+                  context, "Password and confirm password doesn't match");
             }
           } else {
             helper.errorDialog(
-                context, "Password and confirm password doesn't match");
+                context, "Password should be atleast 8 characters");
           }
         } else {
-          helper.errorDialog(
-              context, "Password should be atleast 8 characters");
+          helper.errorDialog(context, "Please enter a valid email address");
         }
       } else {
-        helper.errorDialog(context, "Please enter a valid email address");
+        helper.errorDialog(context, "Please enter your last name atleast of 3 characters");
       }
     } else {
-      helper.errorDialog(context, "Please enter your name");
+      helper.errorDialog(context, "Please enter your first name atleast of 3 characters");
     }
+
+
   }
 
   @override
@@ -272,19 +283,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: size.width * 0.1,
                     ),
                     TextField(
-                      buildCounter: (BuildContext context,
-                          {int? currentLength,
-                          int? maxLength,
-                          bool? isFocused}) {
-                        return null;
-                      },
+                      // buildCounter: (BuildContext context,
+                      //     {int? currentLength,
+                      //     int? maxLength,
+                      //     bool? isFocused}) {
+                      //   return null;
+                      // },
                       maxLength: 30,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
-                      controller: nameController,
+                      controller: firstNameController,
                       textCapitalization: TextCapitalization.words,
                       decoration: InputDecoration(
-                          hintText: "Name",
+                        counterText: "",
+                          hintText: "First name",
+                          hintStyle: customText.kTextStyle(
+                              16, FontWeight.w400, ColorConstants.kIconsGrey),
+                          prefixIcon: const Icon(
+                            Icons.person,
+                            color: ColorConstants.kIconsGrey,
+                            size: 35,
+                          )),
+                    ),
+                    SizedBox(
+                      height: size.width * 0.03,
+                    ),
+                    TextField(
+                      // buildCounter: (BuildContext context,
+                      //     {int? currentLength,
+                      //     int? maxLength,
+                      //     bool? isFocused}) {
+                      //   return null;
+                      // },
+                      maxLength: 30,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      controller: lastNameController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                          counterText: "",
+                          hintText: "Last name",
                           hintStyle: customText.kTextStyle(
                               16, FontWeight.w400, ColorConstants.kIconsGrey),
                           prefixIcon: const Icon(

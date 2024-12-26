@@ -4,6 +4,7 @@ import 'package:kaarobaar/constants/color_constants.dart';
 import 'package:kaarobaar/controllers/business_controllers.dart';
 import 'package:kaarobaar/controllers/side_drawerController.dart';
 import 'package:kaarobaar/services/api_services.dart';
+import 'package:kaarobaar/utils/helper.dart';
 import 'package:kaarobaar/utils/text.dart';
 import 'package:kaarobaar/views/authorization/login_screen.dart';
 import 'package:kaarobaar/views/authorization/register_screen.dart';
@@ -66,6 +67,7 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
 
   bool isApiCalling = false;
   final api = API();
+  final helper = Helper();
   String userName = "";
   String userEmail = "";
   String profileURL = "";
@@ -633,50 +635,85 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                         );
                       },
                     ),
+                    GestureDetector(
+                      child: SizedBox(
+                        height: size.height * 0.05,
+                        child: customText.kText("Delete Account", 22,
+                            FontWeight.w700, Colors.redAccent, TextAlign.start),
+                      ),
+                      onTap: () {
+                        _showAlertDialog(
+                          context,
+                          () async {
+                            print("Delete Account");
+                            final response = await api.deleteUserAccount();
+                            if (response['status'] == 1) {
+                              helper.successDialog(
+                                  context, response['message']);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                                ),
+                                (Route<dynamic> route) =>
+                                    false, // This removes all the previous routes
+                              );
+                            } else {
+                              helper.errorDialog(context, response['message']);
+                            }
+                          },
+                        );
+
+                        // loginController.accessToken.toString() == "";
+                        // loginController.clearToken();
+                        // print(
+                        //     'Logout token ---------- ${loginController.accessToken.toString()}');
+                      },
+                    ),
                   ],
                 ),
               ),
             ),
           ),
           loginController.accessToken.isEmpty
-              ? Container()
-              : Positioned(
-                  top: size.height * 0.2,
-                  left: size.width / 3.5,
-                  child: GestureDetector(
-                    child: Container(
-                      height: size.height * 0.05,
-                      width: size.width * 0.45,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white),
-                          borderRadius:
-                              BorderRadius.circular(size.width * 0.05),
-                          gradient: const LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                ColorConstants.kGradientDarkGreen,
-                                ColorConstants.kGradientLightGreen
-                              ]),
-                          boxShadow: [
-                            BoxShadow(
-                                offset: const Offset(0, 3),
-                                color: Colors.grey.shade400,
-                                spreadRadius: 1,
-                                blurRadius: 2)
+            ? Container()
+            : Positioned(
+                top: size.height * 0.2,
+                left: size.width / 3.5,
+                child: GestureDetector(
+                  child: Container(
+                    height: size.height * 0.05,
+                    width: size.width * 0.45,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      borderRadius:
+                          BorderRadius.circular(size.width * 0.05),
+                      gradient: const LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            ColorConstants.kGradientDarkGreen,
+                            ColorConstants.kGradientLightGreen
                           ]),
-                      child: Center(
-                        child: customText.kText("My Account", 25,
-                            FontWeight.w900, Colors.white, TextAlign.center),
-                      ),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: const Offset(0, 3),
+                            color: Colors.grey.shade400,
+                            spreadRadius: 1,
+                            blurRadius: 2)
+                      ]),
+                    child: Center(
+                      child: customText.kText("My Account", 25,
+                          FontWeight.w900, Colors.white, TextAlign.center),
                     ),
-                    onTap: () {
-                      sideDrawerController.pageIndex.value = 1;
-                      sideDrawerController.pageController.jumpToPage(1);
-                      scaffoldKey.currentState!.closeEndDrawer();
-                    },
                   ),
-                )
+                  onTap: () {
+                    sideDrawerController.pageIndex.value = 1;
+                    sideDrawerController.pageController.jumpToPage(1);
+                    scaffoldKey.currentState!.closeEndDrawer();
+                  },
+                ),
+              )
         ],
       ),
     );
@@ -852,90 +889,48 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
                     SizedBox(
                       height: size.width * 0.02,
                     ),
-                    // Obx(
-                    //   () =>
-                    //  sideDrawerController.pageIndex == 0 ||
-                    //         sideDrawerController.pageIndex == 4 ||
-                    //         sideDrawerController.pageIndex == 7 ||
-                    //         sideDrawerController.pageIndex == 8 ||
-                    //         sideDrawerController.pageIndex == 9 ||
-                    //         sideDrawerController.pageIndex == 10 ||
-                    //         sideDrawerController.pageIndex == 11 ||
-                    //         sideDrawerController.pageIndex == 12 ||
-                    //         sideDrawerController.pageIndex == 13 ||
-                    //         sideDrawerController.pageIndex == 14 ||
-                    //         sideDrawerController.pageIndex == 15 ||
-                    //         sideDrawerController.pageIndex == 16
-                    //     ? GestureDetector(
-                    //         child: Container(
-                    //           height: size.height * 0.06,
-                    //           width: size.width * 0.8,
-                    //           padding: EdgeInsets.symmetric(
-                    //               horizontal: size.width * 0.02),
-                    //           decoration: BoxDecoration(
-                    //               color: Colors.white,
-                    //               borderRadius: BorderRadius.circular(
-                    //                   size.width * 0.03)),
-                    //           child: Row(
-                    //             mainAxisAlignment:
-                    //                 MainAxisAlignment.spaceBetween,
-                    //             children: [
-                    //               customText.kText(
-                    //                   "Search Business",
-                    //                   20,
-                    //                   FontWeight.w700,
-                    //                   ColorConstants.kTextGrey,
-                    //                   TextAlign.left),
-                    //               const Icon(Icons.search,
-                    //                   size: 30,
-                    //                   color: ColorConstants.kTextGrey)
-                    //             ],
-                    //           ),
-                    //         ),
-                    //         onTap: () {
-                    //           sideDrawerController.pageIndex.value = 16;
-                    //           sideDrawerController.pageController
-                    //               .jumpToPage(16);
-                    //         })
-                    //     : const SizedBox(),
                     Container(
                       height: size.height * 0.05,
                       width: size.width * 0.8,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: size.width * 0.02),
+                      padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.circular(size.width * 0.03)),
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        onTap: () {
-                          sideDrawerController.pageIndex.value = 22;
-                          sideDrawerController.pageController.jumpToPage(22);
-                        },
-                        onChanged: (value) async {
-                          searchBusiness(value);
-                        },
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          suffixIcon: Icon(
-                            Icons.search,
-                            size: 30,
-                            color: ColorConstants.kTextGrey,
-                          ),
-                          hintText: "Search Business",
-                          hintStyle: TextStyle(
-                            fontSize: 20,
-                            color: ColorConstants.kTextGrey,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: "Raleway",
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(size.width * 0.03)),
+                      child: Center(
+                        child: TextFormField(
+                          // textAlign: TextAlign.center,
+                          textAlignVertical: TextAlignVertical.center,
+                          onTap: () {
+                            sideDrawerController.pageIndex.value = 22;
+                            sideDrawerController.pageController.jumpToPage(22);
+                          },
+                          onChanged: (value) async {
+                            searchBusiness(value);
+                          },
+                          decoration: const InputDecoration(
+                            isCollapsed: true,
+                            border: InputBorder.none,
+                            suffixIcon: Icon(
+                              Icons.search,
+                              size: 30,
+                              color: ColorConstants.kTextGrey,
+                            ),
+                            hintText: "Search Business",
+                            // hintText: "Search",
+                            hintStyle: TextStyle(
+                              fontSize: 20,
+                              color: ColorConstants.kTextGrey,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: "Raleway",
+                            ),
                           ),
                         ),
                       ),
                     ),
                     // ),
                   ],
-                )),
+                ),
+            ),
             Expanded(
               child: Container(
                   color: Colors.grey.shade400,
@@ -989,4 +984,141 @@ class _SideMenuDrawerState extends State<SideMenuDrawer> {
       ),
     );
   }
+
+  // Function to show an alert dialog
+  void _showAlertDialog(BuildContext context, Function() deleteItem) {
+    final double h = MediaQuery.of(context).size.height;
+    final double w = MediaQuery.of(context).size.width;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: const Text(
+              'Are you sure want to delete this account ?',
+              style: TextStyle(
+                fontFamily: 'Raleway',
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Container(
+                height: h * .030,
+                width: w * .2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  gradient: const RadialGradient(
+                    center: Alignment(0.19, -0.9),
+                    colors: [
+                      Color(0xffD50000),
+                      Color(0xff760000),
+                    ],
+                    radius: 4.0,
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      fontFamily: 'Raleway',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // Perform any action here, then close the dialog
+                deleteItem();
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                height: h * .030,
+                width: w * .2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  gradient: const RadialGradient(
+                    center: Alignment(0.19, -0.9),
+                    colors: [
+                      ColorConstants.kGradientDarkGreen,
+                      ColorConstants.kGradientLightGreen
+                    ],
+                    radius: 4.0,
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                      fontFamily: 'Raleway',
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+
+
+// Obx(
+//   () =>
+//  sideDrawerController.pageIndex == 0 ||
+//         sideDrawerController.pageIndex == 4 ||
+//         sideDrawerController.pageIndex == 7 ||
+//         sideDrawerController.pageIndex == 8 ||
+//         sideDrawerController.pageIndex == 9 ||
+//         sideDrawerController.pageIndex == 10 ||
+//         sideDrawerController.pageIndex == 11 ||
+//         sideDrawerController.pageIndex == 12 ||
+//         sideDrawerController.pageIndex == 13 ||
+//         sideDrawerController.pageIndex == 14 ||
+//         sideDrawerController.pageIndex == 15 ||
+//         sideDrawerController.pageIndex == 16
+//     ? GestureDetector(
+//         child: Container(
+//           height: size.height * 0.06,
+//           width: size.width * 0.8,
+//           padding: EdgeInsets.symmetric(
+//               horizontal: size.width * 0.02),
+//           decoration: BoxDecoration(
+//               color: Colors.white,
+//               borderRadius: BorderRadius.circular(
+//                   size.width * 0.03)),
+//           child: Row(
+//             mainAxisAlignment:
+//                 MainAxisAlignment.spaceBetween,
+//             children: [
+//               customText.kText(
+//                   "Search Business",
+//                   20,
+//                   FontWeight.w700,
+//                   ColorConstants.kTextGrey,
+//                   TextAlign.left),
+//               const Icon(Icons.search,
+//                   size: 30,
+//                   color: ColorConstants.kTextGrey)
+//             ],
+//           ),
+//         ),
+//         onTap: () {
+//           sideDrawerController.pageIndex.value = 16;
+//           sideDrawerController.pageController
+//               .jumpToPage(16);
+//         })
+//     : const SizedBox(),
